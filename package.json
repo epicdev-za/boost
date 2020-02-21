@@ -1,19 +1,22 @@
 {
-  "name": "boost",
-  "version": "1.0.0",
-  "description": "Nuxt & Vuetify based management system",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/epicdev-za/boost.git"
-  },
-  "author": "Kalden Swart",
-  "license": "GPL-3.0",
-  "bugs": {
-    "url": "https://github.com/epicdev-za/boost/issues"
-  },
-  "homepage": "https://github.com/epicdev-za/boost#readme"
+    "name": "boost",
+    "version": "1.0.0",
+    "description": "Nuxt & Vuetify based management system",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/epicdev-za/boost.git"
+    },
+    "author": "Kalden Swart",
+    "license": "GPL-3.0",
+    "bugs": {
+        "url": "https://github.com/epicdev-za/boost/issues"
+    },
+    "homepage": "https://github.com/epicdev-za/boost#readme",
+    "dependencies": {
+        "gravity": "github:epicdev-za/gravity"
+    }
 }

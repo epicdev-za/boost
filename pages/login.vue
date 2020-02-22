@@ -27,7 +27,7 @@
                                     </v-col>
                                 </v-row>
                                 <v-row justify="center" class="mt-12">
-                                    <v-btn color="secondary" class="px-8">Login</v-btn>
+                                    <v-btn color="secondary" class="px-8" @click="login(username, password)">Login</v-btn>
                                 </v-row>
                             </v-container>
                         </v-form>
@@ -71,6 +71,11 @@
                 }
             }
         },
+        methods: {
+            login: function(username, password){
+
+            }
+        }
     }
 </script>
 

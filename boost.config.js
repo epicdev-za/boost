@@ -18,6 +18,7 @@ function getProjectModulesForGroup(){
 
 export default {
     version: '1.0.0',
+    api: _project.api,
     modules: extend(
         {
             'admin': {

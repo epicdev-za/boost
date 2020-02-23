@@ -39,6 +39,7 @@
 </template>
 
 <script>
+    const axios = require("axios");
     import boost from 'boost/boost.config';
     export default {
         name: "login",
@@ -73,7 +74,16 @@
         },
         methods: {
             login: function(username, password){
-
+                axios.post(boost.api + "/auth", {
+                    username: username,
+                    password: password
+                })
+                .then(function(response){
+                    console.log(response);
+                })
+                .catch(function(error){
+                    console.log(error);
+                });
             }
         }
     }

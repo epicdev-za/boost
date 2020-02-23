@@ -73,12 +73,11 @@
 </template>
 
 <script>
-    import boost from 'boost/boost.config'
-    import project from '../../../boost.config'
+    const boost = require('boost/boost.config')
     export default {
         data(){
             return {
-                projectName: project.projectName,
+                projectName: boost.projectName,
                 module_groups: boost.module_groups,
                 modules: boost.modules,
                 drawer: false,

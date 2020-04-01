@@ -19,6 +19,13 @@ function getProjectModulesForGroup(){
 export default {
     version: '1.0.0',
     api: _project.api,
+    jwt: {
+        secret: ''
+    },
+    sanctum: {
+        location: 'https://www.sanctum.epicdev.co.za',
+        project_key: ''
+    },
     modules: extend(
         {
             'admin': {

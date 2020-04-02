@@ -1,8 +1,12 @@
 module.exports = {
     endpoints: {
         'auth': {
-            method: 'post',
-            handler: require("./gravity/endpoints/auth")
+            children: {
+                'token': {
+                    method: 'post',
+                    handler: require("./gravity/endpoints/auth/token")
+                }
+            }
         }
     }
 };

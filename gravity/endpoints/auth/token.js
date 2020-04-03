@@ -186,7 +186,8 @@ function authUser(req, res, next, username, password, application){
             if(typeof cres === typeof undefined || cres === null){
                 next(err);
             }else{
-                next(new GravityException(cres.statusCode, err.body.error, err.body.error_description));
+                let exc = new GravityException(cres.statusCode, err.body.error, err.body.error_description);
+                next(exc);
             }
         }else{
             Authentication.authenticate(req.connection.remoteAddress, application, obj, req.headers['user-agent'], (err, token) => {

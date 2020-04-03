@@ -40,7 +40,7 @@
 
 <script>
     const axios = require("axios");
-    import boost from '../../../boost.config';
+    import config from '../../../boost.config';
     export default {
         name: "login",
         head(){
@@ -50,7 +50,7 @@
         },
         data(){
             return {
-                version: boost.version,
+                version: config.version,
                 valid: false,
                 username: '',
                 password: '',
@@ -74,13 +74,24 @@
         },
         methods: {
             login: function(username, password){
-                axios.post(boost.sanctum.location + "/auth/token", {
+                let _this = this;
+                axios.post(config.api + "/auth/token", {
                     grant_type: 'password',
                     username: username,
                     password: password
                 })
                 .then(function(response){
-                    console.log(response);
+                    if(response.status === 200){
+                        let payload = response.data;
+                        if(payload['token_type'] === "bearer"){
+                            _this.$store.commit('authentication_store/setToken', payload);
+                            _this.$router.push("/admin");
+                        }else{
+                            //@todo: Add error handling
+                        }
+                    }else{
+                        //@todo: Add error handling
+                    }
                 })
                 .catch(function(error){
                     //@todo: Add error handling

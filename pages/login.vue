@@ -40,7 +40,7 @@
 
 <script>
     const axios = require("axios");
-    import boost from 'boost/boost.config';
+    import boost from '../../../boost.config';
     export default {
         name: "login",
         head(){
@@ -74,7 +74,8 @@
         },
         methods: {
             login: function(username, password){
-                axios.post(boost.api + "/auth", {
+                axios.post(boost.sanctum.location + "/auth/token", {
+                    grant_type: 'password',
                     username: username,
                     password: password
                 })
@@ -82,6 +83,7 @@
                     console.log(response);
                 })
                 .catch(function(error){
+                    //@todo: Add error handling
                     console.log(error);
                 });
             }

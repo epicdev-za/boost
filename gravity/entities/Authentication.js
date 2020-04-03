@@ -26,7 +26,7 @@ class Authentication extends Entity{
     }
 
     static authenticate(ip, application, user, user_agent, callback){
-        const config = require("../../../../boost.config");
+        const config = require("../../../../gravity.config");
 
         let authentication = new Authentication().initialise();
         if(user !== undefined){
@@ -64,7 +64,7 @@ class Authentication extends Entity{
         let refresh_token = jwt.sign({
             access_token: crypto.createHash('sha256').update(access_token).digest('hex')
         }, config.jwt.secret, {
-            expiresIn: (config.jwt.ttl + 1800)
+            expiresIn: (config.jwt.ttl + 1800) + 's'
         });
 
         return {

@@ -2,13 +2,6 @@ import colors from 'vuetify/es5/util/colors'
 
 export default {
     version: '1.0.0',
-    jwt: {
-        secret: ''
-    },
-    sanctum: {
-        location: 'https://www.sanctum.epicdev.co.za',
-        project_key: ''
-    },
     modules: {
         'admin': {
             title: "Dashboard",

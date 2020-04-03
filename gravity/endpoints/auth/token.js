@@ -75,25 +75,30 @@ const grant_type = {
     password(req, res, next){
         const body = req.body;
 
-        let client_id, client_secret, username, password;
+        let username, password;
         try{
-            client_id = sanitizer.cleanPermalink(extract(body, 'client_id'));
-            client_secret = sanitizer.cleanAlphaNumeric(extract(body, 'client_secret'));
             username = extract(body, 'username');
             password = extract(body, 'password');
 
-            Plasma.getConnection.fetch(Application, "SELECT * FROM " + Application.getEntity() + " WHERE client_id = $1 AND client_secret = $2", [client_id, client_secret], function(err, r){
-                if(err){
-                    next(new GravityException(err));
-                }else{
-                    if(r.length === 1){
-                        let application = r[0];
-                        authUser(req, res, next, username, password, application);
+            if(body['client_id'] !== undefined && body['client_secret'] !== undefined){
+                let client_id = sanitizer.cleanPermalink(extract(body, 'client_id'));
+                let client_secret = sanitizer.cleanAlphaNumeric(extract(body, 'client_secret'));
+
+                Plasma.getConnection.fetch(Application, "SELECT * FROM " + Application.getEntity() + " WHERE client_id = $1 AND client_secret = $2", [client_id, client_secret], function(err, r){
+                    if(err){
+                        next(new GravityException(err));
                     }else{
-                        next(new GravityException(401, "invalid_client", "Invalid client id and secret combination"));
+                        if(r.length === 1){
+                            let application = r[0];
+                            authUser(req, res, next, username, password, application);
+                        }else{
+                            next(new GravityException(401, "invalid_client", "Invalid client id and secret combination"));
+                        }
                     }
-                }
-            });
+                });
+            }else{
+                authUser(req, res, next, username, password);
+            }
         }catch (e) {
             next(e);
         }
@@ -164,7 +169,7 @@ const grant_type = {
 };
 
 function authUser(req, res, next, username, password, application){
-    const config = require("../../../../../boost.config");
+    const config = require("../../../../../gravity.config");
     let project_key = config.sanctum.project_key;
     let location = config.sanctum.location;
 

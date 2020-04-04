@@ -11,8 +11,8 @@ module.exports = {
         'auth': {
             children: {
                 'token': {
-                    method: 'post',
-                    handler: require("./gravity/endpoints/auth/token")
+                    method: 'get',
+                    handler: require("./api/endpoints/auth/token")
                 }
             }
         }

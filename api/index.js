@@ -1,7 +1,16 @@
-let express = require("express");
-let server = express();
+const express = require("express");
+const bodyParser = require("body-parser");
+const Plasma = require("plasma");
 const ServerException = require("./ServerException");
 const config = require("../../../server.config");
+
+let database = new Plasma();
+database.connect(config.db);
+
+let server = express();
+server.use(bodyParser.urlencoded({extended: true}));
+server.use(bodyParser.json());
+server.use(bodyParser.raw());
 
 loadEndpoint(config.endpoints);
 
@@ -36,22 +45,42 @@ function loadEndpoint(endpoints, parentPath = []){
 
 function handlerErrorWrapper(handler){
     return function(req, res){
-        try{
-            handler(req, res);
-        }catch (e) {
-            if(!(e instanceof ServerException)){
-                e = new ServerException(e);
+        let api_response = null;
+
+        let res_hook = {
+            send(data){
+                api_response = data;
             }
-            if(e instanceof ServerException){
-                res.status(e.status);
-                res.send({
-                    error: e.code,
-                    error_description: e.description
-                });
+        };
+
+        let next = function(e){
+            if(e !== undefined){
+                if(!(e instanceof ServerException)){
+                    e = new ServerException(e);
+                }
+                if(e instanceof ServerException){
+                    res.status(e.status);
+                    res.send({
+                        error: e.code,
+                        error_description: e.description
+                    });
+                    return;
+                }
             }
+            res.send(api_response);
         }
+
+        handler(req, res_hook, next);
     }
 }
+
+server.use(function(req, res){
+    res.status(404);
+    res.send({
+        error: 'not_found',
+        error_description: 'The requested endpoint does not exist'
+    });
+});
 
 module.exports = {
     path: '/api',

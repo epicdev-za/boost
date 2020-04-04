@@ -1,4 +1,11 @@
 module.exports = {
+    db: {
+        database: 'gravity',
+        host: 'localhost',
+        user: 'postgres',
+        password: '',
+        port: 5432
+    },
     jwt: {
         secret: '',
         ttl: 900
@@ -11,7 +18,7 @@ module.exports = {
         'auth': {
             children: {
                 'token': {
-                    method: 'get',
+                    method: 'post',
                     handler: require("./api/endpoints/auth/token")
                 }
             }

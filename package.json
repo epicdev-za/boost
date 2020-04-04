@@ -22,6 +22,7 @@
         "gravity": "github:epicdev-za/gravity",
         "jsonwebtoken": "^8.5.1",
         "nuxt-session": "^1.0.3",
-        "restify-clients": "^2.6.9"
+        "restify-clients": "^2.6.9",
+        "axios": "^0.19.2"
     }
 }

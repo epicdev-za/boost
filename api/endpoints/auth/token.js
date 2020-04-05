@@ -1,9 +1,9 @@
 const Plasma = require("plasma");
-const sanitizer = require("gravity/utils/sanitizer");
+const sanitizer = require("../../sanitizer");
 const Application = require("../../entities/Application");
 const Authentication = require("../../entities/Authentication");
 const clients = require("restify-clients");
-const GravityException = require("gravity/GravityException");
+const ServerException = require("../../ServerException");
 const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
 
@@ -23,10 +23,10 @@ module.exports = function(req, res, next){
                 grant_type.refresh_token(req, res, next);
                 break;
             default:
-                next(new GravityException(400, "unsupported_grant_type", "'" + body['grant_type'] + "' is not supported."));
+                next(new ServerException(400, "unsupported_grant_type", "'" + body['grant_type'] + "' is not supported."));
         }
     }else{
-        next(new GravityException(400, "invalid_request", "Request was missing the 'grant_type' parameter."));
+        next(new ServerException(400, "invalid_request", "Request was missing the 'grant_type' parameter."));
     }
 };
 
@@ -34,7 +34,7 @@ function extract(object, key){
     if(object[key] !== undefined){
         return object[key];
     }
-    throw new GravityException(400, "invalid_request", "Request was missing the '" + key + "' parameter.");
+    throw new ServerException(400, "invalid_request", "Request was missing the '" + key + "' parameter.");
 }
 
 const grant_type = {
@@ -53,20 +53,20 @@ const grant_type = {
 
         Plasma.getConnection.fetch(Application, "SELECT * FROM " + Application.getEntity() + " WHERE client_id = $1 AND client_secret = $2", [client_id, client_secret], function(err, r){
             if(err){
-                next(new GravityException(err));
+                next(new ServerException(err));
             }else{
                 if(r.length === 1){
                     let application = r[0];
                     Authentication.authenticate(req.connection.remoteAddress, application, undefined, req.headers['user-agent'], (err, token) => {
                         if(err){
-                            next(new GravityException(err));
+                            next(new ServerException(err));
                         }else{
                             res.send(token);
                             next();
                         }
                     });
                 }else{
-                    next(new GravityException(401, "invalid_client", "Invalid client id and secret combination"));
+                    next(new ServerException(401, "invalid_client", "Invalid client id and secret combination"));
                 }
             }
         });
@@ -75,30 +75,25 @@ const grant_type = {
     password(req, res, next){
         const body = req.body;
 
-        let username, password;
+        let username, password, client_id, client_secret;
         try{
             username = extract(body, 'username');
             password = extract(body, 'password');
+            client_id = sanitizer.cleanPermalink(extract(body, 'client_id'));
+            client_secret = sanitizer.cleanAlphaNumeric(extract(body, 'client_secret'));
 
-            if(body['client_id'] !== undefined && body['client_secret'] !== undefined){
-                let client_id = sanitizer.cleanPermalink(extract(body, 'client_id'));
-                let client_secret = sanitizer.cleanAlphaNumeric(extract(body, 'client_secret'));
-
-                Plasma.getConnection.fetch(Application, "SELECT * FROM " + Application.getEntity() + " WHERE client_id = $1 AND client_secret = $2", [client_id, client_secret], function(err, r){
-                    if(err){
-                        next(new GravityException(err));
+            Plasma.getConnection.fetch(Application, "SELECT * FROM " + Application.getEntity() + " WHERE client_id = $1 AND client_secret = $2", [client_id, client_secret], function(err, r){
+                if(err){
+                    next(new ServerException(err));
+                }else{
+                    if(r.length === 1){
+                        let application = r[0];
+                        authUser(req, res, next, username, password, application);
                     }else{
-                        if(r.length === 1){
-                            let application = r[0];
-                            authUser(req, res, next, username, password, application);
-                        }else{
-                            next(new GravityException(401, "invalid_client", "Invalid client id and secret combination"));
-                        }
+                        next(new ServerException(401, "invalid_client", "Invalid client id and secret combination"));
                     }
-                });
-            }else{
-                authUser(req, res, next, username, password);
-            }
+                }
+            });
         }catch (e) {
             next(e);
         }
@@ -125,7 +120,7 @@ const grant_type = {
 
                             jwt.verify(refresh_token, config.jwt.secret, (err, payload) => {
                                 if(err){
-                                    next(new GravityException(401, "invalid_refresh_token", "The refresh token failed verification."));
+                                    next(new ServerException(401, "invalid_refresh_token", "The refresh token failed verification."));
                                 }else{
                                     let access_hash = payload.access_token;
                                     let incoming_hash = crypto.createHash('sha256').update(access_token).digest('hex');
@@ -140,26 +135,26 @@ const grant_type = {
                                             res.send(Authentication.generateTokenPayload(decoded_access_token, config));
                                             next();
                                         }catch (e) {
-                                            next(new GravityException(e));
+                                            next(new ServerException(e));
                                         }
 
                                     }else{
-                                        next(new GravityException(401, "invalid_refresh_token", "The refresh token is not authorized to refresh the partnered access_token."));
+                                        next(new ServerException(401, "invalid_refresh_token", "The refresh token is not authorized to refresh the partnered access_token."));
                                     }
                                 }
                             });
 
                         }else{
-                            next(new GravityException(401, "invalid_access_token_signature", "The access token failed signature verification."));
+                            next(new ServerException(401, "invalid_access_token_signature", "The access token failed signature verification."));
                         }
                     }else{
                         res.send(payload);
-                        next(new GravityException(401, "token_not_expired", "The access token has not yet expired"));
+                        next(new ServerException(401, "token_not_expired", "The access token has not yet expired"));
                     }
                 });
 
             }else{
-                next(new GravityException(401, "invalid_authorization_header", "The Authorization header supplied is invalid."))
+                next(new ServerException(401, "invalid_authorization_header", "The Authorization header supplied is invalid."))
             }
         }catch (e) {
             next(e);
@@ -169,7 +164,7 @@ const grant_type = {
 };
 
 function authUser(req, res, next, username, password, application){
-    const config = require("../../../../../gravity.config");
+    const config = require("../../../../../server.config");
     let project_key = config.sanctum.project_key;
     let location = config.sanctum.location;
 
@@ -177,7 +172,7 @@ function authUser(req, res, next, username, password, application){
         url: location
     });
 
-    client.post('/sanctum/auth', {
+    client.post('/api/sanctum/auth', {
         project: project_key,
         username: username,
         password: password
@@ -186,13 +181,12 @@ function authUser(req, res, next, username, password, application){
             if(typeof cres === typeof undefined || cres === null){
                 next(err);
             }else{
-                let exc = new GravityException(cres.statusCode, err.body.error, err.body.error_description);
-                next(exc);
+                next(new ServerException(cres.statusCode, err.body.error, err.body.error_description));
             }
         }else{
             Authentication.authenticate(req.connection.remoteAddress, application, obj, req.headers['user-agent'], (err, token) => {
                 if(err){
-                    next(new GravityException(err));
+                    next(new ServerException(err));
                 }else{
                     res.send(token);
                     next();

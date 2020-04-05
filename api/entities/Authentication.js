@@ -26,7 +26,7 @@ class Authentication extends Entity{
     }
 
     static authenticate(ip, application, user, user_agent, callback){
-        const config = require("../../../../gravity.config");
+        const config = require("../../../../server.config");
 
         let authentication = new Authentication().initialise();
         if(user !== undefined){

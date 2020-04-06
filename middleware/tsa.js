@@ -8,38 +8,45 @@ module.exports = async function({app, route, store, redirect, error, env, req}){
 
     if(boost_route !== undefined){
         if(boost_route.permissions !== undefined){
-            console.log(req);
+            if(req !== undefined){
+                if(req.session.user !== undefined){
+                    let user = req.session.user;
+
+                    if(!user.superuser){
+                        for(let i = 0; i < boost_route.permissions; i++){
+                            if(!user.permissions.includes(boost_route.permissions[i])){
+                                error({
+                                    statusCode: 403
+                                });
+                                break;
+                            }
+                        }
+                    }
+                }else{
+                    error({
+                        statusCode: 403
+                    });
+                }
+            }else{
+                let response = await axios.post("/api/auth/has_access", {
+                    path: url
+                });
+                if(response.status === 200){
+                    if(!response.data.granted){
+                        error({
+                            statusCode: 403
+                        });
+                    }
+                }else{
+                    error({
+                        statusCode: 500
+                    });
+                }
+            }
         }
     }else{
         error({
             statusCode: 404
         });
     }
-
-    // try {
-    //     let axios_config = {
-    //         "path": url
-    //     }
-    //
-    //     if(req !== undefined && req.headers.cookie !== undefined){
-    //         console.log(req.headers.cookie);
-    //     }
-    //
-    //     let response = await axios.post("/api/auth/has_access", );
-    //     if(response.status === 200){
-    //         if(!response.data.granted){
-    //             error({
-    //                 statusCode: 403
-    //             });
-    //         }
-    //     }else{
-    //         error({
-    //             statusCode: 500
-    //         });
-    //     }
-    // }catch (e) {
-    //     error({
-    //         statusCode: 500
-    //     });
-    // }
 }

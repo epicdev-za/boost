@@ -74,14 +74,13 @@
 
 <script>
     const axios = require("axios");
-    const boost = require('../../../boost.config');
-    const config = boost.default;
+    const boost = require('boost/boost.config');
     export default {
         data(){
             return {
-                projectName: config.projectName,
-                module_groups: config.module_groups,
-                modules: config.modules,
+                projectName: boost.projectName,
+                module_groups: boost.module_groups,
+                modules: boost.modules,
                 drawer: false,
                 drawer_open: false
             }

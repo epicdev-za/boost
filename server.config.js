@@ -28,6 +28,10 @@ module.exports = {
                 'has_access': {
                     method: 'post',
                     handler: require("./api/endpoints/auth/has_access")
+                },
+                'logout': {
+                    method: 'post',
+                    handler: require("./api/endpoints/auth/logout")
                 }
             }
         }

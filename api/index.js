@@ -12,12 +12,12 @@ let server = express();
 server.use(bodyParser.urlencoded({extended: true}));
 server.use(bodyParser.json());
 server.use(bodyParser.raw());
-server.use(session({
-    secret: config.jwt.secret,
-    resave: false,
-    saveUnitialized: false,
-    cookie: { maxAge: 1800000, httpOnly: false }
-}));
+// server.use(session({
+//     secret: config.jwt.secret,
+//     resave: false,
+//     saveUnitialized: false,
+//     cookie: { maxAge: 1800000, httpOnly: false }
+// }));
 
 loadEndpoint(config.endpoints);
 

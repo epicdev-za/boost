@@ -32,6 +32,10 @@ module.exports = {
                 'logout': {
                     method: 'post',
                     handler: require("./api/endpoints/auth/logout")
+                },
+                'logged_in': {
+                    method: 'get',
+                    handler: require("./api/endpoints/auth/logged_in")
                 }
             }
         }

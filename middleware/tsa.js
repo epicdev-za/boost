@@ -6,6 +6,24 @@ module.exports = async function({app, route, store, redirect, error, env, req}){
     let url = route.path;
     let boost_route = routes[url];
 
+    let loggedIn = false;
+    if(req !== undefined) {
+        loggedIn = req.session.user !== undefined;
+    }else{
+        let response = await axios.get("/api/auth/logged_in");
+        console.log(response);
+        if(response.status === 200 && response.data.success){
+            loggedIn = true;
+        }
+    }
+    if(loggedIn){
+        switch(url){
+            case "/login":
+                redirect("/admin");
+                return;
+        }
+    }
+
     if(boost_route !== undefined){
         if(boost_route.permissions !== undefined){
             if(req !== undefined){
@@ -44,9 +62,5 @@ module.exports = async function({app, route, store, redirect, error, env, req}){
                 }
             }
         }
-    }else{
-        error({
-            statusCode: 404
-        });
     }
 }

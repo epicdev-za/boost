@@ -3,8 +3,8 @@
         <div class="background-container primary"></div>
         <v-container class="fill-height">
             <v-row align="center" justify="center" class="px-4">
-                <v-card max-width="550" elevation="6" class="px-12 py-4">
-                    <v-row justify="center">
+                <v-card max-width="550" elevation="6" class="px-12" :loading="form_loading" :disabled="form_loading">
+                    <v-row justify="center" class="pt-4">
                         <v-card-title>
                             <v-avatar size="48" tile color="primary">
                                 <img :src="logo" alt="avatar">
@@ -15,7 +15,12 @@
                         <v-card-title class="pt-0" style="text-align: center">Boost Management System</v-card-title>
                         <v-card-text style="text-align: center">v{{version}}</v-card-text>
                     </v-row>
-                    <v-row justify="center">
+                    <v-row justify="center" class="pt-4">
+                        <v-alert type="error" dense text dismissible class="mb-0" :value="error" v-model="error">
+                            {{error_text}}
+                        </v-alert>
+                    </v-row>
+                    <v-row justify="center" class="pb-4">
                         <v-form v-model="valid">
                             <v-container>
                                 <v-row>
@@ -54,7 +59,10 @@
                 valid: false,
                 username: '',
                 password: '',
+                form_loading: false,
                 password_show: false,
+                error: false,
+                error_text: '',
                 usernameRules: [
                     v => !!v || 'Username is required',
                 ],
@@ -74,25 +82,35 @@
         },
         methods: {
             login: function(username, password){
-                let _this = this;
-                axios.post("/api/auth/login", {
-                    username: username,
-                    password: password
-                })
-                .then(function(response){
-                    if(response.status === 200){
-                        let payload = response.data;
-                        if(payload.success){
-                            _this.$router.push('/admin');
+                if(username.length > 0 && password.length > 0){
+                    let _this = this;
+                    _this.form_loading = true;
+                    axios.post("/api/auth/login", {
+                        username: username,
+                        password: password
+                    }).then(function(response){
+                        _this.form_loading = false;
+                        _this.$router.push('/admin');
+                    }).catch(function(error, obj){
+                        _this.form_loading = false;
+                        if(!error.response){
+                            error.response = {
+                                status: 500
+                            };
                         }
-                    }else{
-                        //@todo: Add error handling
-                    }
-                })
-                .catch(function(error){
-                    //@todo: Add error handling
-                    console.log(error);
-                });
+                        switch(error.response.status){
+                            default:
+                            case 500:
+                                _this.error = true;
+                                _this.error_text = "Failed to connect to authentication server";
+                                break;
+                            case 400:
+                                _this.error = true;
+                                _this.error_text = "Invalid credentials";
+                                break;
+                        }
+                    });
+                }
             }
         }
     }

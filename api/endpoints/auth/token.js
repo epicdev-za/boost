@@ -62,7 +62,6 @@ const grant_type = {
                             next(new ServerException(err));
                         }else{
                             res.send(token);
-                            next();
                         }
                     });
                 }else{
@@ -133,7 +132,6 @@ const grant_type = {
 
                                         try{
                                             res.send(Authentication.generateTokenPayload(decoded_access_token, config));
-                                            next();
                                         }catch (e) {
                                             next(new ServerException(e));
                                         }
@@ -148,7 +146,6 @@ const grant_type = {
                             next(new ServerException(401, "invalid_access_token_signature", "The access token failed signature verification."));
                         }
                     }else{
-                        res.send(payload);
                         next(new ServerException(401, "token_not_expired", "The access token has not yet expired"));
                     }
                 });
@@ -189,7 +186,6 @@ function authUser(req, res, next, username, password, application){
                     next(new ServerException(err));
                 }else{
                     res.send(token);
-                    next();
                 }
             });
         }

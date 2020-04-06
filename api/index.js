@@ -1,4 +1,5 @@
 const express = require("express");
+const session = require("express-session");
 const bodyParser = require("body-parser");
 const Plasma = require("plasma");
 const ServerException = require("./ServerException");
@@ -11,6 +12,12 @@ let server = express();
 server.use(bodyParser.urlencoded({extended: true}));
 server.use(bodyParser.json());
 server.use(bodyParser.raw());
+server.use(session({
+    secret: config.jwt.secret,
+    resave: false,
+    saveUnitialized: false,
+    cookie: { maxAge: 1800000, httpOnly: false }
+}));
 
 loadEndpoint(config.endpoints);
 
@@ -44,16 +51,8 @@ function loadEndpoint(endpoints, parentPath = []){
 }
 
 function handlerErrorWrapper(handler){
-    return function(req, res){
-        let api_response = null;
-
-        let res_hook = {
-            send(data){
-                api_response = data;
-            }
-        };
-
-        let next = function(e){
+    return function(req, res, next){
+        let next_hook = function(e){
             if(e !== undefined){
                 if(!(e instanceof ServerException)){
                     e = new ServerException(e);
@@ -67,10 +66,9 @@ function handlerErrorWrapper(handler){
                     return;
                 }
             }
-            res.send(api_response);
         }
 
-        handler(req, res_hook, next);
+        handler(req, res, next_hook);
     }
 }
 

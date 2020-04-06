@@ -75,19 +75,15 @@
         methods: {
             login: function(username, password){
                 let _this = this;
-                axios.post(config.api + "/auth/token", {
-                    grant_type: 'password',
+                axios.post("/api/auth/login", {
                     username: username,
                     password: password
                 })
                 .then(function(response){
                     if(response.status === 200){
                         let payload = response.data;
-                        if(payload['token_type'] === "bearer"){
-                            _this.$store.commit('authentication_store/setToken', payload);
-                            _this.$router.push("/admin");
-                        }else{
-                            //@todo: Add error handling
+                        if(payload.success){
+                            _this.$router.push('/admin');
                         }
                     }else{
                         //@todo: Add error handling

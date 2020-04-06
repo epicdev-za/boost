@@ -1,5 +1,5 @@
 const Entity = require("plasma/PlasmaEntity");
-const sanitizer = require("gravity/utils/sanitizer");
+const sanitizer = require("../sanitizer");
 
 class Application extends Entity{
 

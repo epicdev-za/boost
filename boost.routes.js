@@ -4,25 +4,24 @@ const resolve = function(vue){
     return path.join(__dirname, vue);
 }
 
-export default [
-    {
-        name: 'login',
-        path: '/login',
+export default {
+    '/login': {
+        name: 'Login',
         component: resolve('pages/login')
     },
-    {
+    '/admin': {
         name: 'Dashboard',
-        path: '/admin',
-        component: resolve('pages/admin/index')
+        component: resolve('pages/admin/index'),
+        permissions: ['dashboard']
     },
-    {
+    '/admin/users': {
         name: 'Users',
-        path: '/admin/users',
-        component: resolve('pages/admin/users/index')
+        component: resolve('pages/admin/users/index'),
+        permissions: ['dashboard', 'users.view']
     },
-    {
+    '/admin/users/create': {
         name: 'Create User',
-        path: '/admin/users/create',
-        component: resolve('pages/admin/users/create')
+        component: resolve('pages/admin/users/create'),
+        permissions: ['dashboard', 'users.view', 'users.edit']
     }
-]
+}

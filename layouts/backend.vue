@@ -50,7 +50,7 @@
             </v-tooltip>
             <v-tooltip bottom>
                 <template v-slot:activator="{ on }">
-                    <v-btn fab small v-on="on" color="transparent" depressed class="ml-1">
+                    <v-btn fab small v-on="on" color="transparent" depressed class="ml-1" @click="logout">
                         <v-icon>mdi-power</v-icon>
                     </v-btn>
                 </template>
@@ -73,7 +73,8 @@
 </template>
 
 <script>
-    const boost = require('boost/boost.config')
+    const axios = require("axios");
+    const boost = require('boost/boost.config');
     export default {
         data(){
             return {
@@ -135,6 +136,12 @@
                 }
 
                 return breadcrumbs;
+            },
+            logout(){
+                let _this = this;
+                axios.post("/api/auth/logout", {}).then(() => {
+                    _this.$router.push("/");
+                })
             }
         }
     }

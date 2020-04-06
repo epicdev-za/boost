@@ -1,20 +1,22 @@
 <template>
-    <v-container class="my-12" fluid>
-        <v-row align="start" justify="center" class="px-12">
-            <nuxt-link v-for="(module, index) in modules" :key="index" :to="module.to_prefix + '/' + module.to">
-                <v-card class="ma-0 px-4 py-4 dash-item" width="160" color="transparent" elevation="0" tile>
-                    <v-badge overlap class="dash-notif-badge">
-                        <template v-slot:badge v-if="module.notification_count > 0">{{module.notification_count}}</template>
-                        <v-icon class="dash-icon mx-10 mt-2 mb-1">{{module.icon}}</v-icon>
-                    </v-badge>
-                    <v-badge overlap class="dash-tag-badge" :color="module.tag_color">
-                        <template v-slot:badge v-if="module.tag !== ''">{{module.tag}}</template>
-                        <v-card-text class="pa-0 mb-2 mt-1 dash-text">{{module.title}}</v-card-text>
-                    </v-badge>
-                </v-card>
-            </nuxt-link>
-        </v-row>
-    </v-container>
+    <v-img :src="background" style="height: calc(100vh - 60px)">
+        <v-container class="fill-height" style="background-color: rgba(255, 255, 255, 0.8)" fluid>
+            <v-row align="start" justify="center" class="px-12">
+                <nuxt-link v-for="(module, index) in modules" :key="index" :to="module.to_prefix + '/' + module.to">
+                    <v-card class="ma-0 px-4 py-4 dash-item" width="160" color="transparent" elevation="0" tile>
+                        <v-badge overlap class="dash-notif-badge" :value="module.notification_count > 0">
+                            <template v-slot:badge>{{module.notification_count}}</template>
+                            <v-icon class="dash-icon mx-2 mt-2 mb-1">{{module.icon}}</v-icon>
+                        </v-badge>
+                        <v-badge overlap class="dash-tag-badge" :color="module.tag_color" :value="module.tag !== ''">
+                            <template v-slot:badge>{{module.tag}}</template>
+                            <v-card-text class="pa-0 mb-2 mt-1 dash-text">{{module.title}}</v-card-text>
+                        </v-badge>
+                    </v-card>
+                </nuxt-link>
+            </v-row>
+        </v-container>
+    </v-img>
 </template>
 
 <script>
@@ -28,6 +30,7 @@
         },
         data(){
             return {
+                background: require("../../assets/images/duncan-meyer-LhJfI7lKySc-unsplash.jpg"),
                 breadcrumbs: [
                     {
                         text: 'Dashboard',
@@ -71,9 +74,15 @@
     .dash-icon{
         font-size: 50px !important;
     }
+    .dash-item .dash-icon{
+        -webkit-transition: all 150ms cubic-bezier(.7,.91,.93,2) !important;
+        -moz-transition: all 150ms cubic-bezier(.7,.91,.93,2) !important;
+        -ms-transition: all 150ms cubic-bezier(.7,.91,.93,2) !important;
+        -o-transition: all 150ms cubic-bezier(.7,.91,.93,2) !important;
+        transition: all 150ms cubic-bezier(.7,.91,.93,2) !important;
+    }
     .dash-item:hover .dash-icon{
-        margin-top: 0 !important;
-        margin-bottom: 12px !important;
+        transform: scale(1.1);
     }
 
     .dash-text {
@@ -90,8 +99,11 @@
         width: 100%;
     }
     .dash-tag-badge .v-badge__badge{
-        top: -20px !important;
-        right: 12px !important;
-        padding: 0px 8px !important;
+        top: unset !important;
+        right: unset !important;
+        bottom: unset !important;
+        left: unset !important;
+        position: unset !important;
+        margin-top: 30px !important;
     }
 </style>

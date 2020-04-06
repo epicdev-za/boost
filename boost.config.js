@@ -14,7 +14,7 @@ export default {
             title: "Users",
             icon: "mdi-account-outline",
             to_prefix: '/admin',
-            tag: 'in dev',
+            tag: '',
             tag_color: colors.red.base
         },
         'roles': {
@@ -33,7 +33,7 @@ export default {
         },
         'preferences': {
             title: "Preferences",
-            icon: "mdi-settings-outline",
+            icon: "mdi-cog-outline",
             to_prefix: '/admin',
             tag: '',
             tag_color: colors.blue.base

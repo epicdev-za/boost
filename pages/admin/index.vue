@@ -1,26 +1,38 @@
 <template>
-    <v-container class="fill-height pb-12" :style="background_style" fluid>
-        <div v-for="(module_group, index) in module_groups" :key="index" class="pt-12" v-if="module_group.title !== null && module_group.modules.length > 0">
-            <span class="group-title px-12">{{module_group.title}}</span>
-            <v-row class="px-12 mt-4">
-                <div v-for="(module, key) in module_group.modules" :key="key">
-                    <v-badge class="dash-notif-badge" :value="0 > 0">
-                        <v-btn :to="modules[module].to_prefix + '/' + module" nuxt class="ma-2 pa-0 dash-item" width="160" elevation="1" tile :width="300" style="height: unset; background: #ffffff; text-transform: unset;">
-                            <div style="display: table">
-                                <div style="display: table-row">
-                                    <div style="display: table-cell">
-                                        <v-icon class="dash-icon ma-4" style="color: rgba(0, 0, 0, 0.54);">{{modules[module].icon}}</v-icon>
-                                    </div>
-                                    <div style="display: table-cell; width: 100%; vertical-align: middle; text-align: left;">
-                                        <span class="dash-text">{{modules[module].title}}</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </v-btn>
-                        <template v-slot:badge>0</template>
-                    </v-badge>
-                </div>
-            </v-row>
+    <v-container class="fill-height" fluid :style="background_style">
+        <div class="dashboard-container">
+            <ul class="module-group-ul">
+                <li class="module-group-li" v-for="(module_group, x) in module_groups" :key="x" v-if="module_group.modules.length > 0 && module_group.title !== null">
+                    <div class="dashboard-module-group">
+                        <div class="module-group-title-hold">
+                            <span>{{module_group.title}}</span>
+                        </div>
+                        <div class="module-group-list-hold">
+                            <ul class="module-group-list-ul">
+                                <li class="module-group-list-li" v-for="(module, y) in module_group.modules" :key="y">
+                                    <v-card class="module-item-btn">
+                                        <div class="module-item-hold">
+                                            <div class="module-item-icon-hold">
+                                                <v-icon style="font-size: 80px; color: rgb(208, 208, 208); margin-top: 22px;">{{modules[module].icon}}</v-icon>
+                                            </div>
+                                            <div class="module-item-title-hold">
+                                                <span>{{modules[module].title}}</span>
+                                            </div>
+                                            <div class="module-item-description-hold">
+                                                <p>{{modules[module].description}}</p>
+                                            </div>
+                                            <div class="module-item-button-hold">
+                                                <v-btn elevation="0" class="mx-2" :to="modules[module].to_prefix + '/' + module" nuxt>Manage</v-btn>
+                                                <v-btn elevation="0" class="mx-2" v-if="modules[module].create_btn" :to="modules[module].to_prefix + '/' + module + '/create'" nuxt>Create</v-btn>
+                                            </div>
+                                        </div>
+                                    </v-card>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </li>
+            </ul>
         </div>
     </v-container>
 </template>
@@ -48,7 +60,7 @@
         },
         computed: {
             background_style(){
-                return "background: url('" + this.background + "'); background-size: cover; display: block;";
+                return "background: url('" + this.background + "'); background-size: cover; background-position: center center; display: block;";
             },
             module_groups(){
                 return boost.module_groups;
@@ -61,41 +73,112 @@
 </script>
 
 <style scoped>
-    .group-title{
-        font-size: 28px;
-        font-weight: 500;
+
+    .dashboard-container{
+        display: flex;
+        justify-content: center;
+        padding: 0px 24px;
     }
 
-    .dash-item{
-        cursor: pointer;
+    .module-group-ul{
+        list-style: none;
+        text-align: left;
+        margin: 0;
+        padding: 0;
+        overflow: auto;
+    }
+
+    .module-group-ul .module-group-li{
+        display: block;
+        margin: 0;
+        padding: 0;
+    }
+
+    .dashboard-module-group{
+        margin-top: 12px;
+    }
+
+    .module-group-title-hold{
+        display: block;
+        width: 100%;
+        padding: 8px 0px;
+        text-align: center;
+    }
+    .module-group-title-hold span{
+        font-size: 28px;
+        font-weight: 300;
+    }
+
+    .module-group-list-hold{
+        display: block;
+    }
+
+    .module-group-list-hold .module-group-list-ul{
+        list-style: none;
+        text-align: center;
+        margin: 0;
+        padding: 0;
+        overflow: auto;
+    }
+
+    .module-group-list-hold .module-group-list-ul .module-group-list-li{
+        display: inline-block;
+        margin: 0;
+        padding: 12px;
+        perspective: 300px;
+        perspective-origin: 50% 50%;
+    }
+
+    .module-item-btn{
+        height: unset;
+        min-width: unset;
+        padding: 0;
+        margin: 0;
+        background: #ffffff;
         text-align: center;
     }
 
-    .dash-icon{
-        font-size: 30px !important;
+    .module-item-hold{
+        display: block;
+        width: 240px;
+        height: 300px;
     }
 
-    .dash-text {
-        font-weight: 400;
-        font-size: 1rem;
+    .module-item-hold{
+        display: table;
     }
-</style>
 
-<style>
-    .dash-notif-badge .v-badge__badge{
-        inset: unset !important;
-        right: -2px !important;
-        top: -2px !important;
+    .module-item-icon-hold{
+        display: table-row;
+        height: 110px;
     }
-    .dash-tag-badge{
-        width: 100%;
+
+    .module-item-title-hold{
+        display: table-row;
     }
-    .dash-tag-badge .v-badge__badge{
-        top: unset !important;
-        right: unset !important;
-        bottom: unset !important;
-        left: unset !important;
-        position: unset !important;
-        margin-top: 30px !important;
+
+    .module-item-title-hold span{
+        font-size: 18px;
+        font-weight: 500;
     }
+
+    .module-item-description-hold{
+        display: table-row;
+    }
+
+    .module-item-description-hold p{
+        font-size: 14px;
+        font-weight: 300;
+        max-height: 62px;
+        min-height: 62px;
+        overflow: hidden;
+        padding: 0px 12px;
+        margin: 0;
+        color: #a7a7a7;
+    }
+
+    .module-item-button-hold{
+        display: table-row;
+    }
+
 </style>

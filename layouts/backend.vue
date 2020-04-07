@@ -3,32 +3,34 @@
         <v-navigation-drawer class="sidemenu" :permanent="!$vuetify.breakpoint.xsOnly" app overflow clipped :mini-variant="!drawer && !$vuetify.breakpoint.xsOnly" mini-variant-width="60" v-model="drawer_open">
 
             <template v-for="(module_group, key) in module_groups">
-                <v-divider></v-divider>
+                <div v-if="module_group.modules.length > 0">
+                    <v-divider></v-divider>
 
-                <v-list>
-                    <v-subheader style="white-space: nowrap" v-if="module_group.title !== null">{{module_group.title}}</v-subheader>
+                    <v-list>
+                        <v-subheader style="white-space: nowrap" v-if="module_group.title !== null">{{module_group.title}}</v-subheader>
 
-                    <v-list-item-group>
+                        <v-list-item-group>
 
-                        <template v-for="(module, index) in module_group.modules">
-                            <v-tooltip right :disabled="drawer || $vuetify.breakpoint.xsOnly">
-                                <template v-slot:activator="{ on }">
-                                    <v-list-item v-on="on" :to="modules[module].to_prefix + '/' + module" exact nuxt :class="isActive(modules[module].to_prefix + '/' + module)">
-                                        <v-list-item-icon>
-                                            <v-icon>{{modules[module].icon}}</v-icon>
-                                        </v-list-item-icon>
-                                        <v-list-item-content>
-                                            <v-list-item-title>{{modules[module].title}}</v-list-item-title>
-                                        </v-list-item-content>
-                                    </v-list-item>
-                                </template>
-                                <span>{{modules[module].title}}</span>
-                            </v-tooltip>
-                        </template>
+                            <template v-for="(module, index) in module_group.modules">
+                                <v-tooltip right :disabled="drawer || $vuetify.breakpoint.xsOnly">
+                                    <template v-slot:activator="{ on }">
+                                        <v-list-item v-on="on" :to="modules[module].to_prefix + '/' + module" exact nuxt :class="isActive(modules[module].to_prefix + '/' + module)">
+                                            <v-list-item-icon>
+                                                <v-icon>{{modules[module].icon}}</v-icon>
+                                            </v-list-item-icon>
+                                            <v-list-item-content>
+                                                <v-list-item-title>{{modules[module].title}}</v-list-item-title>
+                                            </v-list-item-content>
+                                        </v-list-item>
+                                    </template>
+                                    <span>{{modules[module].title}}</span>
+                                </v-tooltip>
+                            </template>
 
-                    </v-list-item-group>
+                        </v-list-item-group>
 
-                </v-list>
+                    </v-list>
+                </div>
             </template>
 
         </v-navigation-drawer>

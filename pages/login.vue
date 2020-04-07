@@ -12,7 +12,7 @@
                         </v-card-title>
                     </v-row>
                     <v-row justify="center">
-                        <v-card-title class="pt-0" style="text-align: center">Boost Management System</v-card-title>
+                        <v-card-title class="pt-0" style="text-align: center; word-break: keep-all;">Boost Management System</v-card-title>
                         <v-card-text style="text-align: center">v{{version}}</v-card-text>
                     </v-row>
                     <v-row justify="center" class="pt-4">
@@ -28,7 +28,7 @@
                                         <v-text-field v-model="username" :rules="usernameRules" label="Username" required autofocus></v-text-field>
                                     </v-col>
                                     <v-col cols="12" md="12">
-                                        <v-text-field class="a-field" v-model="password" :rules="passwordRules" label="Password" :type="password_show ? 'text' : 'password'" :append-icon="password_show ? 'mdi-eye' : 'mdi-eye-off'" @click:append="password_show = !password_show"></v-text-field>
+                                        <v-text-field class="a-field" v-model="password" v-on:keyup="fieldEnterPress" :rules="passwordRules" label="Password" :type="password_show ? 'text' : 'password'" :append-icon="password_show ? 'mdi-eye' : 'mdi-eye-off'" @click:append="password_show = !password_show"></v-text-field>
                                     </v-col>
                                 </v-row>
                                 <v-row justify="center" class="mt-12">
@@ -81,6 +81,11 @@
             }
         },
         methods: {
+            fieldEnterPress(e){
+                if(e.keyCode === 13){
+                    this.login(this.username, this.password);
+                }
+            },
             login: function(username, password){
                 if(username.length > 0 && password.length > 0){
                     let _this = this;

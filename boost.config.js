@@ -39,14 +39,18 @@ export default {
             tag_color: colors.blue.base
         }
     },
-    module_groups: [
-        {
+    module_groups: {
+        0: {
             title: null,
             modules: [
                 'admin'
             ]
         },
-        {
+        'Your Modules': {
+            title: 'Your Modules',
+            modules: []
+        },
+        'System': {
             title: "System",
             modules: [
                 'users',
@@ -55,5 +59,5 @@ export default {
                 'preferences'
             ]
         }
-    ]
+    }
 };

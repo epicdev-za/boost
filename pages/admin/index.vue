@@ -1,22 +1,28 @@
 <template>
-    <v-img :src="background" style="height: calc(100vh - 60px)">
-        <v-container class="fill-height" style="background-color: rgba(255, 255, 255, 0.8)" fluid>
-            <v-row align="start" justify="center" class="px-12">
-                <nuxt-link v-for="(module, index) in modules" :key="index" :to="module.to_prefix + '/' + module.to">
-                    <v-card class="ma-0 px-4 py-4 dash-item" width="160" color="transparent" elevation="0" tile>
-                        <v-badge overlap class="dash-notif-badge" :value="module.notification_count > 0">
-                            <template v-slot:badge>{{module.notification_count}}</template>
-                            <v-icon class="dash-icon mx-2 mt-2 mb-1">{{module.icon}}</v-icon>
-                        </v-badge>
-                        <v-badge overlap class="dash-tag-badge" :color="module.tag_color" :value="module.tag !== ''">
-                            <template v-slot:badge>{{module.tag}}</template>
-                            <v-card-text class="pa-0 mb-2 mt-1 dash-text">{{module.title}}</v-card-text>
-                        </v-badge>
-                    </v-card>
-                </nuxt-link>
+    <v-container class="fill-height pb-12" :style="background_style" fluid>
+        <div v-for="(module_group, index) in module_groups" :key="index" class="pt-12" v-if="module_group.title !== null && module_group.modules.length > 0">
+            <span class="group-title px-12">{{module_group.title}}</span>
+            <v-row class="px-12 mt-4">
+                <div v-for="(module, key) in module_group.modules" :key="key">
+                    <v-badge class="dash-notif-badge" :value="0 > 0">
+                        <v-btn :to="modules[module].to_prefix + '/' + module" nuxt class="ma-2 pa-0 dash-item" width="160" elevation="1" tile :width="300" style="height: unset; background: #ffffff; text-transform: unset;">
+                            <div style="display: table">
+                                <div style="display: table-row">
+                                    <div style="display: table-cell">
+                                        <v-icon class="dash-icon ma-4" style="color: rgba(0, 0, 0, 0.54);">{{modules[module].icon}}</v-icon>
+                                    </div>
+                                    <div style="display: table-cell; width: 100%; vertical-align: middle; text-align: left;">
+                                        <span class="dash-text">{{modules[module].title}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </v-btn>
+                        <template v-slot:badge>0</template>
+                    </v-badge>
+                </div>
             </v-row>
-        </v-container>
-    </v-img>
+        </div>
+    </v-container>
 </template>
 
 <script>
@@ -41,59 +47,45 @@
             }
         },
         computed: {
+            background_style(){
+                return "background: url('" + this.background + "'); background-size: cover; display: block;";
+            },
+            module_groups(){
+                return boost.module_groups;
+            },
             modules(){
-                let modules = [];
-
-                const module_groups = boost.module_groups;
-                for(let i = 0; i < module_groups.length; i++){
-                    let module_group = module_groups[i];
-                    if(module_group.title !== null){
-                        for(let x = 0; x < module_group.modules.length; x++){
-                            let module = boost.modules[module_group.modules[x]];
-
-                            module.notification_count = 0;
-                            module.to = module_group.modules[x];
-
-                            modules.push(module);
-                        }
-                    }
-                }
-
-                return modules;
+                return boost.modules;
             }
         }
     }
 </script>
 
 <style scoped>
+    .group-title{
+        font-size: 28px;
+        font-weight: 500;
+    }
+
     .dash-item{
         cursor: pointer;
         text-align: center;
     }
 
     .dash-icon{
-        font-size: 50px !important;
-    }
-    .dash-item .dash-icon{
-        -webkit-transition: all 150ms cubic-bezier(.7,.91,.93,2) !important;
-        -moz-transition: all 150ms cubic-bezier(.7,.91,.93,2) !important;
-        -ms-transition: all 150ms cubic-bezier(.7,.91,.93,2) !important;
-        -o-transition: all 150ms cubic-bezier(.7,.91,.93,2) !important;
-        transition: all 150ms cubic-bezier(.7,.91,.93,2) !important;
-    }
-    .dash-item:hover .dash-icon{
-        transform: scale(1.1);
+        font-size: 30px !important;
     }
 
     .dash-text {
-        font-weight: 700;
+        font-weight: 400;
+        font-size: 1rem;
     }
 </style>
 
 <style>
     .dash-notif-badge .v-badge__badge{
-        right: 28px !important;
-        top: 0px !important;
+        inset: unset !important;
+        right: -2px !important;
+        top: -2px !important;
     }
     .dash-tag-badge{
         width: 100%;

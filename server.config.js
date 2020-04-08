@@ -38,6 +38,18 @@ module.exports = {
                     handler: require("./api/endpoints/auth/logged_in")
                 }
             }
+        },
+        'admin': {
+            children: {
+                'roles': {
+                    children: {
+                        'list': {
+                            method: 'get',
+                            handler: require("./api/endpoints/admin/roles/list")
+                        }
+                    }
+                }
+            }
         }
     }
 };

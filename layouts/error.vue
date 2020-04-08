@@ -6,8 +6,8 @@
         <div class="bottom-bar">
             <v-row justify="center">
                 <v-card elevation="0" class="pa-12">
-                    <v-card-title style="text-align: center">{{header}}</v-card-title>
-                    <v-card-text style="text-align: center">{{subheader}}</v-card-text>
+                    <v-card-title style="text-align: center; word-break: keep-all;">{{header}}</v-card-title>
+                    <v-card-text style="text-align: center; word-break: keep-all;">{{subheader}}</v-card-text>
                     <v-card-actions>
                         <v-btn color="primary" x-large class="px-12" style="margin: 0px auto; margin-top: 36px; margin-bottom: 18px" @click="$router.back()">Go Back</v-btn>
                     </v-card-actions>

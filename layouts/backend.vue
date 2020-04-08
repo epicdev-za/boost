@@ -61,8 +61,8 @@
 
         </v-app-bar>
 
-        <v-content class="fill-height">
-            <v-app-bar dense height="40" elevation="0" style="border-bottom: 1px solid rgba(0,0,0,.12);" class="hidden-xs-only" v-if="getBreadcrumbs().length > 1">
+        <v-content class="fill-height" style="background-color: rgb(240, 240, 240);">
+            <v-app-bar dense height="40" elevation="0" style="border-bottom: 1px solid rgba(0,0,0,.12); background-color: #ffffff;" class="hidden-xs-only" v-if="getBreadcrumbs().length > 1">
                 <v-breadcrumbs :items="getBreadcrumbs()" divider="/" class="px-0">
                     <template v-slot:item="{item}">
                         <v-breadcrumbs-item :to="item.to" exact nuxt>{{item.text}}</v-breadcrumbs-item>
@@ -178,11 +178,12 @@
 
     .sidemenu .v-subheader{
         max-height: 48px;
-        font-size: 0.875rem;
-        transition: max-height 0.5s cubic-bezier(.12,.84,.36,1.01), font-size 0.5s cubic-bezier(.12,.84,.36,1.01);
+        overflow: hidden;
+        opacity: 1;
+        transition: max-height 0.5s cubic-bezier(.12,.84,.36,1.01), opacity 0.5s cubic-bezier(.12,.84,.36,1.01);
     }
     .sidemenu.v-navigation-drawer--mini-variant .v-subheader{
         max-height: 0px;
-        font-size: 0rem;
+        opacity: 0;
     }
 </style>

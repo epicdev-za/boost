@@ -60,7 +60,7 @@
         },
         computed: {
             background_style(){
-                return "background: url('" + this.background + "'); background-size: cover; background-position: center center; display: block;";
+                return "background: url('" + this.background + "'); background-size: cover; background-position: center center; display: block; background-attachment: fixed;";
             },
             module_groups(){
                 return boost.module_groups;

@@ -38,7 +38,7 @@ export default {
         },
         'preferences': {
             title: "Preferences",
-            description: "From here you can control and customize your system preferences",
+            description: "From here you can control and customize your system preferences.",
             icon: "mdi-cog-outline",
             to_prefix: '/admin',
             tag: '',

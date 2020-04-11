@@ -1,5 +1,5 @@
 const axios = require("axios");
-const boost_routes = require("../boost.routes");
+const boost_routes = require("./../../../boost.routes");
 const routes = boost_routes.default;
 
 module.exports = async function({app, route, store, redirect, error, env, req}){
@@ -35,7 +35,7 @@ module.exports = async function({app, route, store, redirect, error, env, req}){
                                 error({
                                     statusCode: 403
                                 });
-                                break;
+                                return;
                             }
                         }
                     }
@@ -43,6 +43,7 @@ module.exports = async function({app, route, store, redirect, error, env, req}){
                     error({
                         statusCode: 403
                     });
+                    return;
                 }
             }else{
                 let response = await axios.post("/api/auth/has_access", {
@@ -53,13 +54,20 @@ module.exports = async function({app, route, store, redirect, error, env, req}){
                         error({
                             statusCode: 403
                         });
+                        return;
                     }
                 }else{
                     error({
                         statusCode: 500
                     });
+                    return;
                 }
             }
         }
+    }else{
+        error({
+            statusCode: 404
+        });
+        return;
     }
 }

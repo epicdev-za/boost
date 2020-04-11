@@ -100,7 +100,7 @@
             },
             isActive(to){
                 if(to !== '/admin'){
-                    let currentPath = this.$route.fullPath;
+                    let currentPath = this.$route.path;
                     if(currentPath.startsWith(to)){
                         return "v-list-item--active";
                     }
@@ -116,7 +116,7 @@
                     pathed_routes[system_routes[i].path] = system_routes[i];
                 }
 
-                let currentPath = this.$route.fullPath;
+                let currentPath = this.$route.path;
                 let splitPaths = currentPath.split('/');
                 splitPaths.splice(0, 1);
 

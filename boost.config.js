@@ -35,15 +35,6 @@ export default {
             to_prefix: '/admin',
             tag: '',
             tag_color: colors.blue.base
-        },
-        'preferences': {
-            title: "Preferences",
-            description: "From here you can control and customize your system preferences.",
-            icon: "mdi-cog-outline",
-            to_prefix: '/admin',
-            tag: '',
-            tag_color: colors.blue.base,
-            create_btn: true
         }
     },
     module_groups: {
@@ -62,8 +53,7 @@ export default {
             modules: [
                 'users',
                 'roles',
-                'debug-logger',
-                'preferences'
+                'debug-logger'
             ]
         }
     }

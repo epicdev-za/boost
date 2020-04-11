@@ -1,12 +1,12 @@
 const ServerException = require("../../../ServerException");
 const sanitizer = require("../../../sanitizer");
 const clients = require("restify-clients");
-const Session = require("../../../Session");
+const APIUtil = require("../../../APIUtil");
 
 module.exports = function(req, res, next){
     if(req.body === undefined) req.body = {};
 
-    if(Session.hasPermission(req.session.user, 'roles.view')){
+    if(APIUtil.hasPermission(req.session.user, 'roles.view')){
         let page, itemsPerPage, sortBy, sortDesc;
         try{
             page = sanitizer.cleanNumeric(extract(req.query, 'page'));
@@ -30,9 +30,16 @@ module.exports = function(req, res, next){
                         next(new ServerException(cres.statusCode, err.body.error, err.body.error_description));
                     }
                 }else{
-                    if(project_key === "56343271-772a-43b4-91b7-35ee3d895e6b"){
-                        obj.showProjectColumn = true;
+                    let items = [];
+                    for(let i = 0; i < obj.items.length; i++){
+                        let item = obj.items[i];
+                        if(!obj.showProjectColumn){
+                            delete item['project'];
+                        }
+                        delete item['project_uuid'];
+                        items.push(item);
                     }
+                    obj.items = items;
                     res.send(obj);
                 }
             });

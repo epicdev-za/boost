@@ -4,7 +4,7 @@
             <v-card-title>
                 Manage Roles
                 <v-spacer></v-spacer>
-                <v-btn depressed to="/admin/users/create">
+                <v-btn depressed to="/admin/roles/create">
                     <v-icon small class="mr-2">mdi-plus</v-icon>
                     Create Role
                 </v-btn>
@@ -23,7 +23,7 @@
                         <v-card>
                             <v-list dense>
 
-                                <v-list-item link>
+                                <v-list-item link :to="'/admin/roles/edit?uuid=' + item.uuid" nuxt>
                                     <v-list-item-icon>
                                         <v-icon>mdi-pencil</v-icon>
                                     </v-list-item-icon>
@@ -117,6 +117,7 @@
                     _this.loading = false;
                     _this.table_items = [];
                     _this.totalItems = 0;
+                    _this.project_column = false;
                 });
             }
         }

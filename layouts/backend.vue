@@ -62,6 +62,7 @@
         </v-app-bar>
 
         <v-content class="fill-height" style="background-color: rgb(240, 240, 240);">
+
             <v-app-bar dense height="40" elevation="0" style="border-bottom: 1px solid rgba(0,0,0,.12); background-color: #ffffff;" class="hidden-xs-only" v-if="getBreadcrumbs().length > 1">
                 <v-breadcrumbs :items="getBreadcrumbs()" divider="/" class="px-0">
                     <template v-slot:item="{item}">
@@ -69,7 +70,11 @@
                     </template>
                 </v-breadcrumbs>
             </v-app-bar>
+
             <nuxt :modulegroups="module_groups"></nuxt>
+
+            <Notifications></Notifications>
+
         </v-content>
     </v-app>
 </template>
@@ -78,6 +83,7 @@
     const axios = require("axios");
     const boost = require('../../../boost.config');
     const config = boost.default;
+    import Notifications from './../components/Notifications';
     export default {
         data(){
             return {
@@ -88,6 +94,7 @@
                 drawer_open: false
             }
         },
+        components: { Notifications },
         methods: {
             toggle_nav(){
                 if(this.$vuetify.breakpoint.xsOnly){

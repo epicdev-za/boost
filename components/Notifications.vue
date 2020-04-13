@@ -2,27 +2,14 @@
     <v-container class="cont">
         <div class="alert-container">
 
-            <div class="alert-holder">
-                <v-alert type="success" dense dismissible>
-                    I'm a success alert.
-                </v-alert>
-            </div>
-
-            <div class="alert-holder">
-                <v-alert type="error" dense dismissible>
-                    I'm a success alert. Aa
-                </v-alert>
-            </div>
-
-            <div class="alert-holder">
-                <v-alert type="warning" dense dismissible>
-                    I'm a success alert. atastastast
-                </v-alert>
-            </div>
-
-            <div class="alert-holder">
-                <v-alert type="info" dense dismissible>
-                    I'm a success alert.
+            <div v-for="(notification, key) in notifications" class="alert-holder">
+                <v-alert :type="notification.type" dense dismissible border="left">
+                    {{notification.message}}
+                    <template v-slot:close>
+                        <v-btn icon rounded small class="v-alert__dismissible" @click="removeNotification(key)">
+                            <v-icon>mdi-close</v-icon>
+                        </v-btn>
+                    </template>
                 </v-alert>
             </div>
 
@@ -32,7 +19,35 @@
 
 <script>
     export default {
-        name: "Notifications"
+        name: "Notifications",
+        computed: {
+            notifications(){
+                return this.$store.state.notification_store.notifications;
+            }
+        },
+        methods: {
+            removeNotification(index){
+                this.$store.commit('notification_store/removeNotification', index);
+            }
+        },
+        mounted() {
+            let _this = this;
+            if(_this.$store.state.notification_store.removeInterval === null){
+                this.$store.commit('notification_store/setRemoveInterval', setInterval(function(){
+                    let current_time = Math.round(new Date().getTime()/1000);
+                    let removals = [];
+                    for(let i = 0; i < _this.notifications.length; i++){
+                        let notif = _this.notifications[i];
+                        if((notif.time_created + notif.delay) < current_time){
+                            removals.push(i);
+                        }
+                    }
+                    for(let i = 0; i < removals.length; i++){
+                        _this.$store.commit('notification_store/removeNotification', removals[i]);
+                    }
+                }, 100));
+            }
+        }
     }
 </script>
 

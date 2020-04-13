@@ -48,6 +48,14 @@ module.exports = {
                             handler: require("./api/endpoints/admin/roles/list")
                         }
                     }
+                },
+                'logs': {
+                    children: {
+                        'list': {
+                            method: 'get',
+                            handler: require("./api/endpoints/admin/logs/list")
+                        }
+                    }
                 }
             }
         }

@@ -28,14 +28,18 @@ module.exports = {
     },
 
     cleanSymbols(data){
+        if(data === null) return null;
         data = data.toString();
         data = data.replace(/[^a-zA-Z0-9 \/:._,~\-!?@#\$%\^&\*]+/g, '');
         return data;
     },
 
     cleanExtraSymbols(data){
+        if(data === null) return null;
         data = data.toString();
-        data = data.replace(/[^a-zA-Z0-9 \/{}[\]:._~\-!@#\$%\^&\*áàâãªäÁÀÂÃÄÍÌÎÏíìîïéèêëÉÈÊËóòôõºöÓÒÔÕÖúùûüÚÙÛÜçÇñÑ]+/g, '')
+        data = data.replace(/[\']+/g, '\\\'');
+        data = data.replace(/[\"]+/g, '\\\"');
+        data = data.replace(/[^a-zA-Z0-9 \"\'\n\\\/{}[\]:._~\-!@#\$%\^&\*áàâãªäÁÀÂÃÄÍÌÎÏíìîïéèêëÉÈÊËóòôõºöÓÒÔÕÖúùûüÚÙÛÜçÇñÑ]+/g, '')
         return data;
     },
 

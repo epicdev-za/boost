@@ -4,6 +4,7 @@ const bodyParser = require("body-parser");
 const Plasma = require("plasma");
 const ServerException = require("./ServerException");
 const config = require("../../../server.config");
+const APIUtil = require("./APIUtil");
 
 let database = new Plasma();
 database.connect(config.db);
@@ -12,12 +13,6 @@ let server = express();
 server.use(bodyParser.urlencoded({extended: true}));
 server.use(bodyParser.json());
 server.use(bodyParser.raw());
-// server.use(session({
-//     secret: config.jwt.secret,
-//     resave: false,
-//     saveUnitialized: false,
-//     cookie: { maxAge: 1800000, httpOnly: false }
-// }));
 
 loadEndpoint(config.endpoints);
 

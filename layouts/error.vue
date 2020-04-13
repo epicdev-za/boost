@@ -9,7 +9,7 @@
                     <v-card-title style="text-align: center; word-break: keep-all;">{{header}}</v-card-title>
                     <v-card-text style="text-align: center; word-break: keep-all;">{{subheader}}</v-card-text>
                     <v-card-actions>
-                        <v-btn color="primary" x-large class="px-12" style="margin: 0px auto; margin-top: 36px; margin-bottom: 18px" @click="$router.back()">Go Back</v-btn>
+                        <v-btn color="primary" x-large class="px-12" style="margin: 0px auto; margin-top: 36px; margin-bottom: 18px" @click="btnFunction">{{button_text}}</v-btn>
                     </v-card-actions>
                 </v-card>
             </v-row>
@@ -28,7 +28,16 @@
         },
         head () {
             return {
-                title: this.error.statusCode === 404 ? '404 Not Found' : 'An error occurred'
+                title: (() => {
+                    switch(this.error.statusCode){
+                        case 404:
+                            return "404 Not Found";
+                        case 403:
+                            return "403 Permission Denied";
+                        default:
+                            return "500 An error occurred";
+                    }
+                })()
             }
         },
         data(){
@@ -43,12 +52,24 @@
                 }
             }
         },
+        methods: {
+            btnFunction(){
+                if(this.error.statusCode === 403){
+                    this.$router.push("/login");
+                }else{
+                    this.$router.back();
+                }
+            }
+        },
         computed: {
             header(){
                 return (this.headers[this.error.statusCode] !== undefined) ? this.headers[this.error.statusCode] : "An error occurred";
             },
             subheader(){
                 return (this.subheaders[this.error.statusCode] !== undefined) ? this.subheaders[this.error.statusCode] : "Please try again later";
+            },
+            button_text(){
+                return (this.error.statusCode === 403) ? "Login" : "Go Back";
             }
         }
     }

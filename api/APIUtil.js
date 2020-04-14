@@ -39,7 +39,7 @@ module.exports = {
         }
 
         if(Object.prototype.toString.call(obj) === "[object Object]" || Object.prototype.toString.call(obj) === "[object Array]"){
-            obj = JSON.stringify(obj);
+            obj = JSON.stringify(obj, null, 4);
         }
 
         obj = "" + obj;
@@ -66,6 +66,15 @@ module.exports = {
         debugLog.stack = fullStack;
 
         return debugLog.save();
+    },
+
+    DebugLevel: {
+        DEBUG: 0,
+        CRON_JOB: 1,
+        SQL: 2,
+        MOBILE: 3,
+        ERROR: 4,
+        EXCEPTION: 5
     }
 
 };

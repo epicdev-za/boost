@@ -2,6 +2,7 @@ const ServerException = require("../../../ServerException");
 const sanitizer = require("../../../sanitizer");
 const APIUtil = require("../../../APIUtil");
 const DebugLog = require("../../../entities/DebugLog");
+const Plasma = require("plasma");
 
 module.exports = function(req, res, next){
     if(req.body === undefined) req.body = {};
@@ -14,7 +15,7 @@ module.exports = function(req, res, next){
         sortBy = JSON.parse(APIUtil.extract(req.query, 'sortBy'));
         sortDesc = JSON.parse(APIUtil.extract(req.query, 'sortDesc'));
 
-        if(APIUtil.hasPermission(req.session.user, 'debug_logger.view')){
+        if(APIUtil.hasPermission(req.session.user, 'debug_logger')){
             let query = "SELECT * FROM " + DebugLog.getEntity();
             let params = [];
 

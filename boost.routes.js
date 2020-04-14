@@ -38,5 +38,10 @@ export default {
         name: 'Edit Role',
         component: resolve('pages/admin/roles/create'),
         permissions: ['roles.view', 'roles.edit']
+    },
+    '/admin/debug-logger': {
+        name: "Debug Logger",
+        component: resolve('pages/admin/debug_logger/index'),
+        permissions: ['debug_logger']
     }
 }

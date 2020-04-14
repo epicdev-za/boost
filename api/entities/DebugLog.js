@@ -27,13 +27,6 @@ class DebugLog extends Entity{
         this.stack = sanitizer.cleanExtraSymbols(this.stack);
     }
 
-    static DEBUG = 0;
-    static CRON_JOB = 1;
-    static SQL = 2;
-    static MOBILE = 3;
-    static ERROR = 4;
-    static EXCEPTION = 5;
-
 }
 
 module.exports = DebugLog;

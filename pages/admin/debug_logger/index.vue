@@ -6,7 +6,7 @@
             </v-card-title>
             <v-data-table :headers="table_headers" :items="table_items" multi-sort :items-per-page="itemsPerPage" :loading="loading" :server-items-length="totalItems" :options.sync="options">
                 <template v-slot:item="{item}">
-                    <tr :style="'background-color: ' + convertRowColor(item)">
+                    <tr @click="openDialog(item)">
                         <td style="white-space: nowrap;">
                             {{convertTime(item)}}
                         </td>
@@ -22,13 +22,8 @@
                         <td style="white-space: nowrap;">
                             {{item.line}}
                         </td>
-                        <td>
-                            <v-btn rounded small icon @click="expanded = ((expanded === item.uuid) ? null : item.uuid)">
-                                <v-icon>{{((expanded === item.uuid) ? "mdi-chevron-up" : "mdi-chevron-down")}}</v-icon>
-                            </v-btn>
-                        </td>
                     </tr>
-                    <tr v-if="expanded === item.uuid">
+                    <tr v-if="1 === 2">
                         <td colspan="4" style="vertical-align: top; padding: 8px 16px; line-break: anywhere;">
                             <span class="monoblock" v-for="(message_line, key) in formatMessage(item).split('\n')" :key="key" style="display: block;">{{message_line.replace(/    +/g, '&nbsp;&nbsp;&nbsp;&nbsp;')}}</span>
                         </td>
@@ -37,11 +32,27 @@
                         </td>
                     </tr>
                 </template>
-                <template v-slot:expanded-item="{ headers, item }">
-                    <td :colspan="headers.length">More info about {{ item.message }}</td>
-                </template>
             </v-data-table>
         </v-card>
+        <v-dialog v-model="showDialog" width="1400">
+            <v-card>
+                <v-card-title style="padding: 16px 24px;">
+                    <v-chip label :color="convertTypeColor(expandedItem).tag" :text-color="convertTypeColor(expandedItem).text" style="margin-right: 10px;">{{convertType(expandedItem)}}</v-chip>
+                    <v-chip label v-if="expandedItem.tags !== null" style="margin-right: 10px;">{{expandedItem.tags}}</v-chip>
+                    <v-chip label style="margin-right: 10px;">{{convertTime(expandedItem)}}</v-chip>
+                    <v-spacer></v-spacer>
+                    <v-chip label>{{expandedItem.uuid}}</v-chip>
+                </v-card-title>
+                <v-divider></v-divider>
+                <div style="display: block; padding: 16px 24px;">
+                    <span class="monoblock" v-for="(message_line, key) in formatMessage(expandedItem).split('\n')" :key="key" style="display: block;">{{message_line.replace(/    +/g, '&nbsp;&nbsp;&nbsp;&nbsp;')}}</span>
+                </div>
+                <v-divider></v-divider>
+                <div style="display: block; padding: 16px 24px;" v-if="expandedItem.stack !== undefined">
+                    <span class="monoblock" v-for="(stack_item, key) in expandedItem.stack.split('\n')" :key="key" style="white-space: nowrap; display: block;">{{stack_item}}</span>
+                </div>
+            </v-card>
+        </v-dialog>
     </v-container>
 </template>
 
@@ -63,14 +74,14 @@
                 project_column: false,
                 loading: true,
                 options: {},
-                expanded: null,
+                expandedItem: {},
+                showDialog: false,
                 table_headers: [
                     { text: 'Time', value: 'time', align: 'left' },
                     { text: 'Type', value: 'type', align: 'left' },
                     { text: 'Tags', value: 'tags', align: 'left' },
                     { text: 'Message', value: 'message', align: 'left' },
-                    { text: 'Line', value: 'line', align: 'left' },
-                    { text: '', value: 'expand', align: 'right'}
+                    { text: 'Line', value: 'line', align: 'left' }
                 ]
             }
         },
@@ -137,6 +148,9 @@
                 }
             },
             formatMessage(item){
+                if(item.message === undefined){
+                    return "";
+                }
                 return item.message.replace(/[\\\"]+/g, "\"");
             },
             convertTime(item){
@@ -148,8 +162,23 @@
                 let hour = a.getHours();
                 let min = a.getMinutes();
                 let sec = a.getSeconds();
+
+                if(hour < 10){
+                    hour = "0" + hour;
+                }
+                if(min < 10){
+                    min = "0" + min;
+                }
+                if(sec < 10){
+                    sec = "0" + sec;
+                }
+
                 let time = date + ' ' + month + ' ' + year + ' ' + hour + ':' + min + ':' + sec ;
                 return time;
+            },
+            openDialog(item){
+                this.expandedItem = item;
+                this.showDialog = true;
             },
             getLogs(){
                 let _this = this;
@@ -203,5 +232,9 @@
     }
     .monoblock{
         font-family: 'Roboto Mono', monospace;
+        font-size: 13px;
+    }
+    .stack{
+        font-size: 13px;
     }
 </style>

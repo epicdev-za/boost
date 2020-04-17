@@ -3,7 +3,10 @@ const uuid = require("uuid/v4");
 module.exports = {
     state: () => ({
         notifications: [],
-        removeInterval: null
+        notificationRemoveInterval: null,
+        debug_logger: {
+            removalInterval: null
+        }
     }),
     mutations: {
         addNotification(state, notif) {
@@ -14,8 +17,11 @@ module.exports = {
         removeNotification(state, index){
             state.notifications.splice(index, 1);
         },
-        setRemoveInterval(state, interval){
-            state.removeInterval = interval;
+        setNotificationRemoveInterval(state, interval){
+            state.notificationRemoveInterval = interval;
+        },
+        setDebugLoggerRemoveInterval(state, interval){
+            state.debug_logger.removalInterval = interval;
         }
     }
 };

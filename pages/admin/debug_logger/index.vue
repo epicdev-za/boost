@@ -1,10 +1,34 @@
 <template>
     <v-container class="pa-12">
         <v-card>
-            <v-card-title>
-
+            <v-card-title style="padding: 0;">
+                <v-row style="margin: 0;">
+                    <v-col cols="12" sm="12" md="12" lg="12">
+                        <v-btn icon color="primary" :loading="loading" @click="paused = !paused">
+                            <v-icon small>{{paused ? "mdi-play" : "mdi-pause"}}</v-icon>
+                        </v-btn>
+                        <v-chip label>Total: {{totalItems}}</v-chip>
+                    </v-col>
+                    <v-col cols="12" sm="12" md="3" lg="3">
+                        <v-text-field dense placeholder="Search..." hide-details v-model="search"></v-text-field>
+                    </v-col>
+                    <v-col cols="12" sm="12" md="3" lg="3">
+                        <v-combobox dense v-model="filtersSelected" :items="filterTags" multiple placeholder="Type..." hide-details></v-combobox>
+                    </v-col>
+                    <v-col cols="12" sm="12" md="3" lg="3">
+                        <v-menu ref="menu" v-model="dateRangeMenu" :close-on-content-click="false" max-width="290">
+                            <template v-slot:activator="{ on }">
+                                <v-text-field v-model="dateRangeText" dense placeholder="Date Range" readonly v-on="on"></v-text-field>
+                            </template>
+                            <v-date-picker v-model="dates" scrollable range></v-date-picker>
+                        </v-menu>
+                    </v-col>
+                    <v-col cols="12" sm="12" md="3" lg="3">
+                        <v-combobox dense v-model="tagsSelected" :items="tagsOptions" multiple placeholder="Tags..." hide-details></v-combobox>
+                    </v-col>
+                </v-row>
             </v-card-title>
-            <v-data-table :headers="table_headers" :items="table_items" multi-sort :items-per-page="itemsPerPage" :loading="loading" :server-items-length="totalItems" :options.sync="options">
+            <v-data-table :headers="table_headers" :items="table_items" multi-sort :items-per-page="itemsPerPage" :footer-props="footer_props" :server-items-length="totalItems" :options.sync="options">
                 <template v-slot:item="{item}">
                     <tr @click="openDialog(item)">
                         <td style="white-space: nowrap;">
@@ -18,9 +42,6 @@
                         </td>
                         <td class="overflow-message">
                             <span>{{formatMessage(item)}}</span>
-                        </td>
-                        <td style="white-space: nowrap;">
-                            {{item.line}}
                         </td>
                     </tr>
                     <tr v-if="1 === 2">
@@ -70,23 +91,75 @@
             return {
                 totalItems: 0,
                 table_items: [],
-                itemsPerPage: 15,
+                itemsPerPage: 50,
                 project_column: false,
                 loading: true,
-                options: {},
+                paused: false,
+                options: {
+                    sortBy: ['time'],
+                    sortDesc: [true]
+                },
                 expandedItem: {},
                 showDialog: false,
                 table_headers: [
                     { text: 'Time', value: 'time', align: 'left' },
                     { text: 'Type', value: 'type', align: 'left' },
                     { text: 'Tags', value: 'tags', align: 'left' },
-                    { text: 'Message', value: 'message', align: 'left' },
-                    { text: 'Line', value: 'line', align: 'left' }
-                ]
+                    { text: 'Message', value: 'message', align: 'left' }
+                ],
+                footer_props: {
+                    'items-per-page-options': [25, 50, 100, 250]
+                },
+                filtersSelected: [
+                    {text: 'DEBUG', value: 0},
+                    {text: 'CRON JOB', value: 1},
+                    {text: 'SQL', value: 2},
+                    {text: 'MOBILE', value: 3},
+                    {text: 'ERROR', value: 4},
+                    {text: 'EXCEPTION', value: 5}
+                ],
+                filterTags: [
+                    {text: 'DEBUG', value: 0},
+                    {text: 'CRON JOB', value: 1},
+                    {text: 'SQL', value: 2},
+                    {text: 'MOBILE', value: 3},
+                    {text: 'ERROR', value: 4},
+                    {text: 'EXCEPTION', value: 5}
+                ],
+                tagsOptions: [],
+                tagsSelected: [],
+                dates: [],
+                dateRangeMenu: false,
+                search: ''
             }
+        },
+        computed: {
+            dateRangeText () {
+                return this.dates.join(' - ')
+            },
         },
         watch: {
             options: {
+                handler(){
+                    this.getLogs();
+                }
+            },
+            search: {
+                handler(){
+                    this.getLogs();
+                }
+            },
+            dates: {
+                handler(){
+                    this.getLogs();
+                }
+            },
+            filtersSelected: {
+                handler(){
+                    this.getLogs();
+                }
+            },
+            tagsSelected: {
                 handler(){
                     this.getLogs();
                 }
@@ -94,6 +167,15 @@
         },
         mounted() {
             this.getLogs();
+            let _this = this;
+            if(_this.$store.state.boost_store.debug_logger.removalInterval !== null){
+                clearInterval(_this.$store.state.boost_store.debug_logger.removalInterval);
+            }
+            this.$store.commit('boost_store/setDebugLoggerRemoveInterval', setInterval(function(){
+                if(!_this.paused) {
+                    _this.getLogs();
+                }
+            }, 5000));
         },
         methods: {
             convertType(item){
@@ -186,17 +268,23 @@
                 _this.expanded = null;
                 const { sortBy, sortDesc, page, itemsPerPage } = this.options;
 
-                axios.get("/api/admin/logs/list?page=" + page + "&itemsPerPage=" + itemsPerPage + "&sortBy=" + JSON.stringify(sortBy) + "&sortDesc=" + JSON.stringify(sortDesc)).then((response) => {
+                const search = this.search;
+                const types = this.filtersSelected;
+                const date_range = this.dates;
+                const tags = this.tagsSelected;
+
+                axios.get("/api/admin/logs/list?page=" + page + "&itemsPerPage=" + itemsPerPage + "&sortBy=" + JSON.stringify(sortBy) + "&sortDesc=" + JSON.stringify(sortDesc) + "&search=" + search + "&type=" + JSON.stringify(types) + "&date=" + JSON.stringify(date_range) + "&tags=" + JSON.stringify(tags)).then((response) => {
                     _this.loading = false;
                     _this.table_items = response.data.items;
                     _this.totalItems = parseInt(response.data.count);
                     _this.project_column = response.data.showProjectColumn;
+                    _this.tagsOptions = response.data.tags;
                 }).catch((err, obj) => {
                     _this.loading = false;
                     _this.table_items = [];
                     _this.totalItems = 0;
                     _this.project_column = false;
-                    this.$store.commit('notification_store/addNotification', {
+                    this.$store.commit('boost_store/addNotification', {
                         message: 'An error occurred. Engineers have been notified, please try again later',
                         type: 'error',
                         delay: 3
@@ -236,5 +324,8 @@
     }
     .stack{
         font-size: 13px;
+    }
+    .v-input.v-select--is-multi .v-select__selections{
+        flex-wrap: unset !important;
     }
 </style>

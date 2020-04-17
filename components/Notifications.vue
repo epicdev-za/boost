@@ -22,31 +22,32 @@
         name: "Notifications",
         computed: {
             notifications(){
-                return this.$store.state.notification_store.notifications;
+                return this.$store.state.boost_store.notifications;
             }
         },
         methods: {
             removeNotification(index){
-                this.$store.commit('notification_store/removeNotification', index);
+                this.$store.commit('boost_store/removeNotification', index);
             }
         },
         mounted() {
             let _this = this;
-            if(_this.$store.state.notification_store.removeInterval === null){
-                this.$store.commit('notification_store/setRemoveInterval', setInterval(function(){
-                    let current_time = Math.round(new Date().getTime()/1000);
-                    let removals = [];
-                    for(let i = 0; i < _this.notifications.length; i++){
-                        let notif = _this.notifications[i];
-                        if((notif.time_created + notif.delay) < current_time){
-                            removals.push(i);
-                        }
-                    }
-                    for(let i = 0; i < removals.length; i++){
-                        _this.$store.commit('notification_store/removeNotification', removals[i]);
-                    }
-                }, 100));
+            if(_this.$store.state.boost_store.notificationRemoveInterval !== null){
+                clearInterval(_this.$store.state.boost_store.notificationRemoveInterval);
             }
+            this.$store.commit('boost_store/setNotificationRemoveInterval', setInterval(function(){
+                let current_time = Math.round(new Date().getTime()/1000);
+                let removals = [];
+                for(let i = 0; i < _this.notifications.length; i++){
+                    let notif = _this.notifications[i];
+                    if((notif.time_created + notif.delay) < current_time){
+                        removals.push(i);
+                    }
+                }
+                for(let i = 0; i < removals.length; i++){
+                    _this.$store.commit('boost_store/removeNotification', removals[i]);
+                }
+            }, 100));
         }
     }
 </script>

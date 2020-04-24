@@ -46,6 +46,14 @@ module.exports = {
                         'list': {
                             method: 'get',
                             handler: require("./api/endpoints/admin/roles/list")
+                        },
+                        'is_sanctum': {
+                            method: 'get',
+                            handler: require("./api/endpoints/admin/roles/is_sanctum")
+                        },
+                        'get': {
+                            method: 'get',
+                            handler: require("./api/endpoints/admin/roles/get")
                         }
                     }
                 },

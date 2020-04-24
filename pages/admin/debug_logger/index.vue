@@ -70,7 +70,7 @@
                 </div>
                 <v-divider></v-divider>
                 <div style="display: block; padding: 16px 24px;" v-if="expandedItem.stack !== undefined">
-                    <span class="monoblock" v-for="(stack_item, key) in expandedItem.stack.split('\n')" :key="key" style="white-space: nowrap; display: block;">{{stack_item}}</span>
+                    <span class="monoblock" v-for="(stack_item, key) in expandedItem.stack.split('\n')" :key="key" style="white-space: nowrap; display: block;" v-html="formatStackRow(stack_item)"></span>
                 </div>
             </v-card>
         </v-dialog>
@@ -234,6 +234,9 @@
                     return "";
                 }
                 return item.message.replace(/[\\\"]+/g, "\"");
+            },
+            formatStackRow(row){
+                return row.replace(/(([A-Z]:\\([a-zA-Z0-9 _@-]+\\)*([a-zA-Z0-9 _.-]*)):(\d+):(\d+))/g, '<a href="phpstorm://open?file=$2&line=$5">$1</a>');
             },
             convertTime(item){
                 let a = new Date(item.time * 1000);

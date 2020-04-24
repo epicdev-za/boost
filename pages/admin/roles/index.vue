@@ -67,7 +67,10 @@
                 itemsPerPage: 15,
                 project_column: false,
                 loading: true,
-                options: {}
+                options: {
+                    sortBy: ['project', 'name'],
+                    sortDesc: [false, false]
+                }
             }
         },
         computed: {
@@ -118,6 +121,11 @@
                     _this.table_items = [];
                     _this.totalItems = 0;
                     _this.project_column = false;
+                    this.$store.commit('boost_store/addNotification', {
+                        message: 'An error occurred. Engineers have been notified, please try again later',
+                        type: 'error',
+                        delay: 3
+                    });
                 });
             }
         }

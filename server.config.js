@@ -54,6 +54,14 @@ module.exports = {
                         'get': {
                             method: 'get',
                             handler: require("./api/endpoints/admin/roles/get")
+                        },
+                        'save': {
+                            method: 'post',
+                            handler: require("./api/endpoints/admin/roles/save")
+                        },
+                        'delete': {
+                            method: 'post',
+                            handler: require("./api/endpoints/admin/roles/delete")
                         }
                     }
                 },

@@ -52,7 +52,7 @@
                 <v-card-actions>
                     <v-spacer></v-spacer>
                     <v-btn depressed to="/admin/roles" exact>Cancel</v-btn>
-                    <v-btn depressed>Save</v-btn>
+                    <v-btn depressed @click="save">Save</v-btn>
                 </v-card-actions>
             </v-card>
         </v-row>
@@ -94,6 +94,34 @@
                     });
                 }
                 return arr;
+            },
+            save(){
+                let _this = this;
+
+                if(_this.item.name.length > 0){
+                    _this.loading = true;
+
+                    axios.post("/api/admin/roles/save", {
+                        item: _this.item,
+                        permissions: _this.permissions
+                    }).then((response) => {
+                        _this.loading = false;
+                        _this.item = response.data.item
+                        _this.permissions = response.data.permissions;
+                        this.$store.commit('boost_store/addNotification', {
+                            message: 'Saved successfully',
+                            type: 'success',
+                            delay: 2
+                        });
+                    }).catch(() => {
+                        _this.loading = false;
+                        this.$store.commit('boost_store/addNotification', {
+                            message: 'An error occurred. Engineers have been notified, please try again later',
+                            type: 'error',
+                            delay: 3
+                        });
+                    });
+                }
             }
         },
         watch: {
@@ -116,6 +144,7 @@
                     axios.get("/api/admin/roles/get?role=" + uuid).then((res) => {
                         _this.loading = false;
                         _this.item = res.data.item;
+                        _this.permissions = res.data.permissions;
 
                         if(_this.is_sanctum){
                             for(let i = 0; i < _this.projects.length; i++){

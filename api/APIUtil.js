@@ -13,7 +13,7 @@ module.exports = {
                 return true;
             }
         }
-        return false;
+        throw new ServerException(403, "permission_denied", "You lack sufficient permission to access this data");
     },
 
     extract: function (object, key){

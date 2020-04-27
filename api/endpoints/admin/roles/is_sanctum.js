@@ -19,7 +19,11 @@ module.exports = function(req, res, next){
 
             client.get('/api/sanctum/roles/get_projects?project=' + project_key, (err, creq, cres, obj) => {
                 if(err){
-                    next(err);
+                    if(typeof cres === typeof undefined || cres === null){
+                        next(err);
+                    }else{
+                        next(new ServerException(cres.statusCode, err.body.error, err.body.error_description));
+                    }
                 }else{
                     res.send({
                         is_sanctum: true,
@@ -33,7 +37,5 @@ module.exports = function(req, res, next){
                 projects: []
             })
         }
-    }else{
-        next(new ServerException(403, "permission_denied", "You lack sufficient permission to access this data"));
     }
 }

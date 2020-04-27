@@ -63,7 +63,11 @@ function handlerErrorWrapper(handler){
             }
         }
 
-        handler(req, res, next_hook);
+        try{
+            handler(req, res, next_hook);
+        }catch (e) {
+            next_hook(e);
+        }
     }
 }
 

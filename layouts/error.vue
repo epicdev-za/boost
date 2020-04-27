@@ -99,10 +99,10 @@
     }
 
     .theme--dark .background{
-        background-color: #424242 !important;
+        background-color: #1E1E1E !important;
     }
     .theme--dark .error-header{
-        color: #424242 !important;
+        color: #1E1E1E !important;
     }
 
     @media only screen and (max-width: 450px) {

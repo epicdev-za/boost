@@ -1,11 +1,10 @@
-const APIUtil = require("../../../APIUtil");
 const ServerException = require("../../../ServerException");
+const sanitizer = require("../../../sanitizer");
 const clients = require("restify-clients");
+const APIUtil = require("../../../APIUtil");
 
 module.exports = function(req, res, next){
-    if(req.body === undefined) req.body = {};
-
-    if(APIUtil.hasPermission(req.session.user, 'roles.edit')){
+    if(APIUtil.hasPermission(req.session.user, 'users.edit')){
 
         const config = require("../../../../../../server.config");
         let project_key = config.sanctum.project_key;
@@ -15,7 +14,13 @@ module.exports = function(req, res, next){
             url: location
         });
 
-        client.post("/api/sanctum/roles/save?project=" + project_key, req.body, (err, creq, cres, obj) => {
+        let endpoint = '/api/sanctum/users/generate_password?project=' + project_key;
+
+        for(let key in req.query){
+            endpoint += "&" + key + "=" + req.query[key];
+        }
+
+        client.post(endpoint, req.body, (err, creq, cres, obj) => {
             if(err){
                 if(typeof cres === typeof undefined || cres === null){
                     next(err);

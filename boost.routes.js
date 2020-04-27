@@ -24,6 +24,11 @@ export default {
         component: resolve('pages/admin/users/create'),
         permissions: ['users.view', 'users.edit']
     },
+    '/admin/users/edit': {
+        name: 'Edit User',
+        component: resolve('pages/admin/users/create'),
+        permissions: ['users.view', 'users.edit']
+    },
     '/admin/roles': {
         name: 'Roles',
         component: resolve('pages/admin/roles/index'),

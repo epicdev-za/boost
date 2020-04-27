@@ -46,8 +46,6 @@ module.exports = function(req, res, next){
         }catch (e) {
             next(e);
         }
-    }else{
-        next(new ServerException(403, "permission_denied", "You lack sufficient permission to access this data"));
     }
 }
 

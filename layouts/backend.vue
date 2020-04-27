@@ -66,7 +66,7 @@
             <v-app-bar dense height="40" elevation="0" style="border-bottom: 1px solid rgba(0,0,0,.12); background-color: #ffffff;" class="hidden-xs-only" v-if="getBreadcrumbs().length > 1">
                 <v-breadcrumbs :items="getBreadcrumbs()" divider="/" class="px-0">
                     <template v-slot:item="{item}">
-                        <v-breadcrumbs-item :to="item.to" exact nuxt>{{item.text}}</v-breadcrumbs-item>
+                        <v-breadcrumbs-item :disabled="item.disabled" :to="item.to" exact nuxt>{{item.text}}</v-breadcrumbs-item>
                     </template>
                 </v-breadcrumbs>
             </v-app-bar>

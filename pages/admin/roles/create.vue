@@ -7,7 +7,7 @@
                     <v-card flat tile class="pa-5">
                         <v-row>
                             <v-col cols="12" md="12" :lg="(is_sanctum ? 8 : 12)" class="py-0">
-                                <v-text-field label="Name" v-model="item.name"></v-text-field>
+                                <v-text-field label="Name" v-model="item.name" :rules="nameRules" required autofocus></v-text-field>
                             </v-col>
 
                             <v-col cols="12" md="12" lg="4" class="py-0" v-if="is_sanctum">

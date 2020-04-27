@@ -134,8 +134,6 @@ module.exports = function(req, res, next){
                     });
                 }
             });
-        }else{
-            next(new ServerException(403, "permission_denied", "You lack sufficient permission to access this data"));
         }
     }catch (e) {
         next(e);

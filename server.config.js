@@ -65,6 +65,34 @@ module.exports = {
                         }
                     }
                 },
+                'users': {
+                    children: {
+                        'list': {
+                            method: 'get',
+                            handler: require("./api/endpoints/admin/users/list")
+                        },
+                        'save': {
+                            method: 'post',
+                            handler: require("./api/endpoints/admin/users/save")
+                        },
+                        'generate_password': {
+                            method: 'post',
+                            handler: require("./api/endpoints/admin/users/generate_password")
+                        },
+                        'get_roles': {
+                            method: 'get',
+                            handler: require("./api/endpoints/admin/users/get_roles")
+                        },
+                        'get': {
+                            method: 'get',
+                            handler: require("./api/endpoints/admin/users/get")
+                        },
+                        'delete': {
+                            method: 'post',
+                            handler: require("./api/endpoints/admin/users/delete")
+                        }
+                    }
+                },
                 'logs': {
                     children: {
                         'list': {

@@ -22,7 +22,11 @@ module.exports = function(req, res, next){
                 role: role
             }, (err, creq, cres, obj) => {
                 if(err){
-                    next(err);
+                    if(typeof cres === typeof undefined || cres === null){
+                        next(err);
+                    }else{
+                        next(new ServerException(cres.statusCode, err.body.error, err.body.error_description));
+                    }
                 }else{
                     res.send(obj);
                 }
@@ -30,7 +34,5 @@ module.exports = function(req, res, next){
         }catch (e) {
             next(e);
         }
-    }else{
-        next(new ServerException(403, "permission_denied", "You lack sufficient permission to access this data"));
     }
 }

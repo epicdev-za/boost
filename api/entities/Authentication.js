@@ -25,6 +25,43 @@ class Authentication extends Entity{
         this.ip_address = sanitizer.cleanSymbols(this.ip_address);
     }
 
+    static getPlasmaMapping(){
+        let mapping = super.getPlasmaMapping();
+
+        mapping['application_uuid'] = {
+            field: "application_uuid",
+            data_type: "VARCHAR",
+            data_length: 36,
+            nullable: "",
+            primary_key: false,
+            index: true
+        };
+        mapping['user_uuid'] = {
+            field: "user_uuid",
+            data_type: "VARCHAR",
+            data_length: 36,
+            nullable: "",
+            primary_key: false,
+            index: true
+        };
+        mapping['user_agent'] = {
+            field: "user_agent",
+            data_type: "VARCHAR",
+            data_length: 256,
+            nullable: "",
+            primary_key: false
+        };
+        mapping['ip_address'] = {
+            field: "ip_address",
+            data_type: "VARCHAR",
+            data_length: 39,
+            nullable: "not null",
+            primary_key: false
+        };
+
+        return mapping;
+    }
+
     static authenticate(ip, application, user, user_agent, callback){
         const config = require("../../../../server.config");
 

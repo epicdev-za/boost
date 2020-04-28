@@ -27,6 +27,51 @@ class DebugLog extends Entity{
         this.stack = sanitizer.cleanExtraSymbols(this.stack);
     }
 
+    static getPlasmaMapping(){
+        let mapping = super.getPlasmaMapping();
+
+        mapping['type'] = {
+            field: "type",
+            data_type: "integer",
+            nullable: "not null",
+            primary_key: false
+        };
+        mapping['message'] = {
+            field: "message",
+            data_type: "TEXT",
+            nullable: "not null",
+            primary_key: false
+        };
+        mapping['time'] = {
+            field: "time",
+            data_type: "INTEGER",
+            nullable: "not null",
+            primary_key: false
+        };
+        mapping['tags'] = {
+            field: "tags",
+            data_type: "VARCHAR",
+            data_length: 128,
+            nullable: "",
+            primary_key: false
+        };
+        mapping['line'] = {
+            field: "line",
+            data_type: "VARCHAR",
+            data_length: 512,
+            nullable: "not null",
+            primary_key: false
+        };
+        mapping['stack'] = {
+            field: "stack",
+            data_type: "TEXT",
+            nullable: "",
+            primary_key: false
+        };
+
+        return mapping;
+    }
+
 }
 
 module.exports = DebugLog;

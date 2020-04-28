@@ -13,7 +13,7 @@
                                     <v-card class="module-item-btn">
                                         <div class="module-item-hold">
                                             <div class="module-item-icon-hold">
-                                                <v-icon style="font-size: 80px; color: rgb(208, 208, 208); margin-top: 22px;">{{module.icon}}</v-icon>
+                                                <v-icon :style="icon_style">{{module.icon}}</v-icon>
                                             </div>
                                             <div class="module-item-title-hold">
                                                 <span>{{module.title}}</span>
@@ -61,7 +61,15 @@
         },
         computed: {
             background_style(){
-                return "background: url('" + this.background + "'); background-size: cover; background-position: center center; display: block; background-attachment: fixed;";
+                let tint = "rgba(255, 255, 255, 0.85)";
+                if(this.$vuetify.theme.dark){
+                    tint = "rgba(0, 0, 0, 0.85)";
+                }
+                return "background: linear-gradient(" + tint + ", " + tint + "), url('" + this.background + "'); background-size: cover; background-position: center center; display: block; background-attachment: fixed;";
+            },
+            icon_style(){
+                let icon_color = "rgb(208, 208, 208)";
+                return "font-size: 80px; color: " + icon_color + "; margin-top: 22px;";
             },
             dashboard_structure(){
                 let module_groups = {};
@@ -194,7 +202,6 @@
         min-width: unset;
         padding: 0;
         margin: 0;
-        background: #ffffff;
         text-align: center;
     }
 

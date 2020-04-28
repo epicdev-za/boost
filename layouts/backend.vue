@@ -61,9 +61,9 @@
 
         </v-app-bar>
 
-        <v-content class="fill-height" style="background-color: rgb(240, 240, 240);">
+        <v-content class="fill-height" :style="(!$vuetify.theme.dark) ? 'background-color: rgb(240, 240, 240);' : ''">
 
-            <v-app-bar dense height="40" elevation="0" style="border-bottom: 1px solid rgba(0,0,0,.12); background-color: #ffffff;" class="hidden-xs-only" v-if="getBreadcrumbs().length > 1">
+            <v-app-bar dense height="40" elevation="0" style="border-bottom: 1px solid rgba(0,0,0,.12);" :style="(!$vuetify.theme.dark) ? 'background-color: #ffffff;' : ''" class="hidden-xs-only" v-if="getBreadcrumbs().length > 1">
                 <v-breadcrumbs :items="getBreadcrumbs()" divider="/" class="px-0">
                     <template v-slot:item="{item}">
                         <v-breadcrumbs-item :disabled="item.disabled" :to="item.to" exact nuxt>{{item.text}}</v-breadcrumbs-item>

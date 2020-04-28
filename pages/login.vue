@@ -6,8 +6,8 @@
                 <v-card max-width="550" elevation="6" class="px-12" :loading="form_loading" :disabled="form_loading">
                     <v-row justify="center" class="pt-4">
                         <v-card-title>
-                            <v-avatar size="48" tile color="primary">
-                                <img :src="logo" alt="avatar">
+                            <v-avatar size="48" tile>
+                                <v-icon>$vuetify.icons.logo</v-icon>
                             </v-avatar>
                         </v-card-title>
                     </v-row>
@@ -69,15 +69,6 @@
                 passwordRules: [
                     v => !!v || 'Password is required'
                 ]
-            }
-        },
-        computed: {
-            logo(){
-                if(!this.$vuetify.theme.dark){
-                    return require("boost/assets/images/login-logo-light.png");
-                }else{
-                    return require("boost/assets/images/login-logo-dark.png");
-                }
             }
         },
         methods: {

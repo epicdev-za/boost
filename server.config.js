@@ -11,7 +11,7 @@ module.exports = {
         ttl: 900
     },
     sanctum: {
-        location: 'https://www.sanctum.epicdev.co.za',
+        location: 'https://sanctum.epicdev.co.za',
         project_key: ''
     },
     endpoints: {

@@ -18,6 +18,7 @@
 </template>
 
 <script>
+    const axios = require("axios");
     export default {
         layout: 'empty',
         props: {
@@ -49,7 +50,8 @@
                 subheaders: {
                     '404': 'Please go back and try take another route',
                     '403': 'Please go back and log in'
-                }
+                },
+                logged_in: false
             }
         },
         methods: {
@@ -66,11 +68,20 @@
                 return (this.headers[this.error.statusCode] !== undefined) ? this.headers[this.error.statusCode] : "An error occurred";
             },
             subheader(){
+                if(this.error.statusCode === 403 && this.logged_in) return this.subheaders[404];
                 return (this.subheaders[this.error.statusCode] !== undefined) ? this.subheaders[this.error.statusCode] : "Please try again later";
             },
             button_text(){
-                return (this.error.statusCode === 403) ? "Login" : "Go Back";
+                return (this.error.statusCode === 403 && !this.logged_in) ? "Login" : "Go Back";
             }
+        },
+        mounted(){
+            let _this = this;
+            axios.get("/api/auth/logged_in").then((response) => {
+                if(response.data.success){
+                    _this.logged_in = true;
+                }
+            });
         }
     }
 </script>

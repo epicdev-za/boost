@@ -6,7 +6,9 @@ module.exports = {
         notificationRemoveInterval: null,
         debug_logger: {
             removalInterval: null
-        }
+        },
+        permissions: [],
+        superuser: false
     }),
     mutations: {
         addNotification(state, notif) {
@@ -22,6 +24,12 @@ module.exports = {
         },
         setDebugLoggerRemoveInterval(state, interval){
             state.debug_logger.removalInterval = interval;
+        },
+        setPermissions(state, permissions){
+            state.permissions = permissions;
+        },
+        setSuperUser(state, superuser){
+            state.superuser = superuser;
         }
     }
 };

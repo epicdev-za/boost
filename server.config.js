@@ -36,6 +36,10 @@ module.exports = {
                 'logged_in': {
                     method: 'get',
                     handler: require("./api/endpoints/auth/logged_in")
+                },
+                'get_permissions': {
+                    method: 'get',
+                    handler: require("./api/endpoints/auth/get_permissions")
                 }
             }
         },

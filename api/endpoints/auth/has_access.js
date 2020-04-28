@@ -30,7 +30,7 @@ module.exports = function(req, res, next){
 
                 let granted = true;
 
-                for(let i = 0; i < route.permissions; i++){
+                for(let i = 0; i < route.permissions.length; i++){
                     if(!user.permissions.includes(route.permissions[i])){
                         granted = false;
                         break;

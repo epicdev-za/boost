@@ -2,7 +2,7 @@
     <v-app app class="fill-height">
         <v-navigation-drawer class="sidemenu" :permanent="!$vuetify.breakpoint.xsOnly" app overflow clipped :mini-variant="!drawer && !$vuetify.breakpoint.xsOnly" mini-variant-width="60" v-model="drawer_open">
 
-            <template v-for="(module_group, key) in module_groups">
+            <template v-for="(module_group, key) in menu_structure">
                 <div v-if="module_group.modules.length > 0">
                     <v-divider></v-divider>
 
@@ -14,16 +14,16 @@
                             <template v-for="(module, index) in module_group.modules">
                                 <v-tooltip right :disabled="drawer || $vuetify.breakpoint.xsOnly">
                                     <template v-slot:activator="{ on }">
-                                        <v-list-item v-on="on" :to="modules[module].to_prefix + '/' + module" exact nuxt :class="isActive(modules[module].to_prefix + '/' + module)">
+                                        <v-list-item v-on="on" :to="module.index_url" exact nuxt :class="isActive(module.index_url)">
                                             <v-list-item-icon>
-                                                <v-icon>{{modules[module].icon}}</v-icon>
+                                                <v-icon>{{module.icon}}</v-icon>
                                             </v-list-item-icon>
                                             <v-list-item-content>
-                                                <v-list-item-title>{{modules[module].title}}</v-list-item-title>
+                                                <v-list-item-title>{{module.title}}</v-list-item-title>
                                             </v-list-item-content>
                                         </v-list-item>
                                     </template>
-                                    <span>{{modules[module].title}}</span>
+                                    <span>{{module.title}}</span>
                                 </v-tooltip>
                             </template>
 
@@ -81,21 +81,82 @@
 
 <script>
     const axios = require("axios");
-    const boost = require('../../../boost.config');
-    const config = boost.default;
+    import boost from '../../../boost.config'
+    import routes from '../../../boost.routes'
     import Notifications from './../components/Notifications';
     export default {
         data(){
             return {
-                projectName: config.projectName,
-                module_groups: config.module_groups,
-                modules: config.modules,
+                projectName: boost.projectName,
                 drawer: false,
                 drawer_open: false
             }
         },
         components: { Notifications },
+        computed: {
+            menu_structure(){
+                let module_groups = {};
+
+                for(let key in boost.module_groups){
+                    let module_group = boost.module_groups[key];
+                    let module_keys = module_group.modules;
+                    let full_modules = [];
+                    for(let i = 0; i < module_keys.length; i++){
+                        let module_key = module_keys[i];
+                        let module = boost.modules[module_key];
+
+                        let route_key = module.to_prefix + "/" + module_key;
+                        let route = routes[route_key];
+                        let permissions = route.permissions;
+
+                        module.index_url = route_key;
+
+                        let create_route_key = route_key + "/create";
+                        let create_route = routes[create_route_key];
+                        if(module.create_btn && create_route !== undefined){
+                            let create_permissions = create_route.permissions;
+                            if(this.hasPermission(create_permissions)){
+                                module.create_url = create_route_key;
+                            }
+                        }
+
+                        if(this.hasPermission(permissions)){
+                            full_modules.push(module);
+                        }
+                    }
+                    if(full_modules.length > 0){
+                        let new_module_group = {
+                            title: module_group.title,
+                            modules: full_modules
+                        };
+                        module_groups[key] = new_module_group;
+                    }
+                }
+
+                return module_groups;
+            }
+        },
         methods: {
+            hasPermission(perm_array){
+                let granted = true;
+
+                if(this.$store.state.boost_store.superuser){
+                    return true;
+                }
+
+                if(this.$store.state.boost_store.permissions.length === 0){
+                    return false;
+                }
+
+                for(let i = 0; i < perm_array.length; i++){
+                    let permission = perm_array[i];
+                    if(!this.$store.state.boost_store.permissions.includes(permission)){
+                        granted = false;
+                    }
+                }
+
+                return granted;
+            },
             toggle_nav(){
                 if(this.$vuetify.breakpoint.xsOnly){
                     this.drawer = false;

@@ -2,7 +2,7 @@
     <v-container class="fill-height" fluid :style="background_style">
         <div class="dashboard-container">
             <ul class="module-group-ul">
-                <li class="module-group-li" v-for="(module_group, x) in module_groups" :key="x" v-if="module_group.modules.length > 0 && module_group.title !== null">
+                <li class="module-group-li" v-for="(module_group, x) in dashboard_structure" :key="x" v-if="module_group.modules.length > 0 && module_group.title !== null">
                     <div class="dashboard-module-group">
                         <div class="module-group-title-hold">
                             <span>{{module_group.title}}</span>
@@ -13,17 +13,17 @@
                                     <v-card class="module-item-btn">
                                         <div class="module-item-hold">
                                             <div class="module-item-icon-hold">
-                                                <v-icon style="font-size: 80px; color: rgb(208, 208, 208); margin-top: 22px;">{{modules[module].icon}}</v-icon>
+                                                <v-icon style="font-size: 80px; color: rgb(208, 208, 208); margin-top: 22px;">{{module.icon}}</v-icon>
                                             </div>
                                             <div class="module-item-title-hold">
-                                                <span>{{modules[module].title}}</span>
+                                                <span>{{module.title}}</span>
                                             </div>
                                             <div class="module-item-description-hold">
-                                                <p>{{modules[module].description}}</p>
+                                                <p>{{module.description}}</p>
                                             </div>
                                             <div class="module-item-button-hold">
-                                                <v-btn elevation="0" class="mx-2" :to="modules[module].to_prefix + '/' + module" nuxt>Manage</v-btn>
-                                                <v-btn elevation="0" class="mx-2" v-if="modules[module].create_btn" :to="modules[module].to_prefix + '/' + module + '/create'" nuxt>Create</v-btn>
+                                                <v-btn elevation="0" class="mx-2" :to="module.index_url" nuxt>Manage</v-btn>
+                                                <v-btn elevation="0" class="mx-2" v-if="module.create_url !== undefined" :to="module.create_url" nuxt>Create</v-btn>
                                             </div>
                                         </div>
                                     </v-card>
@@ -38,7 +38,8 @@
 </template>
 
 <script>
-    import boost from 'boost/boost.config'
+    import boost from '../../../../boost.config'
+    import routes from '../../../../boost.routes'
     export default {
         layout: 'backend',
         head(){
@@ -62,11 +63,70 @@
             background_style(){
                 return "background: url('" + this.background + "'); background-size: cover; background-position: center center; display: block; background-attachment: fixed;";
             },
-            module_groups(){
-                return boost.module_groups;
-            },
-            modules(){
-                return boost.modules;
+            dashboard_structure(){
+                let module_groups = {};
+
+                for(let key in boost.module_groups){
+                    let module_group = boost.module_groups[key];
+                    if(module_group.modules.length > 0 && module_group.title !== null){
+                        let module_keys = module_group.modules;
+                        let full_modules = [];
+                        for(let i = 0; i < module_keys.length; i++){
+                            let module_key = module_keys[i];
+                            let module = boost.modules[module_key];
+
+                            let route_key = module.to_prefix + "/" + module_key;
+                            let route = routes[route_key];
+                            let permissions = route.permissions;
+
+                            module.index_url = route_key;
+
+                            let create_route_key = route_key + "/create";
+                            let create_route = routes[create_route_key];
+                            if(module.create_btn && create_route !== undefined){
+                                let create_permissions = create_route.permissions;
+                                if(this.hasPermission(create_permissions)){
+                                    module.create_url = create_route_key;
+                                }
+                            }
+
+                            if(this.hasPermission(permissions)){
+                                full_modules.push(module);
+                            }
+                        }
+                        if(full_modules.length > 0){
+                            let new_module_group = {
+                                title: module_group.title,
+                                modules: full_modules
+                            };
+                            module_groups[key] = new_module_group;
+                        }
+                    }
+                }
+
+                return module_groups;
+            }
+        },
+        methods: {
+            hasPermission(perm_array){
+                let granted = true;
+
+                if(this.$store.state.boost_store.superuser){
+                    return true;
+                }
+
+                if(this.$store.state.boost_store.permissions.length === 0){
+                    return false;
+                }
+
+                for(let i = 0; i < perm_array.length; i++){
+                    let permission = perm_array[i];
+                    if(!this.$store.state.boost_store.permissions.includes(permission)){
+                        granted = false;
+                    }
+                }
+
+                return granted;
             }
         }
     }

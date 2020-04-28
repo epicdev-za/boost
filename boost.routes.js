@@ -1,6 +1,7 @@
 import path from 'path'
 
 const resolve = function(vue){
+    if(__dirname === undefined) __dirname = '';
     return path.join(__dirname, vue);
 }
 

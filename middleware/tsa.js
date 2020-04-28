@@ -29,8 +29,11 @@ module.exports = async function({app, route, store, redirect, error, env, req}){
                 if(req.session.user !== undefined){
                     let user = req.session.user;
 
+                    store.commit('boost_store/setPermissions', user.permissions);
+                    store.commit('boost_store/setSuperUser', user.superuser);
+
                     if(!user.superuser){
-                        for(let i = 0; i < boost_route.permissions; i++){
+                        for(let i = 0; i < boost_route.permissions.length; i++){
                             if(!user.permissions.includes(boost_route.permissions[i])){
                                 error({
                                     statusCode: 403
@@ -55,6 +58,10 @@ module.exports = async function({app, route, store, redirect, error, env, req}){
                             statusCode: 403
                         });
                         return;
+                    }else{
+                        let response = await axios.get("/api/auth/get_permissions");
+                        store.commit('boost_store/setPermissions', response.data.permissions);
+                        store.commit('boost_store/setSuperUser', response.data.superuser);
                     }
                 }else{
                     error({

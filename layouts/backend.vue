@@ -71,7 +71,7 @@
                 </v-breadcrumbs>
             </v-app-bar>
 
-            <nuxt :modulegroups="module_groups"></nuxt>
+            <nuxt></nuxt>
 
             <Notifications></Notifications>
 

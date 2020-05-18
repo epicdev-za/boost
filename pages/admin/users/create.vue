@@ -69,7 +69,7 @@
                 </v-card-text>
 
                 <v-col cols="12" md="12" class="px-6 py-0">
-                    <v-text-field class="mt-0 pt-0" v-model="generate_password_field" v-on:keyup="passwordFieldKeyUp"></v-text-field>
+                    <v-text-field type="password" class="mt-0 pt-0" v-model="generate_password_field" v-on:keyup="passwordFieldKeyUp"></v-text-field>
                 </v-col>
 
                 <v-divider></v-divider>

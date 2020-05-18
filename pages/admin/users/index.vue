@@ -139,7 +139,7 @@
                     _this.delete_item = null;
                     _this.delete_dialog = false;
                     this.$store.commit('boost_store/addNotification', {
-                        message: 'Project deleted',
+                        message: 'User deleted',
                         type: 'info',
                         delay: 2
                     });

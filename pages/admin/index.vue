@@ -22,8 +22,8 @@
                                                 <p>{{module.description}}</p>
                                             </div>
                                             <div class="module-item-button-hold">
-                                                <v-btn elevation="0" class="mx-2" :to="module.index_url" nuxt>Manage</v-btn>
-                                                <v-btn elevation="0" class="mx-2" v-if="module.create_url !== undefined" :to="module.create_url" nuxt>Create</v-btn>
+                                                <v-btn elevation="0" class="mx-2" :to="(!module.exact) ? module.index_url : null" :href="(module.exact) ? module.index_url : null" exact :nuxt="!module.exact" :target="((module.new_window) ? '_blank' : null)">{{(module.exact) ? "Open" : "Manage"}}</v-btn>
+                                                <v-btn elevation="0" class="mx-2" v-if="module.create_url !== undefined" :to="module.create_url" nuxt :target="((module.new_window) ? '_blank' : null)">Create</v-btn>
                                             </div>
                                         </div>
                                     </v-card>
@@ -84,8 +84,22 @@
                             let module = boost.modules[module_key];
 
                             let route_key = module.to_prefix + "/" + module_key;
+                            if(module.to_prefix === undefined && module.to !== undefined){
+                                route_key = module.to;
+                            }
+
+                            if(module.permissions === undefined){
+                                module.permissions = [];
+                            }
+                            if(module.exact === undefined){
+                                module.exact = false;
+                            }
+                            if(module.new_window === undefined){
+                                module.new_window = false;
+                            }
+
                             let route = routes[route_key];
-                            let permissions = route.permissions;
+                            let permissions = (route !== undefined) ? route.permissions : module.permissions;
 
                             module.index_url = route_key;
 

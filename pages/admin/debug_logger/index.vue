@@ -84,7 +84,7 @@
         layout: "backend",
         head(){
             return {
-                title: "Roles - Manage"
+                title: "Debug Logger"
             }
         },
         data () {

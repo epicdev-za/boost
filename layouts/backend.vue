@@ -14,7 +14,7 @@
                             <template v-for="(module, index) in module_group.modules">
                                 <v-tooltip right :disabled="drawer || $vuetify.breakpoint.xsOnly">
                                     <template v-slot:activator="{ on }">
-                                        <v-list-item v-on="on" :to="module.index_url" exact nuxt :class="isActive(module.index_url)">
+                                        <v-list-item v-on="on" :to="(!module.exact) ? module.index_url : null" :href="(module.exact) ? module.index_url : null" exact :nuxt="!module.exact" :target="((module.new_window) ? '_blank' : null)" :class="isActive(module.index_url)">
                                             <v-list-item-icon>
                                                 <v-icon>{{module.icon}}</v-icon>
                                             </v-list-item-icon>
@@ -106,8 +106,22 @@
                         let module = boost.modules[module_key];
 
                         let route_key = module.to_prefix + "/" + module_key;
+                        if(module.to_prefix === undefined && module.to !== undefined){
+                            route_key = module.to;
+                        }
+
+                        if(module.permissions === undefined){
+                            module.permissions = [];
+                        }
+                        if(module.exact === undefined){
+                            module.exact = false;
+                        }
+                        if(module.new_window === undefined){
+                            module.new_window = false;
+                        }
+
                         let route = routes[route_key];
-                        let permissions = route.permissions;
+                        let permissions = (route !== undefined) ? route.permissions : module.permissions;
 
                         module.index_url = route_key;
 

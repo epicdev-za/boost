@@ -26,18 +26,29 @@ function loadEndpoint(endpoints, parentPath = []){
             }
             fullPath += "/" + path;
 
-            if(endpoint.handler !== undefined && typeof endpoint.handler !== typeof Function){
-                throw new Error("Endpoint configuration '" + fullPath + "' has invalid handler type");
+            function registerEndpoint(endpoint, server){
+                if(endpoint.handler !== undefined && typeof endpoint.handler !== typeof Function){
+                    throw new Error("Endpoint configuration '" + fullPath + "' has invalid handler type");
+                }
+
+                if(typeof endpoint.method === typeof '' && endpoint.handler !== undefined){
+                    server[endpoint.method](fullPath, handlerErrorWrapper(endpoint.handler));
+                }
+
+                if(endpoint.children !== undefined){
+                    let childPaths = [].concat(parentPath);
+                    childPaths.push(path);
+                    loadEndpoint(endpoint.children, childPaths);
+                }
             }
 
-            if(typeof endpoint.method === typeof '' && endpoint.handler !== undefined){
-                server[endpoint.method](fullPath, handlerErrorWrapper(endpoint.handler));
-            }
-
-            if(endpoint.children !== undefined){
-                let childPaths = [].concat(parentPath);
-                childPaths.push(path);
-                loadEndpoint(endpoint.children, childPaths);
+            if(Array.isArray(endpoint)){
+                for(let i = 0; i < endpoint.length; i++){
+                    let endpoint_variant = endpoint[i];
+                    registerEndpoint(endpoint_variant, server);
+                }
+            }else{
+                registerEndpoint(endpoint, server);
             }
         }else{
             throw new Error("Endpoints configuration object somehow missing key '" + path.toString() + "' when its known to be in itself");

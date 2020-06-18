@@ -37,8 +37,6 @@ module.exports = {
     cleanExtraSymbols(data){
         if(data === null) return null;
         data = data.toString();
-        data = data.replace(/[\']+/g, '\\\'');
-        data = data.replace(/[\"]+/g, '\\\"');
         data = data.replace(/[^a-zA-Z0-9 \"\'\n\\\/{}[\]:.,_~\-!@\+=#\$%\^&\*áàâãªäÁÀÂÃÄÍÌÎÏíìîïéèêëÉÈÊËóòôõºöÓÒÔÕÖúùûüÚÙÛÜçÇñÑ]+/g, '')
         return data;
     },

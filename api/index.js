@@ -42,12 +42,14 @@ function loadEndpoint(endpoints, parentPath = []){
                 }
             }
 
-            if(Array.isArray(endpoint)){
-                for(let i = 0; i < endpoint.length; i++){
-                    let endpoint_variant = endpoint[i];
+            if(endpoint.methods !== undefined && Array.isArray(endpoint.methods)){
+                for(let i = 0; i < endpoint.methods.length; i++){
+                    let endpoint_variant = endpoint.methods[i];
                     registerEndpoint(endpoint_variant, server);
                 }
-            }else{
+            }
+
+            if(endpoint.method !== undefined && endpoint.handler !== undefined){
                 registerEndpoint(endpoint, server);
             }
         }else{

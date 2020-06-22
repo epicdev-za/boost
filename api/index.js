@@ -49,7 +49,7 @@ function loadEndpoint(endpoints, parentPath = []){
                 }
             }
 
-            if(endpoint.method !== undefined && endpoint.handler !== undefined){
+            if((endpoint.method !== undefined && endpoint.handler !== undefined) || endpoint.children !== undefined){
                 registerEndpoint(endpoint, server);
             }
         }else{

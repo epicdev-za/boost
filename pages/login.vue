@@ -12,8 +12,8 @@
                         </v-card-title>
                     </v-row>
                     <v-row justify="center">
-                        <v-card-title class="pt-0" style="text-align: center; word-break: keep-all;">Boost Management System</v-card-title>
-                        <v-card-text style="text-align: center">v{{version}}</v-card-text>
+                        <v-card-title class="pt-0" style="text-align: center; word-break: keep-all;">{{project_name}}</v-card-title>
+                        <v-card-text style="text-align: center">Boost Management System<br/>v{{version}}</v-card-text>
                     </v-row>
                     <v-row justify="center" class="pt-4">
                         <v-alert type="error" dense text dismissible class="mb-0" :value="error" v-model="error">
@@ -56,6 +56,7 @@
         data(){
             return {
                 version: config.version,
+                project_name: config.projectName,
                 valid: false,
                 username: '',
                 password: '',

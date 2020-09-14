@@ -1,13 +1,7 @@
 const express = require("express");
-const session = require("express-session");
 const bodyParser = require("body-parser");
-const Plasma = require("plasma");
 const ServerException = require("./ServerException");
 const config = require("../../../server.config");
-const APIUtil = require("./APIUtil");
-
-let database = new Plasma();
-database.connect(config.db);
 
 let server = express();
 server.use(bodyParser.urlencoded({extended: true}));

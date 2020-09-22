@@ -100,6 +100,9 @@ let nuxt_config = {
         ** You can extend webpack config here
         */
         extend (config, ctx) {
+        	config.node = {
+        		fs: 'empty'
+        	}
         }
     },
     router: {

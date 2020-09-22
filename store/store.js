@@ -1,4 +1,11 @@
+const fs = require("fs");
+
 export default (() => {
-    const project_store = require("../../../store/store");
+	let project_store = {};
+
+	if(fs.existsSync("../../../store/store.js")){
+    	project_store = require("../../../store/store");
+	}
+
     return project_store;
 })();

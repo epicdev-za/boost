@@ -56,15 +56,23 @@ function handlerErrorWrapper(handler){
     return function(req, res, next){
         let next_hook = function(e){
             if(e !== undefined){
+                let user = null;
+                if(req.session.user !== undefined && req.session.user !== null){
+                    user = req.session.user;
+                }
+
                 if(!(e instanceof ServerException)){
-                    e = new ServerException(e);
+                    e = new ServerException(e, user);
                 }
                 if(e instanceof ServerException){
+                    e.user = user;
                     res.status(e.status);
                     res.send({
                         error: e.code,
                         error_description: e.description
                     });
+
+                    e.log();
                     return;
                 }
             }
@@ -85,6 +93,15 @@ server.use(function(req, res){
         error_description: 'The requested endpoint does not exist'
     });
 });
+
+if(config.plugins.includes("boost-error-plugin/gc")){
+	const {ErrorReporting} = require('@google-cloud/error-reporting');
+	const errors = new ErrorReporting();
+	process.on('uncaughtException', (e) => {
+	    console.error(e);
+	    errors.report(e);
+	});
+}
 
 module.exports = {
     path: '/api',

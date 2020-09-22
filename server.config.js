@@ -14,6 +14,7 @@ module.exports = {
         location: 'https://sanctum.epicdev.co.za',
         project_key: ''
     },
+    plugins: [],
     endpoints: {
         'auth': {
             children: {

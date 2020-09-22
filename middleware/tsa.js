@@ -2,7 +2,7 @@ const axios = require("axios");
 const boost_routes = require("./../../../boost.routes");
 const routes = boost_routes.default;
 
-module.exports = async function({app, route, store, redirect, error, env, req}){
+const tsa = async function({app, route, store, redirect, error, env, req}){
     let url = route.path;
     let boost_route = routes[url];
 
@@ -77,4 +77,8 @@ module.exports = async function({app, route, store, redirect, error, env, req}){
         });
         return;
     }
-}
+};
+
+export default (() => {
+    return tsa;
+})();

@@ -94,6 +94,15 @@ server.use(function(req, res){
     });
 });
 
+if(config.plugins.includes("boost-error-plugin/gc")){
+	const {ErrorReporting} = require('@google-cloud/error-reporting');
+	const errors = new ErrorReporting();
+	process.on('uncaughtException', (e) => {
+	    console.error(e);
+	    errors.report(e);
+	});
+}
+
 module.exports = {
     path: '/api',
     handler: server

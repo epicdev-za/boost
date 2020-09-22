@@ -136,4 +136,8 @@ if(boost.nuxt !== undefined){
     }
 }
 
+if(process.env.NODE_ENV === "production"){
+    nuxt_config.server.port = process.env.PORT || nuxt_config.server.port;
+}
+
 export default nuxt_config;

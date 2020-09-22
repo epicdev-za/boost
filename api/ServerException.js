@@ -7,20 +7,42 @@ class ServerException extends Error{
         if(status instanceof Error){
             this.status = 500;
             this.description = "An internal server error occurred. Engineers have been notified, please try again later.";
-            this.code = this.log(status);
+            this.code = uuidV4();
+            this.suberror = status;
         }else{
             this.status = status;
             this.description = object;
             this.code = code;
+            this.suberror = this;
         }
     }
 
-    log(err){
-        //@todo: Add error logging and notifying
+    log(){
+        const err = this.suberror;
+
+        const config = require("../../../server.config");
+
         console.log(err);
         let currentStack = new Error();
         console.log(currentStack.stack);
-        return uuidV4();
+
+        let uuid = uuidV4();
+
+        let reporter_class = null;
+
+        if(config.plugins.includes("boost-error-plugin")){
+            reporter_class = require("boost-error-plugin");
+        }
+        if(config.plugins.includes("boost-error-plugin/gc")){
+            reporter_class = require("boost-error-plugin/gc");
+        }
+
+        if(reporter_class !== null){
+            let reporter = new reporter_class(err, this.description, uuid, currentStack);
+            reporter.report();
+        }
+
+        return uuid;
     }
 
 }

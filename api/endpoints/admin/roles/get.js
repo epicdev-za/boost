@@ -4,7 +4,7 @@ const clients = require("restify-clients");
 const APIUtil = require("../../../APIUtil");
 
 module.exports = function(req, res, next){
-    if(APIUtil.hasPermission(req.session.user, 'roles.edit')){
+    if(APIUtil.hasPermission(req.session.user, 'roles.view')){
         try{
             let role = sanitizer.cleanUUID(APIUtil.extract(req.query, 'role'));
 

@@ -110,13 +110,13 @@ for(let i = 0; i < config.plugins.length; i++){
     let start_dirs = [];
 
     let dir_1 = fs.readdirSync(__dirname);
-    let dir_2 = fs.readdirSync(__dirname + "\\..\\..\\..\\api");
+    let dir_2 = fs.readdirSync(__dirname + "/../../../api");
 
     for(let i = 0; i < dir_1.length; i++){
-        start_dirs.push(__dirname + "\\" + dir_1[i]);
+        start_dirs.push(__dirname + "/" + dir_1[i]);
     }
     for(let i = 0; i < dir_2.length; i++){
-        start_dirs.push(__dirname + "\\..\\..\\..\\api\\" + dir_2[i]);
+        start_dirs.push(__dirname + "/../../../api/" + dir_2[i]);
     }
 
     let js_files = [];
@@ -124,7 +124,7 @@ for(let i = 0; i < config.plugins.length; i++){
     let recursive_read = function(dir){
         let dirs = fs.readdirSync(dir);
         for(let i = 0; i < dirs.length; i++){
-            let ndir = dir + "\\" + dirs[i];
+            let ndir = dir + "/" + dirs[i];
             if(fs.lstatSync(ndir).isDirectory()){
                 recursive_read(ndir);
             }else if(fs.lstatSync(ndir).isFile() && ndir.endsWith(".js")) {
@@ -143,10 +143,10 @@ for(let i = 0; i < config.plugins.length; i++){
     }
 
     const exclude_list = [
-        __dirname + "\\APIUtil.js",
-        __dirname + "\\index.js",
-        __dirname + "\\sanitizer.js",
-        __dirname + "\\ServerException.js"
+        __dirname + "/APIUtil.js",
+        __dirname + "/index.js",
+        __dirname + "/sanitizer.js",
+        __dirname + "/ServerException.js"
     ]
 
     let permissions = [];

@@ -14,7 +14,7 @@
                                 <v-combobox label="Project" :items="convertProjectsCombobox()" v-model="project_selected"></v-combobox>
                             </v-col>
 
-                            <v-col cols="12" md="12" class="py-0 mt-4">
+                            <v-col cols="12" md="8" class="py-0 mt-4">
                                 <v-simple-table dense style="border: thin solid rgba(0, 0, 0, 0.12)">
                                     <template v-slot:default>
                                         <thead>
@@ -38,6 +38,25 @@
                                         </tr>
                                         <tr style="text-align: center">
                                             <td colspan="2" style="padding: 0;"><v-btn depressed small block outlined style="border: none;" @click="permissions.push({key: '', value: true})">Add</v-btn></td>
+                                        </tr>
+                                        </tbody>
+                                    </template>
+                                </v-simple-table>
+                            </v-col>
+
+                            <v-col cols="12" md="4" class="py-0 mt-4">
+                                <v-simple-table dense style="border: thin solid rgba(0, 0, 0, 0.12)">
+                                    <template v-slot:default>
+                                        <thead>
+                                        <tr>
+                                            <th colspan="1" class="text-left" style="width: 100%;">Available Permissions</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr v-for="(permission, key) in existing_permissions" :key="key">
+                                            <td style="width:100%; font-size: 16px; padding: 7px 12px;">
+                                                {{permission}}
+                                            </td>
                                         </tr>
                                         </tbody>
                                     </template>
@@ -81,7 +100,8 @@
                 permissions: [],
                 is_sanctum: false,
                 projects: [],
-                project_selected: null
+                project_selected: null,
+                existing_permissions: []
             }
         },
         methods: {
@@ -167,6 +187,17 @@
                     });
                 }
             }).catch((err, obj) => {
+                this.$store.commit('boost_store/addNotification', {
+                    message: 'An error occurred. Engineers have been notified, please try again later',
+                    type: 'error',
+                    delay: 3
+                });
+            });
+
+            axios.get("/api/admin/roles/get_permissions").then((response) => {
+                _this.existing_permissions = response.data;
+            }).catch(() => {
+                _this.loading = false;
                 this.$store.commit('boost_store/addNotification', {
                     message: 'An error occurred. Engineers have been notified, please try again later',
                     type: 'error',

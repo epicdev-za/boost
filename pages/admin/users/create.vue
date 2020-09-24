@@ -45,7 +45,6 @@
                                 </v-simple-table>
                             </v-col>
 
-
                             <v-col cols="12" md="4" class="py-0 mt-4">
                                 <v-simple-table dense style="border: thin solid rgba(0, 0, 0, 0.12)">
                                     <template v-slot:default>

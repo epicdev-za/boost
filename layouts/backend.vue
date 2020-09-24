@@ -44,6 +44,14 @@
 
             <v-tooltip bottom>
                 <template v-slot:activator="{ on }">
+                    <v-btn fab small v-on="on" color="transparent" depressed class="ml-1" @click="toggleTheme">
+                        <v-icon>mdi-invert-colors</v-icon>
+                    </v-btn>
+                </template>
+                <span>Toggle Theme</span>
+            </v-tooltip>
+            <v-tooltip bottom>
+                <template v-slot:activator="{ on }">
                     <v-btn fab small v-on="on" color="transparent" depressed class="ml-1" :to="'/'">
                         <v-icon>mdi-web</v-icon>
                     </v-btn>
@@ -234,6 +242,19 @@
                 axios.post("/api/auth/logout", {}).then(() => {
                     _this.$router.push("/");
                 })
+            },
+            toggleTheme(){
+                this.$vuetify.theme.dark = !this.$vuetify.theme.dark;
+                if(this.$vuetify.theme.dark){
+                    document.cookie = "BoostDark=true; max-age=" + 365*24*60*60;
+                }else{
+                    document.cookie = "BoostDark=; max-age=0";
+                }
+            }
+        },
+        mounted() {
+            if(document.cookie.match(/^(.*;)?\s*BoostDark\s*=\s*[^;]+(.*)?$/)){
+                this.$vuetify.theme.dark = true;
             }
         }
     }

@@ -13,7 +13,12 @@
                 ]
             }
         },
-        name: "default"
+        name: "default",
+        mounted() {
+            if(document.cookie.match(/^(.*;)?\s*BoostDark\s*=\s*[^;]+(.*)?$/)){
+                this.$vuetify.theme.dark = true;
+            }
+        }
     }
 </script>
 

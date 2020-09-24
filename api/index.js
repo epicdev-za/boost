@@ -4,6 +4,8 @@ const ServerException = require("./ServerException");
 const config = require("../../../server.config");
 const fs = require("fs");
 const StaticUtil = require("./StaticUtil");
+const PluginEventDispatcher = require("./plugins/PluginEventDispatcher");
+const BoostPlugin = require("./plugins/BoostPlugin");
 
 let server = express();
 server.use(bodyParser.urlencoded({extended: true}));
@@ -96,13 +98,12 @@ server.use(function(req, res){
     });
 });
 
-if(config.plugins.includes("boost-error-plugin/gc")){
-	const {ErrorReporting} = require('@google-cloud/error-reporting');
-	const errors = new ErrorReporting();
-	process.on('uncaughtException', (e) => {
-	    console.error(e);
-	    errors.report(e);
-	});
+for(let i = 0; i < config.plugins.length; i++){
+    let pluginClass = require(config.plugins[i]);
+    if(pluginClass.prototype instanceof BoostPlugin){
+        let plugin = new pluginClass();
+        PluginEventDispatcher.plugins.push(plugin);
+    }
 }
 
 {

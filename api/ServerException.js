@@ -1,4 +1,5 @@
 const uuidV4 = require("uuid/v4");
+const Dispatcher = require("./plugins/PluginEventDispatcher");
 
 class ServerException extends Error{
 
@@ -28,19 +29,7 @@ class ServerException extends Error{
 
         let uuid = uuidV4();
 
-        let reporter_class = null;
-
-        if(config.plugins.includes("boost-error-plugin")){
-            reporter_class = require("boost-error-plugin");
-        }
-        if(config.plugins.includes("boost-error-plugin/gc")){
-            reporter_class = require("boost-error-plugin/gc");
-        }
-
-        if(reporter_class !== null){
-            let reporter = new reporter_class(err, this.description, uuid, currentStack);
-            reporter.report();
-        }
+        Dispatcher.onExceptionCaught(err, this.description, uuid, currentStack);
 
         return uuid;
     }

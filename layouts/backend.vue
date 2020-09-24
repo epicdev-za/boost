@@ -85,6 +85,13 @@
     import routes from '../../../boost.routes'
     import Notifications from './../components/Notifications';
     export default {
+        head(){
+            return {
+                link: [
+                    { rel: 'icon', type: 'image/x-icon', href: '/backend.ico' }
+                ]
+            }
+        },
         data(){
             return {
                 projectName: boost.projectName,

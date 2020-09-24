@@ -95,6 +95,10 @@ module.exports = {
                         'delete': {
                             method: 'post',
                             handler: require("./api/endpoints/admin/users/delete")
+                        },
+                        'get_permissions': {
+                            method: 'get',
+                            handler: require("./api/endpoints/admin/users/get_permissions")
                         }
                     }
                 },

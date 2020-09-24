@@ -103,6 +103,68 @@ if(config.plugins.includes("boost-error-plugin/gc")){
 	});
 }
 
+{
+    let start_dirs = [];
+
+    let dir_1 = fs.readdirSync(__dirname);
+    let dir_2 = fs.readdirSync(__dirname + "\\..\\..\\..\\api");
+
+    for(let i = 0; i < dir_1.length; i++){
+        start_dirs.push(__dirname + "\\" + dir_1[i]);
+    }
+    for(let i = 0; i < dir_2.length; i++){
+        start_dirs.push(__dirname + "\\..\\..\\..\\api\\" + dir_2[i]);
+    }
+
+    let js_files = [];
+
+    let recursive_read = function(dir){
+        let dirs = fs.readdirSync(dir);
+        for(let i = 0; i < dirs.length; i++){
+            let ndir = dir + "\\" + dirs[i];
+            if(fs.lstatSync(ndir).isDirectory()){
+                recursive_read(ndir);
+            }else if(fs.lstatSync(ndir).isFile() && ndir.endsWith(".js")) {
+                js_files.push(ndir);
+            }
+        }
+    }
+
+    for(let i = 0; i < start_dirs.length; i++){
+        let dir = start_dirs[i];
+        if(fs.lstatSync(dir).isDirectory()){
+            recursive_read(dir);
+        }else if(fs.lstatSync(dir).isFile() && dir.endsWith(".js")){
+            js_files.push(dir);
+        }
+    }
+
+    const exclude_list = [
+        __dirname + "\\APIUtil.js",
+        __dirname + "\\index.js",
+        __dirname + "\\sanitizer.js",
+        __dirname + "\\ServerException.js"
+    ]
+
+    let permissions = [];
+
+    for(let i = 0; i < js_files.length; i++){
+        let js_file = js_files[i];
+        if(!exclude_list.includes(js_file)){
+            let data = fs.readFileSync(js_file, {encoding:'utf8', flag:'r'});
+            let match_result = data.match(/APIUtil.hasPermission\(.+,.*("|')(.*)("|')/);
+            if(match_result !== null && match_result.length > 3){
+                let permission = match_result[2];
+                if(!permissions.includes(permission)){
+                    permissions.push(permission);
+                }
+            }
+        }
+    }
+
+    StaticUtil.permissions = permissions;
+}
+
 module.exports = {
     path: '/api',
     handler: server

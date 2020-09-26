@@ -3,7 +3,13 @@ const boost_routes = require("./../../../boost.routes");
 const routes = boost_routes.default;
 
 const tsa = async function({app, route, store, redirect, error, env, req}){
-    let url = route.path;
+    let url = 0;
+    if(route.matched.length > 0){
+        url = route.matched[0].path;
+        if(url.length === 0){
+            url = "/";
+        }
+    }
     let boost_route = routes[url];
 
     let loggedIn = false;

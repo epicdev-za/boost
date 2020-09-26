@@ -87,7 +87,7 @@
                         password: password
                     }).then(function(response){
                         _this.form_loading = false;
-                        _this.$router.push('/admin');
+                        _this.$router.push(response.data.direct_to);
                     }).catch(function(error, obj){
                         _this.form_loading = false;
                         if(!error.response){

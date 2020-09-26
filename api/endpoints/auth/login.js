@@ -1,5 +1,7 @@
 const ServerException = require("../../ServerException");
 const clients = require("restify-clients");
+const APIUtil = require("../../APIUtil");
+const Dispatcher = require("../../plugins/PluginEventDispatcher");
 
 module.exports = function(req, res, next){
     if(req.body === undefined) req.body = {};
@@ -30,9 +32,17 @@ module.exports = function(req, res, next){
                     next(new ServerException(cres.statusCode, err.body.error, err.body.error_description));
                 }
             }else{
+                let direct_to = "/admin";
+
+                let result = Dispatcher.onLoginDirection(obj);
+                if(result !== undefined && result !== null){
+                    direct_to = result;
+                }
+
                 req.session.user = obj;
                 res.send({
-                    success: true
+                    success: true,
+                    direct_to: direct_to
                 });
             }
         });

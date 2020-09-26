@@ -1,7 +1,7 @@
 import colors from 'vuetify/es5/util/colors'
 
 export default {
-    version: '1.1.2',
+    version: '1.1.3',
     modules: {
         'admin': {
             title: "Dashboard",

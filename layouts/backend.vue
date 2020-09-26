@@ -69,7 +69,7 @@
 
         </v-app-bar>
 
-        <v-content class="fill-height" :style="(!$vuetify.theme.dark) ? 'background-color: rgb(240, 240, 240);' : ''">
+        <v-main class="fill-height" :style="(!$vuetify.theme.dark) ? 'background-color: rgb(240, 240, 240);' : ''">
 
             <v-app-bar dense height="40" elevation="0" style="border-bottom: 1px solid rgba(0,0,0,.12);" :style="(!$vuetify.theme.dark) ? 'background-color: #ffffff;' : ''" class="hidden-xs-only" v-if="getBreadcrumbs().length > 1">
                 <v-breadcrumbs :items="getBreadcrumbs()" divider="/" class="px-0">
@@ -83,7 +83,7 @@
 
             <Notifications></Notifications>
 
-        </v-content>
+        </v-main>
     </v-app>
 </template>
 

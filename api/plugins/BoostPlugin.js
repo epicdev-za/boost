@@ -1,7 +1,11 @@
 class BoostPlugin {
 
     onExceptionCaught(error, description, uuid, currentStack){
-        throw new Error("Abstract class called");
+        return null;
+    }
+
+    onLoginDirection(user){
+        return null;
     }
 
 }

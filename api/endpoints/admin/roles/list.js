@@ -1,7 +1,5 @@
-const ServerException = require("../../../ServerException");
-const sanitizer = require("../../../sanitizer");
-const clients = require("restify-clients");
 const APIUtil = require("../../../APIUtil");
+const SanctumUtil = require("../../../SanctumUtil");
 
 module.exports = function(req, res, next){
     if(req.body === undefined) req.body = {};
@@ -9,49 +7,21 @@ module.exports = function(req, res, next){
     if(APIUtil.hasPermission(req.session.user, 'roles.view')){
         let page, itemsPerPage, sortBy, sortDesc;
         try{
-            page = sanitizer.cleanNumeric(extract(req.query, 'page'));
-            itemsPerPage = sanitizer.cleanNumeric(extract(req.query, 'itemsPerPage'));
-            sortBy = extract(req.query, 'sortBy');
-            sortDesc = extract(req.query, 'sortDesc');
-
-            const config = require("../../../../../../server.config");
-            let project_key = config.sanctum.project_key;
-            let location = config.sanctum.location;
-
-            let client = clients.createJsonClient({
-                url: location
-            });
-
-            client.get("/api/sanctum/roles/list?page=" + page + "&itemsPerPage=" + itemsPerPage + "&sortBy=" + sortBy + "&sortDesc=" + sortDesc + "&project=" + project_key, (err, creq, cres, obj) => {
-                if(err){
-                    if(typeof cres === typeof undefined || cres === null){
-                        next(err);
-                    }else{
-                        next(new ServerException(cres.statusCode, err.body.error, err.body.error_description));
+            SanctumUtil.post('/api/sanctum/roles/list', req.query).then((obj) => {
+                let items = [];
+                for(let i = 0; i < obj.items.length; i++){
+                    let item = obj.items[i];
+                    if(!obj.showProjectColumn){
+                        delete item['project'];
                     }
-                }else{
-                    let items = [];
-                    for(let i = 0; i < obj.items.length; i++){
-                        let item = obj.items[i];
-                        if(!obj.showProjectColumn){
-                            delete item['project'];
-                        }
-                        delete item['project_uuid'];
-                        items.push(item);
-                    }
-                    obj.items = items;
-                    res.send(obj);
+                    delete item['project_uuid'];
+                    items.push(item);
                 }
-            });
+                obj.items = items;
+                res.send(obj);
+            }).catch(next);
         }catch (e) {
             next(e);
         }
     }
-}
-
-function extract(object, key){
-    if(object[key] !== undefined){
-        return object[key];
-    }
-    throw new ServerException(400, "invalid_request", "Request was missing the '" + key + "' parameter.");
 }

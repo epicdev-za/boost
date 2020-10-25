@@ -15,6 +15,27 @@ class PluginEventDispatcher {
                 return res;
             }
         }
+        return null;
+    }
+
+    static onSanctumEncrypt(data, project_key){
+        for(let i = 0; i < this.plugins.length; i++){
+            let res = this.plugins[i].onSanctumEncrypt(data, project_key);
+            if(res !== undefined && res !== null){
+                return res;
+            }
+        }
+        return null;
+    }
+
+    static onSanctumDecrypt(data, project_key){
+        for(let i = 0; i < this.plugins.length; i++){
+            let res = this.plugins[i].onSanctumDecrypt(data, project_key);
+            if(res !== undefined && res !== null){
+                return res;
+            }
+        }
+        return null;
     }
 
 }

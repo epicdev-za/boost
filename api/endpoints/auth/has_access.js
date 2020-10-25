@@ -1,4 +1,5 @@
 const ServerException = require("../../ServerException");
+const APIUtil = require("../../APIUtil");
 const boost_routes = require("../../../boost.routes");
 const routes = boost_routes.default;
 
@@ -8,7 +9,7 @@ module.exports = function(req, res, next){
 
     let path;
     try{
-        path = extract(body, 'path');
+        path = APIUtil.extract(body, 'path');
         let route = routes[path];
         if(route === undefined){
             res.send({
@@ -54,10 +55,3 @@ module.exports = function(req, res, next){
         next(e);
     }
 };
-
-function extract(object, key){
-    if(object[key] !== undefined){
-        return object[key];
-    }
-    throw new ServerException(400, "invalid_request", "Request was missing the '" + key + "' parameter.");
-}

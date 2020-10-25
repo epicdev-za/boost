@@ -6,7 +6,6 @@ const routes = boost_routes.default;
 module.exports = function(req, res, next){
     if(req.body === undefined) req.body = {};
     const body = req.body;
-    console.log(req.session);
 
     let path;
     try{

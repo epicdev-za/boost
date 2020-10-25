@@ -72,7 +72,11 @@ async function encryptData(data, project_key){
     }else{
         let res = Dispatcher.onSanctumEncrypt(data, project_key);
         if(res !== null){
-            return res;
+            if(res instanceof Promise){
+                return await res;
+            }else{
+                return res;
+            }
         }
     }
 
@@ -97,7 +101,11 @@ async function decryptData(data, project_key){
     }else{
         let res = Dispatcher.onSanctumDecrypt(data, project_key);
         if(res !== null){
-            return res;
+            if(res instanceof Promise){
+                return await res;
+            }else{
+                return res;
+            }
         }
     }
 

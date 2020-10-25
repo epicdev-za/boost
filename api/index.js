@@ -98,13 +98,10 @@ server.use(function(req, res){
     });
 });
 
-console.log(config);
 for(let i = 0; i < config.plugins.length; i++){
     let pluginClass = require(config.plugins[i]);
-	console.log(pluginClass);
     if(pluginClass.prototype instanceof BoostPlugin){
         let plugin = new pluginClass();
-		console.log(plugin);
         PluginEventDispatcher.plugins.push(plugin);
     }
 }

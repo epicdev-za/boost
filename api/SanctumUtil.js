@@ -32,7 +32,8 @@ class SanctumUtil {
                         }
                     }else{
                         decryptData(obj.data, project_key).then((decrypted_data) => {
-                            resolve(decrypted_data, req, res);
+                        	console.log(decrypted_data);
+                            resolve(decrypted_data);
                         }).catch((e) => {
                             if(e instanceof ServerException){
                                 reject(e);

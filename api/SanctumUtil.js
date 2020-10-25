@@ -57,7 +57,11 @@ class SanctumUtil {
 async function encryptData(data, project_key){
     if(process.env[project_key + '-sanctum-public'] !== undefined){
         const key_file = process.env[project_key + '-sanctum-public'];
-        const key = await fs.promises.readFile(key_file, 'utf8');
+        try{
+            const key = await fs.promises.readFile(key_file, 'utf8');
+        }catch (e){
+            throw new ServerException(500, "missing_sanctum_key", "Missing sanctum key");
+        }
 
         return crypto.publicEncrypt({
             key: key,
@@ -77,7 +81,12 @@ async function encryptData(data, project_key){
 async function decryptData(data, project_key){
     if(process.env[project_key + '-sanctum-private'] !== undefined){
         const key_file = process.env[project_key + '-sanctum-private'];
-        const key = await fs.promises.readFile(key_file, 'utf8');
+        try{
+            const key = await fs.promises.readFile(key_file, 'utf8');
+        }catch (e){
+            throw new ServerException(500, "missing_sanctum_key", "Missing sanctum key");
+        }
+        
         return JSON.parse(crypto.privateDecrypt({
             key: key,
             padding: crypto.constants.RSA_PKCS1_OAEP_PADDING,

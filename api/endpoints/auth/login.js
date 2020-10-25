@@ -15,6 +15,7 @@ module.exports = function(req, res, next){
             username: username,
             password: password
         }).then((obj) => {
+        	console.log(obj);
             let direct_to = "/admin";
 
             let result = Dispatcher.onLoginDirection(obj);
@@ -23,6 +24,7 @@ module.exports = function(req, res, next){
             }
 
             req.session.user = obj;
+            console.log(req.session);
             res.send({
                 success: true,
                 direct_to: direct_to

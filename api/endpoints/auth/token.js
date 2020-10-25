@@ -2,10 +2,10 @@ const Plasma = require("plasma");
 const sanitizer = require("../../sanitizer");
 const Application = require("../../entities/Application");
 const Authentication = require("../../entities/Authentication");
-const clients = require("restify-clients");
 const ServerException = require("../../ServerException");
 const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
+const SanctumUtil = require("../../SanctumUtil");
 
 module.exports = function(req, res, next){
     if(req.body === undefined) req.body = {};
@@ -161,33 +161,16 @@ const grant_type = {
 };
 
 function authUser(req, res, next, username, password, application){
-    const config = require("../../../../../server.config");
-    let project_key = config.sanctum.project_key;
-    let location = config.sanctum.location;
-
-    let client = clients.createJsonClient({
-        url: location
-    });
-
-    client.post('/api/sanctum/auth', {
-        project: project_key,
+    SanctumUtil.post('/api/sanctum/auth', {
         username: username,
         password: password
-    }, function(err, creq, cres, obj){
-        if(err){
-            if(typeof cres === typeof undefined || cres === null){
-                next(err);
+    }).then((obj) => {
+        Authentication.authenticate(req.connection.remoteAddress, application, obj, req.headers['user-agent'], (err, token) => {
+            if(err){
+                next(new ServerException(err));
             }else{
-                next(new ServerException(cres.statusCode, err.body.error, err.body.error_description));
+                res.send(token);
             }
-        }else{
-            Authentication.authenticate(req.connection.remoteAddress, application, obj, req.headers['user-agent'], (err, token) => {
-                if(err){
-                    next(new ServerException(err));
-                }else{
-                    res.send(token);
-                }
-            });
-        }
-    });
+        });
+    }).catch(next);
 }

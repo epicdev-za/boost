@@ -19,6 +19,7 @@ class PluginEventDispatcher {
     }
 
     static onSanctumEncrypt(data, project_key){
+    	console.log(this.plugins);
         for(let i = 0; i < this.plugins.length; i++){
             let res = this.plugins[i].onSanctumEncrypt(data, project_key);
             if(res !== undefined && res !== null){

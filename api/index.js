@@ -65,7 +65,7 @@ function handlerErrorWrapper(handler){
                     user = req.session.user;
                 }
 
-                if(!(e instanceof ServerException)){
+                if(!Number.isInteger(e.status)){
                     e = new ServerException(e, user);
                 }
                 if(e instanceof ServerException){

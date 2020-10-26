@@ -29,7 +29,7 @@ class ServerException extends Error{
 
         let uuid = uuidV4();
 
-        Dispatcher.onExceptionCaught(err, this.description, uuid, currentStack);
+        Dispatcher.onExceptionCaught(err, this.status, this.description, uuid, currentStack);
 
         return uuid;
     }

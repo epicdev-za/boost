@@ -2,9 +2,9 @@ class PluginEventDispatcher {
 
     static plugins = [];
 
-    static onExceptionCaught(error, description, uuid, currentStack){
+    static onExceptionCaught(error, status, description, uuid, currentStack){
         for(let i = 0; i < this.plugins.length; i++){
-            this.plugins[i].onExceptionCaught(error, description, uuid, currentStack);
+            this.plugins[i].onExceptionCaught(error, status, description, uuid, currentStack);
         }
     }
 

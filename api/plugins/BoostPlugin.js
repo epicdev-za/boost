@@ -1,6 +1,6 @@
 class BoostPlugin {
 
-    onExceptionCaught(error, description, uuid, currentStack){
+    onExceptionCaught(error, status, description, uuid, currentStack){
         return null;
     }
 

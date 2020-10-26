@@ -24,8 +24,6 @@ class SanctumUtil {
                 };
 
                 client.post(endpoint + "?project=" + project_key, packet, (err, req, res, obj) => {
-                	console.log(err);
-                	console.log(obj);
                     if(err){
                         if(typeof cres === typeof undefined || cres === null){
                             reject(err);

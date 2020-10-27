@@ -64,7 +64,7 @@ async function encryptSecret(secret, project_key){
             oaepHash: "sha256"
         }, Buffer.from(JSON.stringify(secret))).toString("base64");
     }else{
-        let res = Dispatcher.onSanctumEncrypt(secret, project_key);
+        let res = Dispatcher.onSanctumEncryptSecret(secret, project_key);
         if(res !== null){
             if(res instanceof Promise){
                 return await res;

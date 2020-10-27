@@ -28,16 +28,6 @@ class PluginEventDispatcher {
         return null;
     }
 
-    static onSanctumDecryptSecret(secret, project_key){
-        for(let i = 0; i < this.plugins.length; i++){
-            let res = this.plugins[i].onSanctumDecryptSecret(secret, project_key);
-            if(res !== undefined && res !== null){
-                return res;
-            }
-        }
-        return null;
-    }
-
 }
 
 module.exports = PluginEventDispatcher;

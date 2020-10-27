@@ -12,10 +12,6 @@ class BoostPlugin {
         return null;
     }
 
-    onSanctumDecryptSecret(secret, project_key){
-        return null;
-    }
-
 }
 
 module.exports = BoostPlugin;

@@ -177,6 +177,9 @@
                 }
             }, 5000));
         },
+        destroyed() {
+            clearInterval(this.$store.state.boost_store.debug_logger.removalInterval);
+        },
         methods: {
             convertType(item){
                 switch(item.type){
@@ -292,6 +295,7 @@
                         type: 'error',
                         delay: 3
                     });
+                    _this.paused = true;
                 });
             }
         }

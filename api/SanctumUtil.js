@@ -27,10 +27,10 @@ class SanctumUtil {
 
                 client.post(endpoint + "?project=" + project_key, packet, (err, req, res, obj) => {
                     if(err){
-                        if(typeof cres === typeof undefined || cres === null){
+                        if(typeof res === typeof undefined || res === null){
                             reject(err);
                         }else{
-                            reject(new ServerException(cres.statusCode, err.body.error, err.body.error_description));
+                            reject(new ServerException(res.statusCode, err.body.error, err.body.error_description));
                         }
                     }else{
                         resolve(decryptData(key, obj.data));

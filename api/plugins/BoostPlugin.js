@@ -8,11 +8,7 @@ class BoostPlugin {
         return null;
     }
 
-    onSanctumEncrypt(data, project_key){
-        return null;
-    }
-
-    onSanctumDecrypt(data, project_key){
+    onSanctumEncryptSecret(secret, project_key){
         return null;
     }
 

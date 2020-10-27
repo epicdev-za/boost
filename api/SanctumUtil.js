@@ -18,9 +18,11 @@ class SanctumUtil {
                 url: location
             });
 
-            encryptData(data, project_key).then((encrypted_data) => {
+            const key = generateAESSecret();
+            encryptSecret(key, project_key).then((secret) => {
                 let packet = {
-                    data: encrypted_data
+                    secret: secret,
+                    data: encryptData(key, data)
                 };
 
                 client.post(endpoint + "?project=" + project_key, packet, (err, req, res, obj) => {
@@ -31,30 +33,22 @@ class SanctumUtil {
                             reject(new ServerException(cres.statusCode, err.body.error, err.body.error_description));
                         }
                     }else{
-                        decryptData(obj.data, project_key).then((decrypted_data) => {
-                            resolve(decrypted_data);
-                        }).catch((e) => {
-                            if(e instanceof ServerException){
-                                reject(e);
-                            }else {
-                                reject(new ServerException(500, 'invalid_sanctum_key', "Invalid sanctum key"));
-                            }
-                        });
+                        resolve(decryptData(key, obj.data));
                     }
                 });
-            }).catch((e) => {
-                if(e instanceof ServerException){
-                    reject(e);
-                }else {
-                    reject(new ServerException(500, 'invalid_sanctum_key', "Invalid sanctum key"));
-                }
-            });
+            }).catch(reject);
         });
     }
 
 };
 
-async function encryptData(data, project_key){
+function generateAESSecret(){
+    const enc_key = crypto.randomBytes(32).toString('hex');
+    const iv = crypto.randomBytes(16).toString('hex');
+    return {key: enc_key, iv: iv};
+}
+
+async function encryptSecret(secret, project_key){
     if(process.env[project_key + '-sanctum-public'] !== undefined){
         const key_file = process.env[project_key + '-sanctum-public'];
         let key;
@@ -68,9 +62,9 @@ async function encryptData(data, project_key){
             key: key,
             padding: crypto.constants.RSA_PKCS1_OAEP_PADDING,
             oaepHash: "sha256"
-        }, Buffer.from(JSON.stringify(data))).toString("base64");
+        }, Buffer.from(JSON.stringify(secret))).toString("base64");
     }else{
-        let res = Dispatcher.onSanctumEncrypt(data, project_key);
+        let res = Dispatcher.onSanctumEncrypt(secret, project_key);
         if(res !== null){
             if(res instanceof Promise){
                 return await res;
@@ -83,33 +77,24 @@ async function encryptData(data, project_key){
     throw new ServerException(500, "missing_sanctum_key", "Missing sanctum key");
 }
 
-async function decryptData(data, project_key){
-    if(process.env[project_key + '-sanctum-private'] !== undefined){
-        const key_file = process.env[project_key + '-sanctum-private'];
-        let key;
-        try{
-            key = await fs.promises.readFile(key_file, 'utf8');
-        }catch (e){
-            throw new ServerException(500, "missing_sanctum_key", "Missing sanctum key");
-        }
+function encryptData(secret, data){
+    const key = Buffer.from(secret.key, "hex");
+    const iv = Buffer.from(secret.iv, "hex");
 
-        return JSON.parse(crypto.privateDecrypt({
-            key: key,
-            padding: crypto.constants.RSA_PKCS1_OAEP_PADDING,
-            oaepHash: "sha256"
-        }, Buffer.from(data, 'base64')).toString());
-    }else{
-        let res = Dispatcher.onSanctumDecrypt(data, project_key);
-        if(res !== null){
-            if(res instanceof Promise){
-                return await res;
-            }else{
-                return res;
-            }
-        }
-    }
+    const cipher = crypto.createCipheriv('aes-256-cbc', key, iv);
+    let encrypted = cipher.update(JSON.stringify(data), 'utf8', 'base64');
+    encrypted += cipher.final('base64');
+    return encrypted;
+}
 
-    throw new ServerException(500, "missing_sanctum_key", "Missing sanctum key");
+function decryptData(secret, data){
+    const key = Buffer.from(secret.key, "hex");
+    const iv = Buffer.from(secret.iv, "hex");
+
+    const decipher = crypto.createDecipheriv('aes-256-cbc', key, iv);
+    let decrypted = decipher.update(data, "base64", 'utf8');
+    decrypted += decipher.final('utf8');
+    return JSON.parse(decrypted);
 }
 
 module.exports = SanctumUtil;

@@ -18,9 +18,9 @@ class PluginEventDispatcher {
         return null;
     }
 
-    static onSanctumEncrypt(data, project_key){
+    static onSanctumEncryptSecret(secret, project_key){
         for(let i = 0; i < this.plugins.length; i++){
-            let res = this.plugins[i].onSanctumEncrypt(data, project_key);
+            let res = this.plugins[i].onSanctumEncryptSecret(secret, project_key);
             if(res !== undefined && res !== null){
                 return res;
             }
@@ -28,9 +28,9 @@ class PluginEventDispatcher {
         return null;
     }
 
-    static onSanctumDecrypt(data, project_key){
+    static onSanctumDecryptSecret(secret, project_key){
         for(let i = 0; i < this.plugins.length; i++){
-            let res = this.plugins[i].onSanctumDecrypt(data, project_key);
+            let res = this.plugins[i].onSanctumDecryptSecret(secret, project_key);
             if(res !== undefined && res !== null){
                 return res;
             }

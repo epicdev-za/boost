@@ -1,4 +1,3 @@
-const ServerException = require("./ServerException");
 const Dispatcher = require("./plugins/PluginEventDispatcher");
 const clients = require("restify-clients");
 const fs = require("fs");
@@ -7,6 +6,8 @@ const crypto = require("crypto");
 class SanctumUtil {
 
     static post = function(endpoint, data){
+        const ServerException = require("./ServerException");
+
         if(data === undefined) data = {};
 
         return new Promise((resolve, reject) => {

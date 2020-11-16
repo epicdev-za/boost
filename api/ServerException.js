@@ -50,7 +50,7 @@ class ServerException extends Error{
             return fullStack;
         }
 
-        const stack = stackSplitter(err.stack) + "\n\n" + stackSplitter(currentStack.stack);
+        const stack = err.message + "\n\n" + stackSplitter(err.stack) + "\n\n" + stackSplitter(currentStack.stack);
 
         let sanctum_payload = {
             project_uuid: project_key,

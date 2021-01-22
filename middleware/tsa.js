@@ -76,6 +76,18 @@ const tsa = async function({app, route, store, redirect, error, env, req}){
                     return;
                 }
             }
+        }else{
+            if(req !== undefined){
+                if(req.session.user !== undefined){
+                    let user = req.session.user;
+                    store.commit('boost_store/setPermissions', user.permissions);
+                    store.commit('boost_store/setSuperUser', user.superuser);
+                }
+            }else{
+                let response = await axios.get("/api/auth/get_permissions");
+                store.commit('boost_store/setPermissions', response.data.permissions);
+                store.commit('boost_store/setSuperUser', response.data.superuser);
+            }
         }
     }else{
         error({

@@ -167,24 +167,7 @@
         },
         methods: {
             hasPermission(perm_array){
-                let granted = true;
-
-                if(this.$store.state.boost_store.superuser){
-                    return true;
-                }
-
-                if(this.$store.state.boost_store.permissions.length === 0){
-                    return false;
-                }
-
-                for(let i = 0; i < perm_array.length; i++){
-                    let permission = perm_array[i];
-                    if(!this.$store.state.boost_store.permissions.includes(permission)){
-                        granted = false;
-                    }
-                }
-
-                return granted;
+                return this.$store.getters["boost_store/hasPermission"](perm_array);
             },
             toggle_nav(){
                 if(this.$vuetify.breakpoint.xsOnly){

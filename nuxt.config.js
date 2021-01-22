@@ -72,8 +72,8 @@ let nuxt_config = {
             const fs = require("fs");
             if(fs.existsSync(__dirname + "/../aspect")){
                 this.addLayout({
-                    name: "default",
-                    src: __dirname + "/../aspect/layouts/default.vue"
+                    name: "aspect",
+                    src: __dirname + "/../aspect/layouts/aspect.vue"
                 });
             }
         }

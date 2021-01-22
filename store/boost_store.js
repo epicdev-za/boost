@@ -32,6 +32,30 @@ export default (() => {
             setSuperUser(state, superuser){
                 state.superuser = superuser;
             }
+        },
+        getters: {
+            hasPermission: (state) => (permission_node) => {
+                let node_array = (Array.isArray(permission_node)) ? permission_node : [permission_node];
+
+                let granted = true;
+
+                if(state.superuser){
+                    return true;
+                }
+
+                if(state.permissions.length === 0){
+                    return false;
+                }
+
+                for(let i = 0; i < node_array.length; i++){
+                    let permission = node_array[i];
+                    if(!state.permissions.includes(permission)){
+                        granted = false;
+                    }
+                }
+
+                return granted;
+            }
         }
     };
 })();

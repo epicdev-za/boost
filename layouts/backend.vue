@@ -223,7 +223,7 @@
             logout(){
                 let _this = this;
                 axios.post("/api/auth/logout", {}).then(() => {
-                    _this.$router.push("/");
+                    _this.$router.replace("/");
                 })
             },
             toggleTheme(){

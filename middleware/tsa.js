@@ -29,6 +29,9 @@ const tsa = async function({app, route, store, redirect, error, env, req}){
         }
     }
 
+    store.commit('boost_store/setPermissions', []);
+    store.commit('boost_store/setSuperUser', false);
+
     if(boost_route !== undefined){
         if(boost_route.permissions !== undefined){
             if(req !== undefined){
@@ -84,9 +87,15 @@ const tsa = async function({app, route, store, redirect, error, env, req}){
                     store.commit('boost_store/setSuperUser', user.superuser);
                 }
             }else{
-                let response = await axios.get("/api/auth/get_permissions");
-                store.commit('boost_store/setPermissions', response.data.permissions);
-                store.commit('boost_store/setSuperUser', response.data.superuser);
+                try{
+                    let response = await axios.get("/api/auth/get_permissions");
+                    if(response.status === 200) {
+                        store.commit('boost_store/setPermissions', response.data.permissions);
+                        store.commit('boost_store/setSuperUser', response.data.superuser);
+                    }
+                }catch (e){
+
+                }
             }
         }
     }else{

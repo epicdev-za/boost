@@ -34,9 +34,19 @@ let nuxt_config = {
     /*
     ** Plugins to load before mounting the App
     */
-    plugins: [
-        __dirname + '/plugins/boost-plugin'
-    ],
+    plugins: (() => {
+        const fs = require("fs");
+
+        let plugins = [
+            __dirname + '/plugins/boost-plugin'
+        ];
+
+        if(fs.existsSync(__dirname + "/../aspect")) {
+            plugins.push(__dirname + "/../aspect/AspectPlugin");
+        }
+
+        return plugins;
+    })(),
     /*
     ** Nuxt.js dev-modules
     */
@@ -57,7 +67,16 @@ let nuxt_config = {
                 saveUnitialized: false,
                 db_store: false
             }, ((boost.nuxt !== undefined && boost.nuxt.session !== undefined) ? boost.nuxt.session : {}))
-        ]
+        ],
+        function(){
+            const fs = require("fs");
+            if(fs.existsSync(__dirname + "/../aspect")){
+                this.addLayout({
+                    name: "aspect",
+                    src: __dirname + "/../aspect/layouts/aspect.vue"
+                });
+            }
+        }
     ],
     /*
     ** vuetify module configuration

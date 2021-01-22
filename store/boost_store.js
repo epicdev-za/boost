@@ -4,10 +4,6 @@ export default (() => {
     return {
         state: () => ({
             notifications: [],
-            notificationRemoveInterval: null,
-            debug_logger: {
-                removalInterval: null
-            },
             permissions: [],
             superuser: false
         }),
@@ -20,17 +16,35 @@ export default (() => {
             removeNotification(state, index){
                 state.notifications.splice(index, 1);
             },
-            setNotificationRemoveInterval(state, interval){
-                state.notificationRemoveInterval = interval;
-            },
-            setDebugLoggerRemoveInterval(state, interval){
-                state.debug_logger.removalInterval = interval;
-            },
             setPermissions(state, permissions){
                 state.permissions = permissions;
             },
             setSuperUser(state, superuser){
                 state.superuser = superuser;
+            }
+        },
+        getters: {
+            hasPermission: (state) => (permission_node) => {
+                let node_array = (Array.isArray(permission_node)) ? permission_node : [permission_node];
+
+                let granted = true;
+
+                if(state.superuser){
+                    return true;
+                }
+
+                if(state.permissions.length === 0){
+                    return false;
+                }
+
+                for(let i = 0; i < node_array.length; i++){
+                    let permission = node_array[i];
+                    if(!state.permissions.includes(permission)){
+                        granted = false;
+                    }
+                }
+
+                return granted;
             }
         }
     };

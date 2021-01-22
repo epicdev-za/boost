@@ -20,6 +20,11 @@
 <script>
     export default {
         name: "Notifications",
+        data(){
+            return {
+                notification_interval: 0
+            }
+        },
         computed: {
             notifications(){
                 return this.$store.state.boost_store.notifications;
@@ -32,10 +37,7 @@
         },
         mounted() {
             let _this = this;
-            if(_this.$store.state.boost_store.notificationRemoveInterval !== null){
-                clearInterval(_this.$store.state.boost_store.notificationRemoveInterval);
-            }
-            this.$store.commit('boost_store/setNotificationRemoveInterval', setInterval(function(){
+            _this.notification_interval = setInterval(function(){
                 let current_time = Math.round(new Date().getTime()/1000);
                 let removals = [];
                 for(let i = 0; i < _this.notifications.length; i++){
@@ -47,14 +49,17 @@
                 for(let i = 0; i < removals.length; i++){
                     _this.$store.commit('boost_store/removeNotification', removals[i]);
                 }
-            }, 100));
+            }, 100);
+        },
+        destroyed() {
+            clearInterval(this.notification_interval);
         }
     }
 </script>
 
 <style scoped>
     .cont{
-        position: absolute !important;
+        position: fixed !important;
         bottom: 0 !important;
         left: 0 !important;
         width: 100% !important;

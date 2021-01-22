@@ -167,24 +167,7 @@
         },
         methods: {
             hasPermission(perm_array){
-                let granted = true;
-
-                if(this.$store.state.boost_store.superuser){
-                    return true;
-                }
-
-                if(this.$store.state.boost_store.permissions.length === 0){
-                    return false;
-                }
-
-                for(let i = 0; i < perm_array.length; i++){
-                    let permission = perm_array[i];
-                    if(!this.$store.state.boost_store.permissions.includes(permission)){
-                        granted = false;
-                    }
-                }
-
-                return granted;
+                return this.$store.getters["boost_store/hasPermission"](perm_array);
             },
             toggle_nav(){
                 if(this.$vuetify.breakpoint.xsOnly){
@@ -240,7 +223,7 @@
             logout(){
                 let _this = this;
                 axios.post("/api/auth/logout", {}).then(() => {
-                    _this.$router.push("/");
+                    _this.$router.replace("/");
                 })
             },
             toggleTheme(){
@@ -261,12 +244,6 @@
 </script>
 
 <style>
-    body{
-        font-family: "Roboto", sans-serif;
-        font-size: 0;
-        font-weight: 400;
-    }
-
     .sidemenu .v-navigation-drawer__content{
         font-size: 14px;
         position: absolute;

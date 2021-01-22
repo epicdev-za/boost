@@ -4,10 +4,6 @@ export default (() => {
     return {
         state: () => ({
             notifications: [],
-            notificationRemoveInterval: null,
-            debug_logger: {
-                removalInterval: null
-            },
             permissions: [],
             superuser: false
         }),
@@ -19,12 +15,6 @@ export default (() => {
             },
             removeNotification(state, index){
                 state.notifications.splice(index, 1);
-            },
-            setNotificationRemoveInterval(state, interval){
-                state.notificationRemoveInterval = interval;
-            },
-            setDebugLoggerRemoveInterval(state, interval){
-                state.debug_logger.removalInterval = interval;
             },
             setPermissions(state, permissions){
                 state.permissions = permissions;

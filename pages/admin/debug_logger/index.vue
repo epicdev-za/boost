@@ -89,6 +89,7 @@
         },
         data () {
             return {
+                refresh_interval: 0,
                 totalItems: 0,
                 table_items: [],
                 itemsPerPage: 50,
@@ -168,17 +169,14 @@
         mounted() {
             this.getLogs();
             let _this = this;
-            if(_this.$store.state.boost_store.debug_logger.removalInterval !== null){
-                clearInterval(_this.$store.state.boost_store.debug_logger.removalInterval);
-            }
-            this.$store.commit('boost_store/setDebugLoggerRemoveInterval', setInterval(function(){
+            _this.refresh_interval = setInterval(function(){
                 if(!_this.paused) {
                     _this.getLogs();
                 }
-            }, 5000));
+            }, 5000);
         },
         destroyed() {
-            clearInterval(this.$store.state.boost_store.debug_logger.removalInterval);
+            clearInterval(this.refresh_interval);
         },
         methods: {
             convertType(item){

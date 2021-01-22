@@ -244,12 +244,6 @@
 </script>
 
 <style>
-    body{
-        font-family: "Roboto", sans-serif;
-        font-size: 0;
-        font-weight: 400;
-    }
-
     .sidemenu .v-navigation-drawer__content{
         font-size: 14px;
         position: absolute;

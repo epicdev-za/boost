@@ -41,14 +41,12 @@ const tsa = async function({app, route, store, redirect, error, env, req}){
                     store.commit('boost_store/setPermissions', user.permissions);
                     store.commit('boost_store/setSuperUser', user.superuser);
 
-                    if(!user.superuser){
-                        for(let i = 0; i < boost_route.permissions.length; i++){
-                            if(!user.permissions.includes(boost_route.permissions[i])){
-                                error({
-                                    statusCode: 403
-                                });
-                                return;
-                            }
+                    for(let i = 0; i < boost_route.permissions.length; i++){
+                        if(!store.getters['boost_store/hasPermission'](boost_route.permissions[i])){
+                            error({
+                                statusCode: 403
+                            });
+                            return;
                         }
                     }
                 }else{

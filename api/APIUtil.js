@@ -1,16 +1,36 @@
-const ServerException = require("./ServerException");
 const DebugLog = require("./entities/DebugLog");
 
 module.exports = {
 
     hasPermission: function (user, permission){
+        const ServerException = require("./ServerException");
         if(user !== undefined){
             if(user.superuser){
                 return true;
             }
 
-            if(user.permissions.includes(permission)){
-                return true;
+            let split_permission = permission.split('.');
+
+            for(let x = 0; x < user.permissions.length; x++){
+                let granted_permission = user.permissions[x].split(".");
+                let passed_count = 0;
+                for(let i = 0; i < split_permission.length; i++){
+                    if(granted_permission.length >= i+1){
+                        let granted_node = granted_permission[i];
+                        let needed_node = split_permission[i];
+                        if(granted_node !== needed_node){
+                            if(granted_node === "*" && passed_count === i){
+                                return true;
+                            }
+                        }else{
+                            passed_count++;
+                        }
+                    }
+                }
+
+                if(passed_count === split_permission.length){
+                    return true;
+                }
             }
         }
         throw new ServerException(403, "permission_denied", "You lack sufficient permission to access this data");

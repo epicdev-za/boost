@@ -8,7 +8,7 @@
                         <v-row>
 
                             <v-col cols="12" md="12" lg="7" class="py-0">
-                                <v-text-field label="Username" v-model="item.username" :rules="usernameRules" required autofocus></v-text-field>
+                                <v-text-field label="Email Address" v-model="item.username" :rules="usernameRules" required autofocus></v-text-field>
                             </v-col>
 
                             <v-col cols="12" md="12" lg="5" class="py-0">
@@ -123,7 +123,11 @@
             return {
                 valid: false,
                 usernameRules: [
-                    v => !!v || 'Username is required',
+                    v => !!v || 'Email Address is required',
+                    value => {
+                        const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+                        return pattern.test(value) || 'Invalid Email Address.'
+                    }
                 ],
                 loading: false,
                 item: {

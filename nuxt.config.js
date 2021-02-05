@@ -43,6 +43,10 @@ let nuxt_config = {
 
         if(fs.existsSync(__dirname + "/../aspect")) {
             plugins.push(__dirname + "/../aspect/AspectPlugin");
+            plugins.push({
+                src: __dirname + "/../aspect/CKEditorPlugin",
+                mode: 'client'
+            });
         }
 
         return plugins;

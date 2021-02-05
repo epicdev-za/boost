@@ -35,7 +35,7 @@
 
         </v-navigation-drawer>
 
-        <v-app-bar app color="secondary" clipped-left dark :height="($vuetify.breakpoint.xsOnly) ? 50 : 60">
+        <v-app-bar app color="primary" clipped-left dark :height="($vuetify.breakpoint.xsOnly) ? 50 : 60">
             <v-app-bar-nav-icon @click.stop="toggle_nav"></v-app-bar-nav-icon>
 
             <v-toolbar-title>{{projectName}}</v-toolbar-title>

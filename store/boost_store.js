@@ -64,6 +64,53 @@ export default (() => {
                 }
 
                 return false;
+            },
+            hasPermissions: (state) => (permissions) => {
+                if(!Array.isArray(permissions)){
+                    permissions = [permissions];
+                }
+
+                if(state.superuser){
+                    return true;
+                }
+
+                if(state.permissions.length === 0){
+                    return false;
+                }
+
+                let approved_count = 0;
+
+                for(let i = 0; i < permissions.length; i++){
+                    let permission = permissions[i];
+
+                    let split_permission = permission.split('.');
+
+                    for(let x = 0; x < state.permissions.length; x++){
+                        let granted_permission = state.permissions[x].split(".");
+                        let passed_count = 0;
+                        for(let i = 0; i < split_permission.length; i++){
+                            if(granted_permission.length >= i+1){
+                                let granted_node = granted_permission[i];
+                                let needed_node = split_permission[i];
+                                if(granted_node !== needed_node){
+                                    if(granted_node === "*" && passed_count === i){
+                                        approved_count++;
+                                        break;
+                                    }
+                                }else{
+                                    passed_count++;
+                                }
+                            }
+                        }
+
+                        if(passed_count === split_permission.length){
+                            approved_count++;
+                            break;
+                        }
+                    }
+                }
+
+                return (approved_count === permissions.length);
             }
         }
     };

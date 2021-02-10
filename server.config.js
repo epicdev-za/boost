@@ -12,7 +12,8 @@ module.exports = {
     },
     sanctum: {
         location: 'https://sanctum.epicdev.co.za',
-        project_key: ''
+        project_key: '',
+        cache_ttl: 7200
     },
     plugins: [__dirname + "/plugins/PermissionLoaderPlugin"],
     endpoints: {

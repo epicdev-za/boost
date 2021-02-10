@@ -16,11 +16,13 @@ class ServerException extends Error{
             this.code = this.reference_code;
             this.suberror = status;
             this.user = code;
+            this.message = status.message;
         }else{
             this.status = status;
             this.description = object;
             this.code = code;
             this.suberror = this;
+            this.message = this.description;
         }
     }
 

@@ -35,13 +35,13 @@
                                             </v-col>
                                             <v-col cols="12" md="12">
                                                 <v-text-field class="a-field" v-model="password" v-on:keyup="fieldEnterPress" :rules="passwordRules" label="Password" :type="password_show ? 'text' : 'password'" :append-icon="password_show ? 'mdi-eye' : 'mdi-eye-off'" @click:append="password_show = !password_show"></v-text-field>
-<!--                                                <v-card-text style="text-align: right;" class="pa-0 pt-2 text-body-2">-->
-<!--                                                    <a color="primary" @click="tab = 1">Forgot Password?</a>-->
-<!--                                                </v-card-text>-->
+                                                <v-card-text style="text-align: right;" class="pa-0 pt-2 text-body-2">
+                                                    <a color="primary" @click="tab = 1">Forgot Password?</a>
+                                                </v-card-text>
                                             </v-col>
                                         </v-row>
                                         <v-row justify="center" class="mt-12">
-                                            <v-btn color="secondary" depressed class="px-8" @click="login(username, password)">Login</v-btn>
+                                            <v-btn color="secondary" depressed class="px-8" @click="login(username, password)" :disabled="username.length === 0 || password.length === 0">Login</v-btn>
                                         </v-row>
                                     </v-container>
                                 </v-form>
@@ -53,8 +53,8 @@
                                 <v-card-text style="text-align: center">Enter the username or email address associated with your account.</v-card-text>
                             </v-row>
                             <v-row justify="center" class="pt-4">
-                                <v-alert type="error" dense text dismissible class="mb-0" :value="error" v-model="error">
-                                    {{error_text}}
+                                <v-alert type="error" dense text dismissible class="mb-0" :value="forgotPasswordError" v-model="forgotPasswordError">
+                                    {{forgotPasswordErrorText}}
                                 </v-alert>
                             </v-row>
                             <v-row justify="center" class="pb-8">
@@ -62,12 +62,12 @@
                                     <v-container>
                                         <v-row>
                                             <v-col cols="12" md="12">
-                                                <v-text-field v-model="username" :rules="usernameRules" label="Username" required hide-details></v-text-field>
+                                                <v-text-field v-model="forgotPasswordUsername" :rules="usernameRules" label="Username" required autofocus></v-text-field>
                                             </v-col>
                                         </v-row>
                                         <v-row justify="center" class="mt-12">
                                             <v-btn class="px-8 mx-4" depressed @click="tab = 0">Cancel</v-btn>
-                                            <v-btn color="secondary" class="px-8 mx-4" depressed>Next</v-btn>
+                                            <v-btn color="secondary" class="px-8 mx-4" depressed @click="processForgotPassword(forgotPasswordUsername)" :disabled="forgotPasswordUsername.length === 0">Next</v-btn>
                                         </v-row>
                                     </v-container>
                                 </v-form>
@@ -111,7 +111,11 @@ export default {
             ],
             passwordRules: [
                 v => !!v || 'Password is required'
-            ]
+            ],
+
+            forgotPasswordUsername: '',
+            forgotPasswordError: false,
+            forgotPasswordErrorText: ''
         }
     },
     methods: {
@@ -149,6 +153,12 @@ export default {
                             break;
                     }
                 });
+            }
+        },
+        processForgotPassword(username){
+            let _this = this;
+            if(username.length > 0){
+                _this.tab = 2;
             }
         }
     },

@@ -2,35 +2,93 @@ const DebugLog = require("./entities/DebugLog");
 
 module.exports = {
 
-    hasPermission: function (user, permission){
+    hasPermission: function (user, permissions){
         const ServerException = require("./ServerException");
         if(user !== undefined){
             if(user.superuser){
                 return true;
             }
 
-            let split_permission = permission.split('.');
+            if(!Array.isArray(permissions)){
+                permissions = [permissions];
+            }
 
-            for(let x = 0; x < user.permissions.length; x++){
-                let granted_permission = user.permissions[x].split(".");
-                let passed_count = 0;
-                for(let i = 0; i < split_permission.length; i++){
-                    if(granted_permission.length >= i+1){
-                        let granted_node = granted_permission[i];
-                        let needed_node = split_permission[i];
-                        if(granted_node !== needed_node){
-                            if(granted_node === "*" && passed_count === i){
-                                return true;
+            for(let i = 0; i < permissions.length; i++){
+                let permission = permissions[i];
+
+                let split_permission = permission.split('.');
+
+                for(let x = 0; x < user.permissions.length; x++){
+                    let granted_permission = user.permissions[x].split(".");
+                    let passed_count = 0;
+                    for(let i = 0; i < split_permission.length; i++){
+                        if(granted_permission.length >= i+1){
+                            let granted_node = granted_permission[i];
+                            let needed_node = split_permission[i];
+                            if(granted_node !== needed_node){
+                                if(granted_node === "*" && passed_count === i){
+                                    return true;
+                                }
+                            }else{
+                                passed_count++;
                             }
-                        }else{
-                            passed_count++;
                         }
                     }
-                }
 
-                if(passed_count === split_permission.length){
-                    return true;
+                    if(passed_count === split_permission.length){
+                        return true;
+                    }
                 }
+            }
+        }
+        throw new ServerException(403, "permission_denied", "You lack sufficient permission to access this data");
+    },
+
+    hasPermissions: function(user, permissions){
+        const ServerException = require("./ServerException");
+        if(user !== undefined){
+            if(user.superuser){
+                return true;
+            }
+
+            if(!Array.isArray(permissions)){
+                permissions = [permissions];
+            }
+
+            let approved_count = 0;
+
+            for(let i = 0; i < permissions.length; i++){
+                let permission = permissions[i];
+
+                let split_permission = permission.split('.');
+
+                for(let x = 0; x < user.permissions.length; x++){
+                    let granted_permission = user.permissions[x].split(".");
+                    let passed_count = 0;
+                    for(let i = 0; i < split_permission.length; i++){
+                        if(granted_permission.length >= i+1){
+                            let granted_node = granted_permission[i];
+                            let needed_node = split_permission[i];
+                            if(granted_node !== needed_node){
+                                if(granted_node === "*" && passed_count === i){
+                                    approved_count++;
+                                    break;
+                                }
+                            }else{
+                                passed_count++;
+                            }
+                        }
+                    }
+
+                    if(passed_count === split_permission.length){
+                        approved_count++;
+                        break;
+                    }
+                }
+            }
+            
+            if(approved_count === permissions.length){
+                return true;
             }
         }
         throw new ServerException(403, "permission_denied", "You lack sufficient permission to access this data");

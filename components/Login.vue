@@ -35,9 +35,9 @@
                                             </v-col>
                                             <v-col cols="12" md="12">
                                                 <v-text-field class="a-field" v-model="password" v-on:keyup="fieldEnterPress" :rules="passwordRules" label="Password" :type="password_show ? 'text' : 'password'" :append-icon="password_show ? 'mdi-eye' : 'mdi-eye-off'" @click:append="password_show = !password_show"></v-text-field>
-                                                <v-card-text style="text-align: right;" class="pa-0 pt-2 text-body-2">
-                                                    <a color="primary" @click="tab = 1">Forgot Password?</a>
-                                                </v-card-text>
+<!--                                                <v-card-text style="text-align: right;" class="pa-0 pt-2 text-body-2">-->
+<!--                                                    <a color="primary" @click="tab = 1">Forgot Password?</a>-->
+<!--                                                </v-card-text>-->
                                             </v-col>
                                         </v-row>
                                         <v-row justify="center" class="mt-12">

@@ -1,11 +1,23 @@
 const BoostPlugin = require("../api/plugins/BoostPlugin");
 const fs = require("fs");
 const StaticUtil = require("./../api/StaticUtil");
+const boost_routes = require("../../../boost.routes");
 
 class PermissionLoaderPlugin extends BoostPlugin {
 
     onStart() {
         const permissions = [];
+
+        for(let key in boost_routes.default){
+            let route = boost_routes.default[key];
+            if(route.permissions !== undefined){
+                for(let i = 0; i < route.permissions.length; i++){
+                    if(!permissions.includes(route.permissions[i])){
+                        permissions.push(route.permissions[i]);
+                    }
+                }
+            }
+        }
 
         const backend_permissions = this.loadBackendPermissions();
         for(let i = 0; i < backend_permissions.length; i++){
@@ -21,7 +33,7 @@ class PermissionLoaderPlugin extends BoostPlugin {
             }
         }
 
-        StaticUtil.permissions = permissions;
+        StaticUtil.permissions = permissions.sort();
     }
 
     loadBackendPermissions(){

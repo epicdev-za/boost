@@ -12,9 +12,10 @@ module.exports = {
     },
     sanctum: {
         location: 'https://sanctum.epicdev.co.za',
-        project_key: ''
+        project_key: '',
+        cache_ttl: 7200
     },
-    plugins: [__dirname + "/plugins/PermissionLoaderPlugin"],
+    plugins: [__dirname + "/plugins/DatabaseAutomationPlugin", __dirname + "/plugins/PermissionLoaderPlugin"],
     endpoints: {
         'auth': {
             children: {
@@ -41,6 +42,10 @@ module.exports = {
                 'get_permissions': {
                     method: 'get',
                     handler: require("./api/endpoints/auth/get_permissions")
+                },
+                'password-recovery': {
+                    method: 'post',
+                    handler: require("./api/endpoints/auth/password-recovery")
                 }
             }
         },

@@ -10,6 +10,10 @@ export default {
         name: 'Login',
         component: resolve('pages/login')
     },
+    '/password-recovery': {
+        name: "Password Recovery",
+        component: resolve("pages/password_recovery")
+    },
     '/admin': {
         name: 'Dashboard',
         component: resolve('pages/admin/index'),

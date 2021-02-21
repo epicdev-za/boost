@@ -27,7 +27,7 @@
                                         </v-row>
                                         <v-row justify="center" class="mt-12">
                                             <v-btn class="px-8 mx-4" depressed nuxt :to="'/login'">Cancel</v-btn>
-                                            <v-btn color="secondary" class="px-8 mx-4" depressed @click="processForgotPassword(forgotPasswordUsername)" :disabled="forgotPasswordUsername.length === 0">Next</v-btn>
+                                            <v-btn color="primary" class="px-8 mx-4" depressed @click="processForgotPassword(forgotPasswordUsername)" :disabled="forgotPasswordUsername.length === 0">Next</v-btn>
                                         </v-row>
                                     </v-container>
                                 </v-form>

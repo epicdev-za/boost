@@ -14,6 +14,10 @@ export default {
         name: "Password Recovery",
         component: resolve("pages/password_recovery")
     },
+    '/password-reset': {
+        name: "Password Reset",
+        component: resolve("pages/password_reset")
+    },
     '/admin': {
         name: 'Dashboard',
         component: resolve('pages/admin/index'),

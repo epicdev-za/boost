@@ -39,7 +39,7 @@
                                     </v-col>
                                 </v-row>
                                 <v-row justify="center" class="mt-12">
-                                    <v-btn color="secondary" depressed class="px-8" @click="login(username, password)" :disabled="username.length === 0 || password.length === 0">Login</v-btn>
+                                    <v-btn color="primary" depressed class="px-8" @click="login(username, password)" :disabled="username.length === 0 || password.length === 0">Login</v-btn>
                                 </v-row>
                             </v-container>
                         </v-form>

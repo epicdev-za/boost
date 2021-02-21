@@ -10,14 +10,14 @@ export default {
         name: 'Login',
         component: resolve('pages/login')
     },
-    '/password-recovery': {
-        name: "Password Recovery",
-        component: resolve("pages/password_recovery")
-    },
-    '/password-reset': {
-        name: "Password Reset",
-        component: resolve("pages/password_reset")
-    },
+    // '/password-recovery': {
+    //     name: "Password Recovery",
+    //     component: resolve("pages/password_recovery")
+    // },
+    // '/password-reset': {
+    //     name: "Password Reset",
+    //     component: resolve("pages/password_reset")
+    // },
     '/admin': {
         name: 'Dashboard',
         component: resolve('pages/admin/index'),

@@ -86,7 +86,7 @@ export default {
     name: "PasswordReset",
     data(){
         return {
-            tab: 0,
+            tab: 1,
             passwordResetError: false,
             passwordResetErrorText: '',
             password: '',

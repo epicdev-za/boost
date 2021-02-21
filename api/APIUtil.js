@@ -101,6 +101,10 @@ module.exports = {
         throw new ServerException(400, "invalid_request", "Request was missing the '" + key + "' parameter.");
     },
 
+    time: function(){
+        return Math.round(new Date().getTime()/1000);
+    },
+
     log(obj, type, tags){
         if(obj === undefined){
             throw Error("Object paramter cannot be null");

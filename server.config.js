@@ -15,7 +15,7 @@ module.exports = {
         project_key: '',
         cache_ttl: 7200
     },
-    plugins: [__dirname + "/plugins/PermissionLoaderPlugin"],
+    plugins: [__dirname + "/plugins/DatabaseAutomationPlugin", __dirname + "/plugins/PermissionLoaderPlugin"],
     endpoints: {
         'auth': {
             children: {

@@ -30,6 +30,56 @@ class SanctumCache extends Entity{
         this.ttl = sanitizer.cleanNumeric(this.ttl);
     }
 
+    static getPlasmaMapping(){
+        return {
+            _uuid: {
+                field: "uuid",
+                data_type: "VARCHAR",
+                data_length: 36,
+                nullable: "not null",
+                primary_key: true
+            },
+            user_uuid: {
+                field: "user_uuid",
+                data_type: "VARCHAR",
+                data_length: 36,
+                unique: true
+            },
+            username: {
+                field: "username",
+                data_type: "VARCHAR",
+                data_length: 1024,
+                nullable: "not null"
+            },
+            password: {
+                field: "password",
+                data_type: "VARCHAR",
+                data_length: 2048,
+                nullable: "not null"
+            },
+            superuser: {
+                field: "superuser",
+                data_type: "boolean"
+            },
+            roles: {
+                field: "roles",
+                data_type: "text"
+            },
+            permissions: {
+                field: "permissions",
+                data_type: "text"
+            },
+            cached_time: {
+                field: "cached_time",
+                data_type: "integer"
+            },
+            ttl: {
+                field: "ttl",
+                data_type: "integer"
+            }
+        };
+    }
+
 }
 
 module.exports = SanctumCache;

@@ -4,6 +4,10 @@ class BoostPlugin {
         return null;
     }
 
+    onDatabaseConnected(){
+        return null;
+    }
+
     onExceptionCaught(error, status, description, uuid, currentStack){
         return null;
     }

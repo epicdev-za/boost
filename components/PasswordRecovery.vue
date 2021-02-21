@@ -22,7 +22,7 @@
                                     <v-container>
                                         <v-row>
                                             <v-col cols="12" md="12">
-                                                <v-text-field v-model="forgotPasswordUsername" :rules="usernameRules" label="Username" required autofocus></v-text-field>
+                                                <v-text-field v-model="forgotPasswordUsername" v-on:keyup="fieldEnterPress" :rules="usernameRules" label="Username" required autofocus></v-text-field>
                                             </v-col>
                                         </v-row>
                                         <v-row justify="center" class="mt-12">
@@ -82,6 +82,11 @@ export default {
         }
     },
     methods: {
+        fieldEnterPress(e){
+            if(e.keyCode === 13){
+                this.processForgotPassword(this.forgotPasswordUsername);
+            }
+        },
         processForgotPassword(username){
             let _this = this;
             if(username.length > 0){

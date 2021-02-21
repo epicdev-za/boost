@@ -1,10 +1,29 @@
 class PluginEventDispatcher {
 
     static plugins = [];
+    static call_queue = [];
+
+    static popCallQueue(){
+        for(let i = 0; i < this.call_queue.length; i++){
+            this.call_queue[i]();
+        }
+    }
 
     static onStart(){
         for(let i = 0; i < this.plugins.length; i++){
             this.plugins[i].onStart();
+        }
+    }
+
+    static onDatabaseConnected(){
+        if(this.plugins.length > 0){
+            for(let i = 0; i < this.plugins.length; i++){
+                this.plugins[i].onDatabaseConnected();
+            }
+        }else{
+            this.call_queue.push(function(){
+                PluginEventDispatcher.onDatabaseConnected();
+            });
         }
     }
 

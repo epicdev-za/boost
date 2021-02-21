@@ -3,6 +3,8 @@ const session = require('express-session');
 const pgSession = require('connect-pg-simple')(session);
 const Plasma = require("plasma");
 const config = require("../../../server.config");
+const SanctumCache = require("../api/entities/SanctumCache");
+const PluginEventDispatcher = require("../api/plugins/PluginEventDispatcher");
 
 module.exports = function(moduleConfig){
 
@@ -21,4 +23,6 @@ module.exports = function(moduleConfig){
     app.use(session(moduleConfig));
 
     this.options.serverMiddleware.unshift(app);
+
+    PluginEventDispatcher.onDatabaseConnected();
 }

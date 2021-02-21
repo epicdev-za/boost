@@ -1,5 +1,5 @@
 <template>
-    <PasswordReset></PasswordReset>
+    <PasswordReset :param="param"></PasswordReset>
 </template>
 
 <script>
@@ -10,6 +10,11 @@ export default {
     head(){
         return {
             title: "Password Reset"
+        }
+    },
+    asyncData(context){
+        return {
+            param: context.route.query
         }
     }
 }

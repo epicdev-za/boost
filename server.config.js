@@ -46,6 +46,14 @@ module.exports = {
                 'password-recovery': {
                     method: 'post',
                     handler: require("./api/endpoints/auth/password-recovery")
+                },
+                'validate-password-recovery': {
+                    method: "post",
+                    handler: require("./api/endpoints/auth/validate-password-recovery")
+                },
+                'reset-password': {
+                    method: "post",
+                    handler: require("./api/endpoints/auth/reset-password")
                 }
             }
         },

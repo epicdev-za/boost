@@ -82,11 +82,17 @@
 </template>
 
 <script>
+const axios = require("axios");
 export default {
     name: "PasswordReset",
+    props: {
+        param: {
+            required: true
+        }
+    },
     data(){
         return {
-            tab: 1,
+            tab: (this.param.r === undefined || (this.param.r !== undefined && !this.param.r.match(/^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/))) ? 3 : 1,
             passwordResetError: false,
             passwordResetErrorText: '',
             password: '',
@@ -108,6 +114,35 @@ export default {
         },
         reset(){
             this.tab = 1;
+
+            if(this.password.length > 0 && this.confirm_password === this.password){
+                axios.post("/api/auth/reset-password", {uuid: this.param.r, password: this.password}).then((res) => {
+                    if(res.data.success){
+                        this.tab = 2;
+                    }
+                }).catch((error) => {
+                    this.tab = (error.response.data.error === "invalid_request") ? 3 : 0;
+                    this.passwordResetError = true;
+                    this.passwordResetErrorText = "An error occurred. Engineers have been notified";
+                });
+            }
+        }
+    },
+    mounted(){
+        if(this.param.r !== undefined && this.param.r.match(/^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/)){
+            axios.post("/api/auth/validate-password-recovery", {uuid: this.param.r}).then((res) => {
+                if(res.data.valid){
+                    this.tab = 0;
+                }else{
+                    this.tab = 3;
+                }
+            }).catch((error) => {
+                this.tab = (error.response.data.error === "invalid_request") ? 3 : 0;
+                this.passwordResetError = true;
+                this.passwordResetErrorText = "An error occurred. Engineers have been notified";
+            });
+        }else{
+            this.tab = 3;
         }
     }
 }

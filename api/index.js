@@ -114,6 +114,7 @@ for(let i = 0; i < config.plugins.length; i++){
     }
 }
 
+PluginEventDispatcher.popCallQueue();
 PluginEventDispatcher.onStart();
 
 module.exports = {

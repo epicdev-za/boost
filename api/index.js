@@ -5,6 +5,13 @@ const config = require("../../../server.config");
 const PluginEventDispatcher = require("./plugins/PluginEventDispatcher");
 const BoostPlugin = require("./plugins/BoostPlugin");
 
+if(process.env.NODE_ENV === 'production'){
+    process.on("uncaughtException", function(err){
+        let exception = new ServerException(err);
+        exception.log();
+    });
+}
+
 let server = express();
 server.use(bodyParser.urlencoded({extended: true}));
 server.use(bodyParser.json());
@@ -81,6 +88,7 @@ function handlerErrorWrapper(handler){
         }
 
         try{
+            if(req.body === undefined) req.body = {};
             handler(req, res, next_hook);
         }catch (e) {
             next_hook(e);

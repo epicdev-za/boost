@@ -35,9 +35,9 @@
                                             </v-col>
                                             <v-col cols="12" md="12">
                                                 <v-text-field class="a-field" v-model="password" v-on:keyup="fieldEnterPress" :rules="passwordRules" label="Password" :type="password_show ? 'text' : 'password'" :append-icon="password_show ? 'mdi-eye' : 'mdi-eye-off'" @click:append="password_show = !password_show"></v-text-field>
-<!--                                                <v-card-text style="text-align: right;" class="pa-0 pt-2 text-body-2">-->
-<!--                                                    <a color="primary" @click="tab = 1">Forgot Password?</a>-->
-<!--                                                </v-card-text>-->
+                                                <v-card-text style="text-align: right;" class="pa-0 pt-2 text-body-2">
+                                                    <a color="primary" @click="tab = 1">Forgot Password?</a>
+                                                </v-card-text>
                                             </v-col>
                                         </v-row>
                                         <v-row justify="center" class="mt-12">
@@ -159,6 +159,27 @@ export default {
             let _this = this;
             if(username.length > 0){
                 _this.tab = 2;
+                axios.post("/api/auth/password-recovery", {username: username}).then((response) => {
+
+                }).catch((error, obj) => {
+                    _this.tab = 1;
+                    if(!error.response){
+                        error.response = {
+                            status: 500
+                        };
+                    }
+                    switch(error.response.status){
+                        default:
+                        case 500:
+                            _this.forgotPasswordError = true;
+                            _this.forgotPasswordErrorText = "Failed to connect to authentication server";
+                            break;
+                        case 400:
+                            _this.forgotPasswordError = true;
+                            _this.forgotPasswordErrorText = "Invalid credentials";
+                            break;
+                    }
+                });
             }
         }
     },

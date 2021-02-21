@@ -42,6 +42,10 @@ module.exports = {
                 'get_permissions': {
                     method: 'get',
                     handler: require("./api/endpoints/auth/get_permissions")
+                },
+                'password-recovery': {
+                    method: 'post',
+                    handler: require("./api/endpoints/auth/password-recovery")
                 }
             }
         },

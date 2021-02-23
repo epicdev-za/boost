@@ -66,7 +66,7 @@ class ServerException extends Error{
             sanctum_payload.user_uuid = this.user.uuid;
         }
 
-        if(this.code !== 'error_logger_error'){
+        if(this.code !== 'error_logger_error' && process.env.NODE_ENV === 'production'){
             SanctumUtil.post("/api/sanctum/errors/log", sanctum_payload).then((obj) => {
                 console.log("Logged error to Sanctum");
             }).catch((e) => {

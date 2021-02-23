@@ -81,9 +81,7 @@ function handlerErrorWrapper(handler){
                         error_description: e.description
                     });
 
-                    if(process.env.NODE_ENV === 'production') {
-                        e.log();
-                    }
+                    e.log();
                     return;
                 }
             }

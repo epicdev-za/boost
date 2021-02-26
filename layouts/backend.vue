@@ -140,12 +140,19 @@
 
                         module.index_url = route_key;
 
-                        let create_route_key = route_key + "/create";
+                        let create_suffix = (module.create !== undefined) ? module.create : "/add";
+
+                        let create_route_key = route_key + create_suffix;
+                        let create_param = '';
+                        if(create_route_key.indexOf("?") > -1) {
+                            create_param = create_route_key.substr(create_route_key.indexOf("?"));
+                            create_route_key = create_route_key.substr(0, create_route_key.indexOf("?"));
+                        }
                         let create_route = routes[create_route_key];
                         if(module.create_btn && create_route !== undefined){
                             let create_permissions = create_route.permissions;
                             if(this.hasPermission(create_permissions)){
-                                module.create_url = create_route_key;
+                                module.create_url = create_route_key + create_param;
                             }
                         }
 

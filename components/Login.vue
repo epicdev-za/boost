@@ -52,7 +52,7 @@
 
 <script>
 const axios = require("axios");
-import config from '../../../boost.config';
+import config from '../../../../boost.config';
 export default {
     name: "Login",
     data(){
@@ -116,7 +116,7 @@ export default {
             }
         },
         passwordRecoveryEnabled(){
-            const routes = require("./../../../boost.routes");
+            const routes = require("./../../../../boost.routes");
             return routes.default['/password-recovery'] !== undefined && routes.default['/password-recovery'] !== null;
         }
     },

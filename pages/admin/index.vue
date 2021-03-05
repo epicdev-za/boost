@@ -38,8 +38,8 @@
 </template>
 
 <script>
-    import boost from '../../../../boost.config'
-    import routes from '../../../../boost.routes'
+    import boost from '../../../../../boost.config'
+    import routes from '../../../../../boost.routes'
     export default {
         layout: 'backend',
         head(){

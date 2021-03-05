@@ -1,6 +1,6 @@
 const ServerException = require("../../ServerException");
 const APIUtil = require("../../APIUtil");
-const boost_routes = require("../../../boost.routes");
+const boost_routes = require("../../../../../../boost.routes");
 const routes = boost_routes.default;
 
 module.exports = function(req, res, next){

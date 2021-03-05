@@ -99,7 +99,7 @@ const grant_type = {
     },
 
     refresh_token(req, res, next){
-        const config = require("../../../../../boost.config");
+        const config = require("../../../../../../boost.config");
         const body = req.body;
 
         let client_id, client_secret, access_token, refresh_token;

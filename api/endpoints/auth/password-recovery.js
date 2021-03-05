@@ -4,7 +4,7 @@ const ServerException = require("./../../ServerException");
 const SanctumUtil = require("./../../SanctumUtil");
 const fs = require("fs");
 const nodemailer = require("nodemailer");
-const nuxt_config = require("../../../../../nuxt.config");
+const nuxt_config = require("../../../../../../nuxt.config");
 const moment = require("moment");
 
 module.exports = function(req, res, next){
@@ -25,7 +25,7 @@ module.exports = function(req, res, next){
         html_template = html_template.replace(/\${reset_link}/g, reset_link);
         html_template = html_template.replace(/\${expiry_time}/g, expiry_time);
 
-        const config = require("./../../../../../server.config");
+        const config = require("./../../../../../../server.config");
         if(config.email_server !== undefined) {
             try{
                 let server = nodemailer.createTransport(config.email_server);

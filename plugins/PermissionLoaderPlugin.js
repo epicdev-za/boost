@@ -1,7 +1,7 @@
 const BoostPlugin = require("../api/plugins/BoostPlugin");
 const fs = require("fs");
 const StaticUtil = require("./../api/StaticUtil");
-const boost_routes = require("../../../boost.routes");
+const boost_routes = require("../../../../boost.routes");
 
 class PermissionLoaderPlugin extends BoostPlugin {
 
@@ -40,13 +40,13 @@ class PermissionLoaderPlugin extends BoostPlugin {
         let start_dirs = [];
 
         let dir_1 = fs.readdirSync(__dirname + "/../api");
-        let dir_2 = fs.readdirSync(__dirname + "/../../../api");
+        let dir_2 = fs.readdirSync(__dirname + "/../../../../api");
 
         for(let i = 0; i < dir_1.length; i++){
             start_dirs.push(__dirname + "/../api/" + dir_1[i]);
         }
         for(let i = 0; i < dir_2.length; i++){
-            start_dirs.push(__dirname + "/../../../api/" + dir_2[i]);
+            start_dirs.push(__dirname + "/../../../../api/" + dir_2[i]);
         }
 
         let js_files = [];
@@ -104,13 +104,13 @@ class PermissionLoaderPlugin extends BoostPlugin {
         const search_dirs = [
             __dirname + "/../pages",
             __dirname + "/../layouts",
-            __dirname + "/../../../pages",
-            __dirname + "/../../../components"
+            __dirname + "/../../../../pages",
+            __dirname + "/../../../../components"
         ];
 
         if(fs.existsSync(__dirname + "/../../aspect")){
-            search_dirs.push(__dirname + "/../../aspect/components");
-            search_dirs.push(__dirname + "/../../aspect/layouts");
+            search_dirs.push(__dirname + "/../../../aspect/components");
+            search_dirs.push(__dirname + "/../../../aspect/layouts");
         }
 
         let vue_files = [];

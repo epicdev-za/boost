@@ -1,5 +1,5 @@
 const uuidV4 = require("uuid/v4");
-const SanctumUtil = require("boost/api/SanctumUtil");
+const SanctumUtil = require("@epicdev/boost/api/SanctumUtil");
 const Dispatcher = require("./plugins/PluginEventDispatcher");
 
 class ServerException extends Error{

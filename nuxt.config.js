@@ -1,9 +1,9 @@
 import colors from 'vuetify/es5/util/colors'
-import boost from '../../boost.config'
-import boost_routes from '../../boost.routes'
+import boost from '../../../boost.config'
+import boost_routes from '../../../boost.routes'
 import serveStatic from 'serve-static';
 import array_marriage from "array-marriage";
-import server_config from "../../server.config";
+import server_config from "../../../server.config";
 
 let nuxt_config = {
     mode: 'universal',
@@ -41,10 +41,10 @@ let nuxt_config = {
             __dirname + '/plugins/boost-plugin'
         ];
 
-        if(fs.existsSync(__dirname + "/../aspect")) {
-            plugins.push(__dirname + "/../aspect/AspectPlugin");
+        if(fs.existsSync(__dirname + "/../../aspect")) {
+            plugins.push(__dirname + "/../../aspect/AspectPlugin");
             plugins.push({
-                src: __dirname + "/../aspect/CKEditorPlugin",
+                src: __dirname + "/../../aspect/CKEditorPlugin",
                 mode: 'client'
             });
         }
@@ -74,10 +74,10 @@ let nuxt_config = {
         ],
         function(){
             const fs = require("fs");
-            if(fs.existsSync(__dirname + "/../aspect")){
+            if(fs.existsSync(__dirname + "/../../aspect")){
                 this.addLayout({
                     name: "aspect",
-                    src: __dirname + "/../aspect/layouts/aspect.vue"
+                    src: __dirname + "/../../aspect/layouts/aspect.vue"
                 });
             }
         }
@@ -135,10 +135,10 @@ let nuxt_config = {
         }
     },
     dir: {
-        layouts: 'node_modules/boost/layouts',
-        pages: 'node_modules/boost/pages/null',
-        middleware: 'node_modules/boost/middleware',
-        store: 'node_modules/boost/store'
+        layouts: 'node_modules/@epicdev/boost/layouts',
+        pages: 'node_modules/@epicdev/boost/pages/null',
+        middleware: 'node_modules/@epicdev/boost/middleware',
+        store: 'node_modules/@epicdev/boost/store'
     },
     serverMiddleware: [
         __dirname + '/api/index.js',

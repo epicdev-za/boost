@@ -89,8 +89,8 @@
 
 <script>
     const axios = require("axios");
-    import boost from '../../../boost.config'
-    import routes from '../../../boost.routes'
+    import boost from '../../../../boost.config'
+    import routes from '../../../../boost.routes'
     import Notifications from './../components/Notifications';
     export default {
         head(){

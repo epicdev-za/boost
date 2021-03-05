@@ -2,7 +2,7 @@ const express = require('express');
 const session = require('express-session');
 const pgSession = require('connect-pg-simple')(session);
 const Plasma = require("plasma");
-const config = require("../../../server.config");
+const config = require("../../../../server.config");
 const SanctumCache = require("../api/entities/SanctumCache");
 const PluginEventDispatcher = require("../api/plugins/PluginEventDispatcher");
 

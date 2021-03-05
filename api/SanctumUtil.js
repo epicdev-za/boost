@@ -11,7 +11,7 @@ class SanctumUtil {
         if(data === undefined) data = {};
 
         return new Promise((resolve, reject) => {
-            const config = require("../../../server.config");
+            const config = require("../../../../server.config");
             let project_key = config.sanctum.project_key;
             let location = config.sanctum.location;
 

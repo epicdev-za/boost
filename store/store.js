@@ -1,3 +1,3 @@
 export default (() => {
-    return require("../../../store/store");
+    return require("../../../../store/store");
 })();

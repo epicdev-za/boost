@@ -79,7 +79,7 @@
 
 <script>
     const axios = require("axios");
-    import config from '../../../../../boost.config'
+    import config from '../../../../../../boost.config'
     export default {
         layout: "backend",
         head(){

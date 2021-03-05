@@ -83,7 +83,7 @@ module.exports = function(req, res, next){
 }
 
 function cacheUser(user, password){
-    const config = require("../../../../../server.config");
+    const config = require("../../../../../../server.config");
     return new Promise(async (resolve, reject) => {
         let cached_user = await Plasma.getConnection.fetch(SanctumCache, "SELECT * FROM " + SanctumCache.getEntity() + " WHERE user_uuid = $1", [sanitizer.cleanUUID(user.uuid)]);
 

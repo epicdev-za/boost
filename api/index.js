@@ -1,7 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const ServerException = require("./ServerException");
-const config = require("../../../server.config");
+const config = require("../../../../server.config");
 const PluginEventDispatcher = require("./plugins/PluginEventDispatcher");
 const BoostPlugin = require("./plugins/BoostPlugin");
 

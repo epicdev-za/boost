@@ -1,5 +1,5 @@
 const axios = require("axios");
-const boost_routes = require("./../../../boost.routes");
+const boost_routes = require("./../../../../boost.routes");
 const routes = boost_routes.default;
 
 const tsa = async function({app, route, store, redirect, error, env, req}){

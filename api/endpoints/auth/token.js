@@ -1,4 +1,4 @@
-const Plasma = require("plasma");
+const Plasma = require("@epicdev/plasma");
 const sanitizer = require("../../sanitizer");
 const Application = require("../../entities/Application");
 const Authentication = require("../../entities/Authentication");

@@ -18,8 +18,8 @@
     },
     "homepage": "https://github.com/epicdev-za/boost#readme",
     "dependencies": {
-        "array-marriage": "github:epicdev-za/array-marriage#v1.0.0",
-        "axios": "^0.21.1",
+        "@epicdev/array-marriage": "^1.0.0",
+        "axios": "^0.19.2",
         "connect-pg-simple": "^6.2.1",
         "express": "^4.17.1",
         "express-session": "^1.17.1",
@@ -27,7 +27,7 @@
         "moment": "^2.29.0",
         "nodemailer": "^6.4.17",
         "nuxt-session": "^1.0.3",
-        "plasma": "github:epicdev-za/plasma",
+        "@epicdev/plasma": "^1.0.0",
         "restify-clients": "^2.6.9",
         "uuid": "^3.3.3",
         "argon2": "^0.24.1"

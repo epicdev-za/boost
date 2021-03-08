@@ -29,7 +29,7 @@ class ServerException extends Error{
     log(){
         const err = this.suberror;
 
-        const config = require("../../../server.config");
+        const config = require("../../../../server.config");
         let project_key = config.sanctum.project_key;
 
         let currentStack = this.currentStack;

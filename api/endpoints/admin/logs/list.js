@@ -2,7 +2,7 @@ const ServerException = require("../../../ServerException");
 const sanitizer = require("../../../sanitizer");
 const APIUtil = require("../../../APIUtil");
 const DebugLog = require("../../../entities/DebugLog");
-const Plasma = require("plasma");
+const Plasma = require("@epicdev/plasma");
 
 module.exports = function(req, res, next){
     if(req.body === undefined) req.body = {};

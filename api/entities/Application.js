@@ -1,4 +1,4 @@
-const Entity = require("plasma/PlasmaEntity");
+const Entity = require("@epicdev/plasma/PlasmaEntity");
 const sanitizer = require("../sanitizer");
 
 class Application extends Entity{

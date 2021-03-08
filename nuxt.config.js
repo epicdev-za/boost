@@ -2,7 +2,7 @@ import colors from 'vuetify/es5/util/colors'
 import boost from '../../../boost.config'
 import boost_routes from '../../../boost.routes'
 import serveStatic from 'serve-static';
-import array_marriage from "array-marriage";
+import array_marriage from "@epicdev/array-marriage";
 import server_config from "../../../server.config";
 
 let nuxt_config = {

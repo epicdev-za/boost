@@ -95,6 +95,7 @@ module.exports = {
     },
 
     extract: function (object, key){
+        const ServerException = require("./ServerException");
         if(object[key] !== undefined){
             return object[key];
         }

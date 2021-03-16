@@ -15,6 +15,14 @@ module.exports = {
         return parseInt(data);
     },
 
+    cleanDecimal(data){
+    	try{
+    		return parseFloat(data);
+    	}catch(e){
+    		return null;
+    	}
+    },
+
     cleanAlpha(data){
         data = data.toString();
         data = data.replace(/[^a-zA-Z]/g, '');

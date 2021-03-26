@@ -87,11 +87,13 @@ class PermissionLoaderPlugin extends BoostPlugin {
             let js_file = js_files[i];
             if(!exclude_list.includes(js_file)){
                 let data = fs.readFileSync(js_file, {encoding:'utf8', flag:'r'});
-                let match_result = data.match(/APIUtil.hasPermission\(.+,.*("|')(.*)("|')/);
-                if(match_result !== null && match_result.length > 3){
-                    let permission = match_result[2];
-                    if(!permissions.includes(permission)){
-                        permissions.push(permission);
+                let match_result = [...data.matchAll(/(APIUtil.hasPermission\([^)]*\)|APIUtil.hasPermissions\([^)]*\))/g)];
+                for(let i = 0; i < match_result.length; i++){
+                    let usage = match_result[i][0];
+                    usage = usage.replace(/(APIUtil.hasPermission\([^,]*,\s*|APIUtil.hasPermissions\([^,]*,\s*)/g, "extractPermissions(");
+                    let extracted_permissions = this.evalPermissionExtraction(usage, js_file);
+                    for(let x = 0; x < extracted_permissions.length; x++){
+                        permissions.push(extracted_permissions[x]);
                     }
                 }
             }
@@ -141,16 +143,35 @@ class PermissionLoaderPlugin extends BoostPlugin {
         for(let i = 0; i < vue_files.length; i++){
             let vue_file = vue_files[i];
             let data = fs.readFileSync(vue_file, {encoding:'utf8', flag:'r'});
-            let match_result = data.match(/\$store.getters\['boost_store\/hasPermission'\]\(("|')(.*)("|')\)/);
-            if(match_result !== null && match_result.length > 3){
-                let permission = match_result[2];
-                if(!permissions.includes(permission)){
-                    permissions.push(permission);
+            let match_result = [...data.matchAll(/(\$store.getters\[\'boost_store\/hasPermission\'\]\([^)]*\)|\$store.getters\[\'boost_store\/hasPermissions\'\]\([^)]*\))/g)];
+            for(let i = 0; i < match_result.length; i++){
+                let usage = match_result[i][0];
+                usage = usage.replace(/(\$store.getters\[\'boost_store\/hasPermission\'\]\(|\$store.getters\[\'boost_store\/hasPermissions\'\]\()/g, "extractPermissions(");
+                let extracted_permissions = this.evalPermissionExtraction(usage, vue_file);
+                for(let x = 0; x < extracted_permissions.length; x++){
+                    permissions.push(extracted_permissions[x]);
                 }
             }
         }
 
         return permissions;
+    }
+
+    evalPermissionExtraction(usage, file){
+        "use strict";
+        try{
+            let extracted_permissions = eval("let extractPermissions = (function(permissions){return permissions;}).bind({}); let func = function(){'use strict'; return " + usage + "}; let boundFund = func.bind({}); boundFund();");
+            if(Array.isArray(extracted_permissions)){
+                return extracted_permissions;
+            }else{
+                return [extracted_permissions];
+            }
+        }catch (e){
+            if(!usage.includes("+") && (usage.includes("\"") || usage.includes("'"))) {
+                console.log("\x1b[31mFailed to load a permission usage\n\x1b[31mFile: \x1b[36m%s\n\x1b[31mUsage: \x1b[36m%s\n\n\x1b[0m", file, usage);
+            }
+            return [];
+        }
     }
 
 }

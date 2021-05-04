@@ -12,10 +12,16 @@ if(process.env.NODE_ENV === 'production'){
     });
 }
 
+let rawBodySaver = function (req, res, buf, encoding) {
+    if (buf && buf.length) {
+        req.rawBody = buf.toString(encoding || 'utf8');
+    }
+}
+
 let server = express();
-server.use(bodyParser.urlencoded({extended: true}));
-server.use(bodyParser.json());
-server.use(bodyParser.raw());
+server.use(bodyParser.urlencoded({extended: true, verify: rawBodySaver}));
+server.use(bodyParser.json({verify: rawBodySaver}));
+server.use(bodyParser.raw({verify: rawBodySaver}));
 
 loadEndpoint(config.endpoints);
 

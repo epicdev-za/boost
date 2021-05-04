@@ -19,7 +19,7 @@
     "homepage": "https://github.com/epicdev-za/boost#readme",
     "dependencies": {
         "@epicdev/array-marriage": "^1.0.0",
-        "axios": "^0.19.2",
+        "axios": "^0.21.1",
         "connect-pg-simple": "^6.2.1",
         "express": "^4.17.1",
         "express-session": "^1.17.1",

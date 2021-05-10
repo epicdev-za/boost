@@ -50,6 +50,8 @@ function generateAESSecret(){
 }
 
 async function encryptSecret(secret, project_key){
+    const ServerException = require("./ServerException");
+
     if(process.env[project_key + '-sanctum-public'] !== undefined){
         const key_file = process.env[project_key + '-sanctum-public'];
         let key;

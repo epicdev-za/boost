@@ -36,12 +36,13 @@ function loadEndpoint(endpoints, parentPath = []){
             fullPath += "/" + path;
 
             function registerEndpoint(endpoint, server){
-                if(endpoint.handler !== undefined && typeof endpoint.handler !== typeof Function){
+                if(endpoint.handler !== undefined && !(typeof endpoint.handler === typeof Function || typeof endpoint.handler === 'string')){
                     throw new Error("Endpoint configuration '" + fullPath + "' has invalid handler type");
                 }
 
                 if(typeof endpoint.method === typeof '' && endpoint.handler !== undefined){
-                    server[endpoint.method](fullPath, handlerErrorWrapper(endpoint.handler));
+                    let handler = (typeof endpoint.handler === 'string') ? require(endpoint.handler) : endpoint.handler;
+                    server[endpoint.method](fullPath, handlerErrorWrapper(handler));
                 }
 
                 if(endpoint.children !== undefined){

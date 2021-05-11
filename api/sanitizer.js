@@ -1,12 +1,16 @@
 module.exports = {
 
-    cleanBoolean(data){
+    cleanBoolean(data, optional){
+        if(optional && (data === undefined || data === null)) return data;
+
         if(data === true || data === 1) return true;
         if(data === false || data === 0) return false;
         throw new Error("Invalid data property");
     },
 
-    cleanNumeric(data){
+    cleanNumeric(data, optional){
+        if(optional && (data === undefined || data === null)) return data;
+
         data = data.toString();
         data = data.replace(/[^0-9-]/g, '');
         let negative = data.charAt(0) === '-';
@@ -15,41 +19,53 @@ module.exports = {
         return parseInt(data);
     },
 
-    cleanDecimal(data){
-    	try{
+    cleanDecimal(data, optional){
+        if(optional && (data === undefined || data === null)) return data;
+
+        try{
     		return parseFloat(data);
     	}catch(e){
     		return null;
     	}
     },
 
-    cleanAlpha(data){
+    cleanAlpha(data, optional){
+        if(optional && (data === undefined || data === null)) return data;
+
         data = data.toString();
         data = data.replace(/[^a-zA-Z]/g, '');
         return data;
     },
 
-    cleanAlphaNumeric(data){
+    cleanAlphaNumeric(data, optional){
+        if(optional && (data === undefined || data === null)) return data;
+
         data = data.toString();
         data = data.replace(/[^a-zA-Z0-9]/g, '');
         return data;
     },
 
-    cleanSymbols(data){
+    cleanSymbols(data, optional){
+        if(optional && (data === undefined || data === null)) return data;
+
         if(data === null) return null;
         data = data.toString();
         data = data.replace(/[^a-zA-Z0-9 \/:._,~\-!?@#\$%\^&\*]+/g, '');
         return data;
     },
 
-    cleanExtraSymbols(data){
+    cleanExtraSymbols(data, optional){
+        if(optional && (data === undefined || data === null)) return data;
+
         if(data === null) return null;
         data = data.toString();
         data = data.replace(/[^a-zA-Z0-9 \"\'\n\\\/{}[\]:.,_~\-!@\+=#\$%\^&\*áàâãªäÁÀÂÃÄÍÌÎÏíìîïéèêëÉÈÊËóòôõºöÓÒÔÕÖúùûüÚÙÛÜçÇñÑ]+/g, '')
         return data;
     },
 
-    cleanPermalink(data){
+    cleanPermalink(data, optional){
+        if(optional && (data === undefined || data === null)) return data;
+
         data = data.toString();
         data = data.replace(/ & /g, ' and ');
         data = data.replace(/[^a-zA-Z0-9\- ]/g, '');
@@ -61,8 +77,9 @@ module.exports = {
         return data;
     },
 
-    cleanUUID(uuid, loose){
-        if(loose && (uuid === undefined || uuid === null)) return uuid;
+    cleanUUID(uuid, optional){
+        if(optional && (uuid === undefined || uuid === null)) return uuid;
+
         if(uuid === undefined || !uuid.match(/^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/)){
             throw new Error("Invalid UUID");
         }

@@ -21,39 +21,39 @@ module.exports = {
             children: {
                 'token': {
                     method: 'post',
-                    handler: require("./api/endpoints/auth/token")
+                    handler: __dirname + "/api/endpoints/auth/token"
                 },
                 'login': {
                     method: 'post',
-                    handler: require("./api/endpoints/auth/login")
+                    handler: __dirname + "/api/endpoints/auth/login"
                 },
                 'has_access': {
                     method: 'post',
-                    handler: require("./api/endpoints/auth/has_access")
+                    handler: __dirname + "/api/endpoints/auth/has_access"
                 },
                 'logout': {
                     method: 'post',
-                    handler: require("./api/endpoints/auth/logout")
+                    handler: __dirname + "/api/endpoints/auth/logout"
                 },
                 'logged_in': {
                     method: 'get',
-                    handler: require("./api/endpoints/auth/logged_in")
+                    handler: __dirname + "/api/endpoints/auth/logged_in"
                 },
                 'get_permissions': {
                     method: 'get',
-                    handler: require("./api/endpoints/auth/get_permissions")
+                    handler: __dirname + "/api/endpoints/auth/get_permissions"
                 },
                 'password-recovery': {
                     method: 'post',
-                    handler: require("./api/endpoints/auth/password-recovery")
+                    handler: __dirname + "/api/endpoints/auth/password-recovery"
                 },
                 'validate-password-recovery': {
                     method: "post",
-                    handler: require("./api/endpoints/auth/validate-password-recovery")
+                    handler: __dirname + "/api/endpoints/auth/validate-password-recovery"
                 },
                 'reset-password': {
                     method: "post",
-                    handler: require("./api/endpoints/auth/reset-password")
+                    handler: __dirname + "/api/endpoints/auth/reset-password"
                 }
             }
         },
@@ -63,27 +63,27 @@ module.exports = {
                     children: {
                         'list': {
                             method: 'get',
-                            handler: require("./api/endpoints/admin/roles/list")
+                            handler: __dirname + "/api/endpoints/admin/roles/list"
                         },
                         'is_sanctum': {
                             method: 'get',
-                            handler: require("./api/endpoints/admin/roles/is_sanctum")
+                            handler: __dirname + "/api/endpoints/admin/roles/is_sanctum"
                         },
                         'get': {
                             method: 'get',
-                            handler: require("./api/endpoints/admin/roles/get")
+                            handler: __dirname + "/api/endpoints/admin/roles/get"
                         },
                         'save': {
                             method: 'post',
-                            handler: require("./api/endpoints/admin/roles/save")
+                            handler: __dirname + "/api/endpoints/admin/roles/save"
                         },
                         'delete': {
                             method: 'post',
-                            handler: require("./api/endpoints/admin/roles/delete")
+                            handler: __dirname + "/api/endpoints/admin/roles/delete"
                         },
                         'get_permissions': {
                             method: 'get',
-                            handler: require("./api/endpoints/admin/roles/get_permissions")
+                            handler: __dirname + "/api/endpoints/admin/roles/get_permissions"
                         }
                     }
                 },
@@ -91,31 +91,31 @@ module.exports = {
                     children: {
                         'list': {
                             method: 'get',
-                            handler: require("./api/endpoints/admin/users/list")
+                            handler: __dirname + "/api/endpoints/admin/users/list"
                         },
                         'save': {
                             method: 'post',
-                            handler: require("./api/endpoints/admin/users/save")
+                            handler: __dirname + "/api/endpoints/admin/users/save"
                         },
                         'generate_password': {
                             method: 'post',
-                            handler: require("./api/endpoints/admin/users/generate_password")
+                            handler: __dirname + "/api/endpoints/admin/users/generate_password"
                         },
                         'get_roles': {
                             method: 'get',
-                            handler: require("./api/endpoints/admin/users/get_roles")
+                            handler: __dirname + "/api/endpoints/admin/users/get_roles"
                         },
                         'get': {
                             method: 'get',
-                            handler: require("./api/endpoints/admin/users/get")
+                            handler: __dirname + "/api/endpoints/admin/users/get"
                         },
                         'delete': {
                             method: 'post',
-                            handler: require("./api/endpoints/admin/users/delete")
+                            handler: __dirname + "/api/endpoints/admin/users/delete"
                         },
                         'get_permissions': {
                             method: 'get',
-                            handler: require("./api/endpoints/admin/users/get_permissions")
+                            handler: __dirname + "/api/endpoints/admin/users/get_permissions"
                         }
                     }
                 },
@@ -123,7 +123,7 @@ module.exports = {
                     children: {
                         'list': {
                             method: 'get',
-                            handler: require("./api/endpoints/admin/logs/list")
+                            handler: __dirname + "/api/endpoints/admin/logs/list"
                         }
                     }
                 }

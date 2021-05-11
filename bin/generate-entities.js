@@ -1,11 +1,19 @@
 const Plasma = require("@epicdev/plasma");
+const sanitizer = require("../api/sanitizer");
 const config = require("../../../../server.config");
 const fs = require('fs');
+
+var args = process.argv.slice(2);
 
 let database = new Plasma();
 database.connect(config.db).then(async (client) => {
 
-    let tables = await client.query("SELECT table_name FROM information_schema.tables WHERE table_schema = '" + config.db.schema + "'");
+    let sql = "SELECT table_name FROM information_schema.tables WHERE table_schema = '" + config.db.schema + "'";
+    if(args.length > 0){
+        sql += " AND table_name = '" + sanitizer.cleanExtraSymbols(args[0]) + "'";
+    }
+
+    let tables = await client.query(sql);
 
     let entities = [];
 
@@ -89,7 +97,7 @@ database.connect(config.db).then(async (client) => {
                 case "text":
                     output += "cleanExtraSymbols";
                     break;
-                case "bool":
+                case "boolean":
                     output += "cleanBoolean";
                     break;
                 case "double precision":

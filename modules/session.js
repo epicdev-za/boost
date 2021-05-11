@@ -10,7 +10,9 @@ const ServerException = require("../api/ServerException");
 module.exports = function(moduleConfig){
 
     let database = new Plasma();
-    database.connect(config.db).catch((err) => {
+    database.connect(config.db).then((client) => {
+        client.release();
+    }).catch((err) => {
         err = new ServerException(err);
         err.log();
         process.exit(1);

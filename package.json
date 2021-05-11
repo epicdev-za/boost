@@ -1,6 +1,6 @@
 {
     "name": "@epicdev/boost",
-    "version": "1.2.14",
+    "version": "1.2.15",
     "description": "Nuxt & Vuetify based management system",
     "main": "index.js",
     "scripts": {

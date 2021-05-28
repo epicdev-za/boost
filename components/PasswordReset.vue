@@ -1,9 +1,11 @@
 <template>
     <div class="page-container">
-        <div class="background-container primary"></div>
+        <slot name="background">
+            <div class="background-container primary"></div>
+        </slot>
         <v-container class="fill-height">
             <v-row align="center" justify="center" class="px-4">
-                <v-card width="550" min-height="300" elevation="6">
+                <v-card :class="card_class" width="550" min-height="300" elevation="6">
                     <v-tabs-items v-model="tab">
                         <v-tab-item>
                             <slot name="heading">
@@ -22,14 +24,14 @@
                                     <v-container>
                                         <v-row>
                                             <v-col cols="12" md="12">
-                                                <v-text-field class="a-field" v-model="password" :rules="passwordRules" label="Password" :type="password_show_1 ? 'text' : 'password'" :append-icon="password_show_1 ? 'mdi-eye' : 'mdi-eye-off'" @click:append="password_show_1 = !password_show_1"></v-text-field>
+                                                <v-text-field :class="textfield_class" :outlined="textfield_outlined" class="a-field" v-model="password" :rules="passwordRules" label="New Password" :type="password_show_1 ? 'text' : 'password'" :append-icon="password_show_1 ? 'mdi-eye' : 'mdi-eye-off'" @click:append="password_show_1 = !password_show_1"></v-text-field>
                                             </v-col>
                                             <v-col cols="12" md="12">
-                                                <v-text-field class="a-field" v-model="confirm_password" v-on:keyup="fieldEnterPress" :rules="confirmPasswordRules" label="Confirm Password" :type="password_show_2 ? 'text' : 'password'" :append-icon="password_show_2 ? 'mdi-eye' : 'mdi-eye-off'" @click:append="password_show_2 = !password_show_2"></v-text-field>
+                                                <v-text-field :class="textfield_class" :outlined="textfield_outlined" class="a-field" v-model="confirm_password" v-on:keyup="fieldEnterPress" :rules="confirmPasswordRules" label="Confirm Password" :type="password_show_2 ? 'text' : 'password'" :append-icon="password_show_2 ? 'mdi-eye' : 'mdi-eye-off'" @click:append="password_show_2 = !password_show_2"></v-text-field>
                                             </v-col>
                                         </v-row>
                                         <v-row justify="center" class="mt-12">
-                                            <v-btn color="primary" depressed class="px-8" @click="reset" :disabled="password.length === 0 || confirm_password.length === 0 || confirm_password !== password">Reset</v-btn>
+                                            <v-btn :block="button_block" color="primary" depressed class="px-8" @click="reset" :disabled="password.length === 0 || confirm_password.length === 0 || confirm_password !== password">Reset</v-btn>
                                         </v-row>
                                     </v-container>
                                 </v-form>
@@ -51,7 +53,7 @@
                                 <v-form style="width: 100%;" class="px-12">
                                     <v-container>
                                         <v-row justify="center" class="mt-12">
-                                            <v-btn class="px-8 mx-4" depressed nuxt :to="'/login'">Back to Login</v-btn>
+                                            <v-btn :block="button_block" class="px-8 mx-4" depressed nuxt :to="'/login'">Back to Login</v-btn>
                                         </v-row>
                                     </v-container>
                                 </v-form>
@@ -68,7 +70,7 @@
                                 <v-form style="width: 100%;" class="px-12">
                                     <v-container>
                                         <v-row justify="center" class="mt-12">
-                                            <v-btn class="px-8 mx-4" depressed nuxt :to="'/password-recovery'">Password Recovery</v-btn>
+                                            <v-btn :block="button_block" class="px-8 mx-4" depressed nuxt :to="'/password-recovery'">Password Recovery</v-btn>
                                         </v-row>
                                     </v-container>
                                 </v-form>
@@ -88,6 +90,22 @@ export default {
     props: {
         param: {
             required: true
+        },
+        card_class: {
+            type: String,
+            default: null
+        },
+        textfield_class: {
+            type: String,
+            default: null
+        },
+        textfield_outlined: {
+            type: Boolean,
+            default: false
+        },
+        button_block: {
+            type: Boolean,
+            default: false
         }
     },
     data(){

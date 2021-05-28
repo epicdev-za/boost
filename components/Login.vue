@@ -1,9 +1,11 @@
 <template>
     <div class="page-container">
-        <div class="background-container primary"></div>
+        <slot name="background">
+            <div class="background-container primary"></div>
+        </slot>
         <v-container class="fill-height">
             <v-row align="center" justify="center" class="px-4">
-                <v-card width="550" min-height="300" elevation="6" :loading="form_loading" :disabled="form_loading">
+                <v-card :class="card_class" width="550" min-height="300" elevation="6" :loading="form_loading" :disabled="form_loading">
                     <v-row justify="center" class="pt-4">
                         <slot name="logo">
                             <v-card-title>
@@ -29,17 +31,17 @@
                             <v-container>
                                 <v-row>
                                     <v-col cols="12" md="12">
-                                        <v-text-field v-model="username" :rules="usernameRules" label="Email Address" required autofocus></v-text-field>
+                                        <v-text-field :outlined="textfield_outlined" :class="textfield_class" v-model="username" :rules="usernameRules" label="Email Address" required autofocus></v-text-field>
                                     </v-col>
                                     <v-col cols="12" md="12">
-                                        <v-text-field class="a-field" v-model="password" v-on:keyup="fieldEnterPress" :rules="passwordRules" label="Password" :type="password_show ? 'text' : 'password'" :append-icon="password_show ? 'mdi-eye' : 'mdi-eye-off'" @click:append="password_show = !password_show"></v-text-field>
+                                        <v-text-field :outlined="textfield_outlined" :class="textfield_class" class="a-field" v-model="password" v-on:keyup="fieldEnterPress" :rules="passwordRules" label="Password" :type="password_show ? 'text' : 'password'" :append-icon="password_show ? 'mdi-eye' : 'mdi-eye-off'" @click:append="password_show = !password_show"></v-text-field>
                                         <v-card-text v-if="passwordRecoveryEnabled()" style="text-align: right;" class="pa-0 pt-2 text-body-2">
                                             <a color="primary" style="text-decoration: none;" href="/password-recovery">Forgot Password?</a>
                                         </v-card-text>
                                     </v-col>
                                 </v-row>
                                 <v-row justify="center" class="mt-12">
-                                    <v-btn color="primary" depressed class="px-8" @click="login(username, password)" :disabled="username.length === 0 || password.length === 0">Login</v-btn>
+                                    <v-btn :block="button_block" color="primary" depressed class="px-8" @click="login(username, password)" :disabled="username.length === 0 || password.length === 0">Login</v-btn>
                                 </v-row>
                             </v-container>
                         </v-form>
@@ -55,6 +57,24 @@ const axios = require("axios");
 import config from '../../../../boost.config';
 export default {
     name: "Login",
+    props: {
+        card_class: {
+            type: String,
+            default: null
+        },
+        textfield_class: {
+            type: String,
+            default: null
+        },
+        textfield_outlined: {
+            type: Boolean,
+            default: false
+        },
+        button_block: {
+            type: Boolean,
+            default: false
+        }
+    },
     data(){
         return {
             version: config.version,

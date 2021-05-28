@@ -1,9 +1,11 @@
 <template>
     <div class="page-container">
-        <div class="background-container primary"></div>
+        <slot name="background">
+            <div class="background-container primary"></div>
+        </slot>
         <v-container class="fill-height">
             <v-row align="center" justify="center" class="px-4">
-                <v-card width="550" min-height="300" elevation="6">
+                <v-card :class="card_class" width="550" min-height="300" elevation="6">
                     <v-tabs-items v-model="tab">
                         <v-tab-item>
                             <slot name="heading">
@@ -22,12 +24,12 @@
                                     <v-container>
                                         <v-row>
                                             <v-col cols="12" md="12">
-                                                <v-text-field v-model="forgotPasswordUsername" v-on:keyup="fieldEnterPress" :rules="usernameRules" label="Username" required autofocus></v-text-field>
+                                                <v-text-field :class="textfield_class" :outlined="textfield_outlined" v-model="forgotPasswordUsername" v-on:keyup="fieldEnterPress" :rules="usernameRules" label="Username" required autofocus></v-text-field>
                                             </v-col>
                                         </v-row>
                                         <v-row justify="center" class="mt-12">
-                                            <v-btn class="px-8 mx-4" depressed nuxt :to="'/login'">Cancel</v-btn>
-                                            <v-btn color="primary" class="px-8 mx-4" depressed @click="processForgotPassword(forgotPasswordUsername)" :disabled="forgotPasswordUsername.length === 0">Next</v-btn>
+                                            <v-btn :block="button_block" class="px-8 mx-4" depressed nuxt :to="'/login'">Cancel</v-btn>
+                                            <v-btn :block="button_block" color="primary" class="px-8 mx-4" depressed @click="processForgotPassword(forgotPasswordUsername)" :disabled="forgotPasswordUsername.length === 0">Next</v-btn>
                                         </v-row>
                                     </v-container>
                                 </v-form>
@@ -66,6 +68,24 @@
 const axios = require("axios");
 export default {
     name: "PasswordRecovery",
+    props: {
+        card_class: {
+            type: String,
+            default: null
+        },
+        textfield_class: {
+            type: String,
+            default: null
+        },
+        textfield_outlined: {
+            type: Boolean,
+            default: false
+        },
+        button_block: {
+            type: Boolean,
+            default: false
+        }
+    },
     data(){
         return {
             tab: 0,

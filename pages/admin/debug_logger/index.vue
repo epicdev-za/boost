@@ -300,7 +300,7 @@
     }
 </script>
 
-<style>
+<style scoped>
     @import url('https://fonts.googleapis.com/css?family=Roboto+Mono&display=swap');
 
     .v-data-table-header th{

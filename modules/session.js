@@ -9,27 +9,32 @@ const ServerException = require("../api/ServerException");
 
 module.exports = function(moduleConfig){
 
-    let database = new Plasma();
-    database.connect(config.db).then((client) => {
-        client.release();
-    }).catch((err) => {
-        err = new ServerException(err);
-        err.log();
-        process.exit(1);
-    });
+    if(process.env.npm_lifecycle_event != 'build') {
 
-    if(moduleConfig.db_store !== undefined && moduleConfig.db_store == true) {
-        moduleConfig.store = new pgSession({
-            pool: database.pool,
-            schemaName: "boost"
+        let database = new Plasma();
+        database.connect(config.db).then((client) => {
+            client.release();
+        }).catch((err) => {
+            err = new ServerException(err);
+            err.log();
+            process.exit(1);
         });
+
+        if (moduleConfig.db_store !== undefined && moduleConfig.db_store == true) {
+            moduleConfig.store = new pgSession({
+                pool: database.pool,
+                schemaName: "boost"
+            });
+        }
+
+        const app = express();
+
+        app.use(session(moduleConfig));
+
+        this.options.serverMiddleware.unshift(app);
+
+        PluginEventDispatcher.onDatabaseConnected();
+
     }
 
-    const app = express();
-
-    app.use(session(moduleConfig));
-
-    this.options.serverMiddleware.unshift(app);
-
-    PluginEventDispatcher.onDatabaseConnected();
 }

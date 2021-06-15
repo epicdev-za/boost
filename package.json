@@ -1,6 +1,6 @@
 {
     "name": "@epicdev/boost",
-    "version": "1.2.20",
+    "version": "1.2.21",
     "description": "Nuxt & Vuetify based management system",
     "main": "index.js",
     "scripts": {
@@ -18,7 +18,7 @@
     "homepage": "https://github.com/epicdev-za/boost#readme",
     "dependencies": {
         "@epicdev/array-marriage": "^1.0.0",
-        "@epicdev/plasma": "^1.0.1",
+        "@epicdev/plasma": "^1.0.3",
         "argon2": "^0.24.1",
         "axios": "^0.19.2",
         "connect-pg-simple": "^6.2.1",

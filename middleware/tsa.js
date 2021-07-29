@@ -40,6 +40,13 @@ const tsa = async function({app, route, store, redirect, error, env, req}){
 
                     store.commit('boost_store/setPermissions', user.permissions);
                     store.commit('boost_store/setSuperUser', user.superuser);
+                    if(req.session.publicSession !== undefined){
+                        store.commit('boost_store/setPublicSession', req.session.publicSession);
+                    }else{
+                        store.commit('boost_store/setPublicSession', {});
+                    }
+
+
 
                     for(let i = 0; i < boost_route.permissions.length; i++){
                         if(!store.getters['boost_store/hasPermission'](boost_route.permissions[i])){
@@ -69,6 +76,11 @@ const tsa = async function({app, route, store, redirect, error, env, req}){
                         let response = await axios.get("/api/auth/get_permissions");
                         store.commit('boost_store/setPermissions', response.data.permissions);
                         store.commit('boost_store/setSuperUser', response.data.superuser);
+                        if(req.session.publicSession !== undefined){
+                            store.commit('boost_store/setPublicSession', req.session.publicSession);
+                        }else{
+                            store.commit('boost_store/setPublicSession', {});
+                        }
                     }
                 }else{
                     error({
@@ -83,6 +95,11 @@ const tsa = async function({app, route, store, redirect, error, env, req}){
                     let user = req.session.user;
                     store.commit('boost_store/setPermissions', user.permissions);
                     store.commit('boost_store/setSuperUser', user.superuser);
+                    if(req.session.publicSession !== undefined){
+                        store.commit('boost_store/setPublicSession', req.session.publicSession);
+                    }else{
+                        store.commit('boost_store/setPublicSession', {});
+                    }
                 }
             }else{
                 try{
@@ -90,6 +107,11 @@ const tsa = async function({app, route, store, redirect, error, env, req}){
                     if(response.status === 200) {
                         store.commit('boost_store/setPermissions', response.data.permissions);
                         store.commit('boost_store/setSuperUser', response.data.superuser);
+                        if(req.session.publicSession !== undefined){
+                            store.commit('boost_store/setPublicSession', req.session.publicSession);
+                        }else{
+                            store.commit('boost_store/setPublicSession', {});
+                        }
                     }
                 }catch (e){
 

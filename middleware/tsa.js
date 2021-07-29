@@ -31,6 +31,7 @@ const tsa = async function({app, route, store, redirect, error, env, req}){
 
     store.commit('boost_store/setPermissions', []);
     store.commit('boost_store/setSuperUser', false);
+    store.commit('boost_store/setPublicSession', {});
 
     if(boost_route !== undefined){
         if(boost_route.permissions !== undefined){
@@ -76,8 +77,8 @@ const tsa = async function({app, route, store, redirect, error, env, req}){
                         let response = await axios.get("/api/auth/get_permissions");
                         store.commit('boost_store/setPermissions', response.data.permissions);
                         store.commit('boost_store/setSuperUser', response.data.superuser);
-                        if(req.session.publicSession !== undefined){
-                            store.commit('boost_store/setPublicSession', req.session.publicSession);
+                        if(response.data.publicSession !== undefined){
+                            store.commit('boost_store/setPublicSession', response.data.publicSession);
                         }else{
                             store.commit('boost_store/setPublicSession', {});
                         }
@@ -107,8 +108,8 @@ const tsa = async function({app, route, store, redirect, error, env, req}){
                     if(response.status === 200) {
                         store.commit('boost_store/setPermissions', response.data.permissions);
                         store.commit('boost_store/setSuperUser', response.data.superuser);
-                        if(req.session.publicSession !== undefined){
-                            store.commit('boost_store/setPublicSession', req.session.publicSession);
+                        if(response.data.publicSession !== undefined){
+                            store.commit('boost_store/setPublicSession', response.data.publicSession);
                         }else{
                             store.commit('boost_store/setPublicSession', {});
                         }

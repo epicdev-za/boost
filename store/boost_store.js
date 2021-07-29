@@ -5,7 +5,8 @@ export default (() => {
         state: () => ({
             notifications: [],
             permissions: [],
-            superuser: false
+            superuser: false,
+            publicSession:{}
         }),
         mutations: {
             addNotification(state, notif) {
@@ -21,9 +22,15 @@ export default (() => {
             },
             setSuperUser(state, superuser){
                 state.superuser = superuser;
+            },
+            setPublicSession(state, publicSession){
+                state.publicSession = publicSession;
             }
         },
         getters: {
+            getPublicSession: (state) => (publicSession) => {
+                return state.publicSession;
+            },
             hasPermission: (state) => (permission_node) => {
                 let node_array = (Array.isArray(permission_node)) ? permission_node : [permission_node];
 

@@ -85,8 +85,8 @@
 <script>
     const axios = require("axios");
     import config from '../../../../../../boost.config'
+    definePageMeta({ layout: 'backend' });
     export default {
-        layout: "backend",
         head(){
             return {
                 title: "Roles - Manage"

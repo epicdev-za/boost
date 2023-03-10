@@ -40,8 +40,8 @@
 <script>
     import boost from '../../../../../boost.config'
     import routes from '../../../../../boost.routes'
+    definePageMeta({ layout: 'backend' });
     export default {
-        layout: 'backend',
         head(){
             return {
                 title: "Dashboard"

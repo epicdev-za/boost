@@ -79,7 +79,7 @@
                 </v-breadcrumbs>
             </v-app-bar>
 
-            <nuxt></nuxt>
+            <slot></slot>
 
             <Notifications></Notifications>
 
@@ -92,6 +92,7 @@
     import boost from '../../../../boost.config'
     import routes from '../../../../boost.routes'
     import Notifications from './../components/Notifications';
+    const router = useRouter();
     export default {
         head(){
             return {
@@ -198,7 +199,8 @@
                 let breadcrumbs = [];
 
                 let pathed_routes = {};
-                let system_routes = this.$router.options.routes;
+                // let system_routes = this.$router.options.routes;
+                let system_routes = router.options.routes;
                 for(let i = 0; i < system_routes.length; i++){
                     pathed_routes[system_routes[i].path] = system_routes[i];
                 }
@@ -230,7 +232,8 @@
             logout(){
                 let _this = this;
                 axios.post("/api/auth/logout", {}).then(() => {
-                    _this.$router.replace("/");
+                    // _this.$router.replace("/");
+                    router.replace("/");
                 })
             },
             toggleTheme(){

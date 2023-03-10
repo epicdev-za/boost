@@ -1,10 +1,11 @@
 module.exports = {
     db: {
-        database: 'gravity',
-        host: 'localhost',
-        user: 'postgres',
-        password: '',
-        port: 5432
+        host: '34.159.97.172',
+        database: 'energydriveui',
+        user: 'system',
+        schema: 'energydriveui',
+        password: 'fcdjIiFExJu1mlyv',
+        port:5432
     },
     jwt: {
         secret: '',

@@ -112,8 +112,8 @@
 
 <script>
     const axios = require("axios");
+    definePageMeta({ layout: 'backend' });
     export default {
-        layout: "backend",
         head(){
             return {
                 title: "Users - Create"

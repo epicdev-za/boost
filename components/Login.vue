@@ -55,6 +55,7 @@
 <script>
 const axios = require("axios");
 import config from '../../../../boost.config';
+const router = useRouter();
 export default {
     name: "Login",
     props: {
@@ -111,9 +112,10 @@ export default {
                 axios.post("/api/auth/login", {
                     username: username,
                     password: password
-                }).then(function(response){
-                    _this.form_loading = false;
-                    _this.$router.push(response.data.direct_to);
+                }).then(async function (response) {
+                  _this.form_loading = false;
+                  // _this.$router.push(response.data.direct_to);
+                  await navigateTo(response.data.direct_to);
                 }).catch(function(error, obj){
                     _this.form_loading = false;
                     if(!error.response){

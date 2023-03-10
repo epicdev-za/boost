@@ -160,7 +160,9 @@ class PermissionLoaderPlugin extends BoostPlugin {
     evalPermissionExtraction(usage, file){
         "use strict";
         try{
-            let extracted_permissions = eval("let extractPermissions = (function(permissions){return permissions;}).bind({}); let func = function(){'use strict'; return " + usage + "}; let boundFund = func.bind({}); boundFund();");
+            let extracted_permissions = eval(
+                "let extractPermissions = (function(permissions){return permissions;}).bind({}); let func = function(){'use strict'; return " + usage + "}; let boundFund = func.bind({}); boundFund();"
+            );
             if(Array.isArray(extracted_permissions)){
                 return extracted_permissions;
             }else{

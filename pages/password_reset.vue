@@ -12,7 +12,8 @@ export default {
             title: "Password Reset"
         }
     },
-    asyncData(context){
+
+    useAsyncData(context){
         return {
             param: context.route.query
         }

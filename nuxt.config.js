@@ -1,9 +1,9 @@
-import colors from 'vuetify/es5/util/colors'
-import boost from '../../../boost.config'
-import boost_routes from '../../../boost.routes'
+// import colors from 'vuetify/es5/util/colors'
+import boost from './boost.config'
+import boost_routes from './boost.routes'
 import serveStatic from 'serve-static';
 import array_marriage from "@epicdev/array-marriage";
-import server_config from "../../../server.config";
+import server_config from "./server.config";
 
 let nuxt_config = {
     mode: 'universal',
@@ -55,13 +55,14 @@ let nuxt_config = {
     ** Nuxt.js dev-modules
     */
     buildModules: [
-        '@nuxtjs/vuetify',
+        // '@nuxtjs/vuetify',
     ],
     /*
     ** Nuxt.js modules
     */
     modules: [
         [
+
             __dirname + '/modules/session',
             array_marriage({
                 secret: server_config.jwt.secret,
@@ -87,29 +88,7 @@ let nuxt_config = {
     ** https://github.com/nuxt-community/vuetify-module
     */
     vuetify: {
-        theme: {
-            dark: false,
-            themes: {
-                light: {
-                    primary: colors.teal.lighten1,
-                    secondary: colors.teal.lighten1,
-                    accent: colors.teal.accent1,
-                    error: colors.red.accent2,
-                    info: colors.blue.base,
-                    success: colors.green.base,
-                    warning: colors.amber.base
-                },
-                dark: {
-                    primary: colors.teal.darken3,
-                    secondary: colors.teal.darken3,
-                    accent: colors.blue.darken1,
-                    info: colors.teal.lighten1,
-                    warning: colors.amber.base,
-                    error: colors.deepOrange.accent4,
-                    success: colors.green.accent3
-                }
-            }
-        }
+
     },
     /*
     ** Build configuration
@@ -118,6 +97,7 @@ let nuxt_config = {
         /*
         ** You can extend webpack config here
         */
+        transpile: ['vuetify'],
         extend (config, ctx) {
         	config.node = {
         		fs: 'empty'
@@ -127,6 +107,16 @@ let nuxt_config = {
     router: {
         middleware: ['tsa'],
         extendRoutes (routes, resolve) {
+            console.warn("BOOST:: extendRoutes is deprecated remove this method")
+            for(let path in boost_routes){
+                let route = boost_routes[path];
+                route.path = path;
+                routes.push(route);
+            }
+        }
+    },
+    hooks: {
+        'pages:extend'(routes) {
             for(let path in boost_routes){
                 let route = boost_routes[path];
                 route.path = path;
@@ -162,4 +152,4 @@ if(process.env.NODE_ENV === "production"){
     nuxt_config.server.port = process.env.PORT || nuxt_config.server.port;
 }
 
-export default nuxt_config;
+export default defineNuxtConfig(nuxt_config);

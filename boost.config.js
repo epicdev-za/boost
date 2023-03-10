@@ -1,4 +1,4 @@
-import colors from 'vuetify/es5/util/colors'
+// import colors from 'vuetify/es5/util/colors'
 
 export default {
     version: '1.2.25',
@@ -8,7 +8,7 @@ export default {
             icon: "mdi-view-dashboard-outline",
             to_prefix: '',
             tag: '',
-            tag_color: colors.blue.base
+            tag_color: 'blue'
         },
         'users': {
             title: "Users",
@@ -16,7 +16,7 @@ export default {
             icon: "mdi-account-outline",
             to_prefix: '/admin',
             tag: '',
-            tag_color: colors.red.base,
+            tag_color: 'red',
             create_btn: true
         },
         'roles': {
@@ -25,7 +25,7 @@ export default {
             icon: "mdi-clipboard-outline",
             to_prefix: '/admin',
             tag: '',
-            tag_color: colors.blue.base,
+            tag_color: 'blue',
             create_btn: true
         },
         'debug-logger': {
@@ -34,7 +34,7 @@ export default {
             icon: "mdi-radar",
             to_prefix: '/admin',
             tag: '',
-            tag_color: colors.blue.base
+            tag_color: 'blue'
         }
     },
     module_groups: {

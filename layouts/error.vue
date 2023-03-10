@@ -19,6 +19,7 @@
 
 <script>
     const axios = require("axios");
+    const router = useRouter();
     export default {
         layout: 'empty',
         props: {
@@ -55,12 +56,14 @@
             }
         },
         methods: {
-            btnFunction(){
-                if(this.error.statusCode === 403){
-                    this.$router.push("/login");
-                }else{
-                    this.$router.back();
-                }
+            async btnFunction() {
+              if (this.error.statusCode === 403) {
+                //this.$router.push("/login");
+                await navigateTo("/login");
+              } else {
+                // this.$router.back();
+                router.back();
+              }
             }
         },
         computed: {

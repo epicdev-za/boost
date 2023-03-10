@@ -80,8 +80,8 @@
 
 <script>
     const axios = require("axios");
+    definePageMeta({ layout: 'backend' });
     export default {
-        layout: "backend",
         head(){
             return {
                 title: "Roles - " + ((this.item._uuid !== undefined) ? "Edit" : "Create")

@@ -1,10 +1,16 @@
 {
     "name": "@epicdev/boost",
-    "version": "1.2.25",
+    "version": "2.0.2",
     "description": "Nuxt & Vuetify based management system",
     "main": "index.js",
     "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1"
+        "dev": "nuxt dev",
+        "build": "nuxt build",
+        "start": "nuxt start",
+        "generate": "nuxt generate",
+        "postinstall": "nuxt prepare",
+        "deploy": "gcloud app deploy app.yaml --project energydrive-analytics",
+        "deploy-dev": "gcloud app deploy app-dev.yaml --project energydrive-analytics-dev "
     },
     "repository": {
         "type": "git",
@@ -18,19 +24,24 @@
     "homepage": "https://github.com/epicdev-za/boost#readme",
     "dependencies": {
         "@epicdev/array-marriage": "^1.0.0",
+        "@vue/compat": "^3.1.0",
         "argon2": "^0.24.1",
         "axios": "^0.19.2",
         "connect-pg-simple": "^6.2.1",
-        "express": "^4.17.1",
+        "express": "^4.17.3",
         "express-session": "^1.17.1",
-        "jsonwebtoken": "^8.5.1",
-        "moment": "^2.29.0",
+        "jsonwebtoken": "^9.0.0",
+        "moment": "^2.29.4",
         "nodemailer": "^6.4.17",
         "nuxt-session": "^1.0.3",
         "restify-clients": "^2.6.9",
-        "uuid": "^3.3.3"
+        "uuid": "^3.3.3",
+        "vuetify": "^3.1.7"
     },
     "devDependencies": {
-        "@epicdev/plasma": "^1.0.3"
+        "@epicdev/plasma": "^1.0.3",
+        "@vue/compiler-sfc": "^3.1.0",
+        "nuxt": "^3.2.3"
+
     }
 }

@@ -1,6 +1,6 @@
 <template>
     <v-app app>
-        <nuxt/>
+        <slot/>
     </v-app>
 </template>
 
